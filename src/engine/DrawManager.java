@@ -505,7 +505,7 @@ public final class DrawManager {
 		String titleAchievementsString4 = "Flawless Failure";
 
 
-		String sampleAchievementsString1 = "80%  =>  80%";
+		String sampleAchievementsString1 = "=>  80%";
 		String sampleAchievementsString2 = " 1  2 ";
 
 
