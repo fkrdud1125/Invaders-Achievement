@@ -15,11 +15,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.Properties;
 
 import engine.DrawManager.SpriteType;
 import entity.Wallet;
@@ -237,24 +235,83 @@ public final class FileManager {
 
 			String totalScorePath = new File(jarPath).getParent();
 			totalScorePath += File.separator;
-			totalScorePath += "info";
+			totalScorePath += "total_score";
 
 			File totalScoreFile = new File(totalScorePath);
 			inputStream = new FileInputStream(totalScoreFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
 
+			// Load properties from the file
+			Properties properties = new Properties();
+			properties.load(bufferedReader);
+
 			logger.info("Loading user total score.");
 
-		totalScore = Integer.parseInt(bufferedReader.readLine());
+			// Get the value associated with the 'TOTAL_SCORE' key
+			String totalScoreStr = properties.getProperty("TOTAL_SCORE", "0"); // Default to "0" if key not found
+			totalScore = Integer.parseInt(totalScoreStr);
+
 		} catch (FileNotFoundException e) {
 			// loads default if there's no user scores.
-			logger.info("Loading default total score.");
+			logger.info("File not found. Loading default total score.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for total score. Defaulting to 0.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
 		}
 
 		return totalScore;
 	}
 
+	public int loadTotalPlayTime() throws IOException {
+		int totalPlayTime = 0;
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String totalPlayTimePath = new File(jarPath).getParent();
+			totalPlayTimePath += File.separator;
+			totalPlayTimePath += "total_play_time"; // Assuming the file is named 'info'
+
+			File totalScoreFile = new File(totalPlayTimePath);
+			inputStream = new FileInputStream(totalScoreFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			Properties properties = new Properties();
+			properties.load(bufferedReader); // Load properties from the file
+
+			logger.info("Loading user total play time.");
+
+			// Get the value associated with the 'TOTAL_PLAY_TIME' key
+			String playTimeStr = properties.getProperty("TOTAL_PLAY_TIME", "0"); // Default to "0" if key not found
+			totalPlayTime = Integer.parseInt(playTimeStr);
+
+		} catch (FileNotFoundException e) {
+			// Load default if there's no user scores
+			logger.info("File not found. Loading default total play time.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for total play time. Defaulting to 0.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		return totalPlayTime;
+	}
 	/**
 	 * Saves user high scores to disk.
 	 * 
@@ -317,25 +374,68 @@ public final class FileManager {
 
 			String totalScorePath = new File(jarPath).getParent();
 			totalScorePath += File.separator;
-			totalScorePath += "info";
+			totalScorePath += "total_score";  // Assuming the file name is 'info'
 
 			File totalScoreFile = new File(totalScorePath);
 
+			// Create the file if it doesn't exist
 			if (!totalScoreFile.exists())
 				totalScoreFile.createNewFile();
 
-			outputStream = new FileOutputStream(totalScoreFile);
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					outputStream, Charset.forName("UTF-8")));
+			// Use FileOutputStream with 'false' to overwrite the existing content
+			outputStream = new FileOutputStream(totalScoreFile, false);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
 
 			logger.info("Saving user total scores.");
 
-			bufferedWriter.write(Integer.toString(totalScore));
-
+			// Write the total score in the format TOTAL_SCORE='value'
+			bufferedWriter.write("TOTAL_SCORE=" + totalScore);
 
 		} finally {
-			if (bufferedWriter != null)
+			if (bufferedWriter != null) {
 				bufferedWriter.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+	}
+
+	public void saveTotalPlayTime(int totalPlayTime) throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String totalPlayTimePath = new File(jarPath).getParent();
+			totalPlayTimePath += File.separator;
+			totalPlayTimePath += "total_play_time";  // Assuming the file name is 'info'
+
+			File totalPlayTimeFile = new File(totalPlayTimePath);
+
+			// Create the file if it doesn't exist
+			if (!totalPlayTimeFile.exists())
+				totalPlayTimeFile.createNewFile();
+
+			// Use FileOutputStream with 'false' to overwrite the existing content
+			outputStream = new FileOutputStream(totalPlayTimeFile, false);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving user total scores.");
+
+			// Write the total score in the format TOTAL_SCORE='value'
+			bufferedWriter.write("TOTAL_PLAY_TIME=" + totalPlayTime);
+
+		} finally {
+			if (bufferedWriter != null) {
+				bufferedWriter.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
 		}
 	}
 

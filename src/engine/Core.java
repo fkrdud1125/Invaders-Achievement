@@ -29,7 +29,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Max lives. */
-	private static final int MAX_LIVES = 3;
+	private static final int MAX_LIVES = 1;
 	/** Levels between extra life. */
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
@@ -70,6 +70,7 @@ public final class Core {
 	/** Logger handler for printing to console. */
 	private static ConsoleHandler consoleHandler;
 
+	private static long startTime, endTime;
 
 	/**
 	 * Test implementation.
@@ -119,7 +120,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
+			gameState = new GameState(1, 0, MAX_LIVES, 0, 0, 0);
 			achievementManager = new AchievementManager(totalScore);
 			switch (returnCode) {
 			case 1:
@@ -134,6 +135,7 @@ public final class Core {
 				// Game & score.
 				do {
 					// One extra live every few levels.
+					startTime = System.currentTimeMillis();
 					boolean bonusLife = gameState.getLevel()
 							% EXTRA_LIFE_FRECUENCY == 0
 							&& gameState.getLivesRemaining() < MAX_LIVES;
@@ -151,10 +153,13 @@ public final class Core {
 							gameState.getScore(),
 							gameState.getLivesRemaining(),
 							gameState.getBulletsShot(),
-							gameState.getShipsDestroyed());
+							gameState.getShipsDestroyed(),
+					        gameState.getPlayTime());
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
+				endTime = System.currentTimeMillis();
 				achievementManager.updateTotalScore(gameState.getScore());
+				achievementManager.updateTotalTimePlay(gameState.getPlayTime() + ((int) (endTime - startTime) / 1000));
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
