@@ -89,22 +89,12 @@ public class GameState {
 		return coinsEarned;
 	}
 
-	public void addCoins(int coins) {
-		coinsEarned += coins;
-	}
-
-	protected GameState getInstance() {
-		if (instance == null)
-			instance = new GameState(this.level, this.score, this.livesRemaining, this.bulletsShot,
-					this.shipsDestroyed);
-		return instance;
-	}
-
 	public float getAccuracy() {
 		if (bulletsShot == 0){
 			return 0;
 		}
 		return ((float) shipsDestroyed / bulletsShot) *100;
 	}
+
 }
 

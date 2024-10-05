@@ -1,8 +1,10 @@
 package engine;
 
-import engine.GameState;
+import screen.GameSettingScreen;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -14,7 +16,6 @@ public class AchievementManager {
     private int totalScore;
     // 누적 플레이 시간
     private int totalTimePlay;
-
 
     // 퍼펙트 업적 관련 변수
     private int checkPerfectAchievement = 1;
@@ -28,11 +29,14 @@ public class AchievementManager {
     // 명중률 업적 관련 변수
     private List<String> accuracy; // 명중률 업적 리스트
 
+    // High Score를 가져오는 변수
+    private List<Score> highScores;
+
     public AchievementManager() throws IOException {
         totalScore = FileManager.getInstance().loadTotalScore();
         totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
         accuracy = FileManager.getInstance().loadAccuracyAchievement();
-
+        highScores = FileManager.getInstance().loadHighScores();
     }
 
     public void updateTotalTimePlay(int timePlay) throws IOException {
@@ -45,7 +49,9 @@ public class AchievementManager {
         FileManager.getInstance().saveTotalScore(totalScore);
     }
 
-    /** 명중률 업적을 업데이트 하는 함수. */
+    /**
+     * 명중률 업적을 업데이트 하는 함수.
+     */
     public void updateAccuracyAchievement(double accuracy) throws IOException {
         // 명중률 업적 달성 시, 그 아래 있는 모든 업적을 같이 달성하는 조건.
         if (accuracy >= 100) {
@@ -67,14 +73,18 @@ public class AchievementManager {
         FileManager.getInstance().saveAccuracyAchievement(this.accuracy);
     }
 
-    /** 퍼펙트 조건을 위반했는지 확인 */
+    /**
+     * 퍼펙트 조건을 위반했는지 확인
+     */
     public void checkPerfect(final int checkPerfectAchievement) {
         if (checkPerfectAchievement < this.checkPerfectAchievement) {
             checkPerfect = false;
         }
     }
 
-    /** 퍼펙트 업적을 달성했는지 확인 */
+    /**
+     * 퍼펙트 업적을 달성했는지 확인
+     */
     public void checkPerfectAchievement(final int livesRemaining, final int gameLevel) throws IOException {
         checkPerfect(livesRemaining);
         // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
@@ -92,7 +102,7 @@ public class AchievementManager {
     }
 
     public void updateCurrentPerfectStage() throws IOException {
-        engine.FileManager.getInstance().saveCurrentPsAchievement(currentPerfectLevel);
+        FileManager.getInstance().saveCurrentPsAchievement(currentPerfectLevel);
     }
 
     public static int getCurrentPerfectLevel() {
@@ -103,6 +113,17 @@ public class AchievementManager {
         return nextPerfectLevel;
     }
 
-
+    public void checkHighScore(String currentName, int currentScore) throws IOException {
+        Score highScore = new Score(currentName, currentScore);
+        int highScoresLength = highScores.size();
+        if (highScoresLength < 3) {
+            highScores.add(highScore);
+        } else {
+            highScores.add(highScore);
+            Collections.sort(highScores);
+            highScores.removeLast();
+        }
+        FileManager.getInstance().saveHighScores(highScores);
+    }
 
 }

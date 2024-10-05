@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import entity.Wallet;
+import screen.GameSettingScreen;
 import screen.Screen;
 import entity.Entity;
 import entity.Ship;
@@ -24,6 +25,32 @@ import entity.Ship;
  * 
  */
 public final class DrawManager {
+	private GameSettingScreen gameSettingScreen;
+
+	public void drawAchievements(Screen screen) {
+		// GameSettingScreen의 isMultiplayer 상태를 확인
+		String sampleAchievementsString = "complete!";
+		String sampleAchievementsString4 = " Achieved by playing 2-player mode";
+		String sampleAchievementsString4_1 = "                for the first time.";
+		boolean firstPlayed = true;
+		if (gameSettingScreen.getMultiplay() && firstPlayed) {
+				backBufferGraphics.setColor(Color.GREEN);
+				drawRightSideAchievementBigString(screen, sampleAchievementsString,
+						screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
+						firstPlayed = false;
+		} else {
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightSideAchievementSmallString(screen, sampleAchievementsString4,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightSideAchievementSmallString(screen, sampleAchievementsString4_1,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
+		}
+
+
+
+
+	}
 
 	/** Singleton instance of the class. */
 	private static DrawManager instance;
@@ -505,10 +532,12 @@ public final class DrawManager {
 		String achievementsStatusString = "Achievements Status";
 
 		// Achievements names
+		//public void drawAchievementStatus()
 		String titleAchievementsString1 = "High Accuracy";
-		String titleAchievementsString2 = "Perfect Clear";
-		String titleAchievementsString3 = "We're best friends";
-		String titleAchievementsString4 = "Flawless Failure";
+		String titleAchievementsString2 = "perfect clear";
+		String titleAchievementsString3 = "Flawless Failure";
+		String titleAchievementsString4 = "We're best friends";
+
 
 		// sample strings
 		String sampleAchievementsString1 = "70%  =>  80%  name";
@@ -518,19 +547,14 @@ public final class DrawManager {
 				nextPerfectStage;
 
 
-		String sampleAchievementsString3 = " Achieved by playing 2-player mode";
-		String sampleAchievementsString3_1 = "                for the first time.";
-		String sampleAchievementsString4 = "      Achieved when the game ends ";
-		String sampleAchievementsString4_1 = "                  with 0% accuracy.";
 
-
-
+		String sampleAchievementsString3 = "      Achieved when the game ends ";
+		String sampleAchievementsString3_1 = "                  with 0% accuracy.";
 
 		String sampleCoin1 = "1000";
 		String sampleCoin2 = "1500";
 		String sampleCoin3 = "500";
 		String sampleCoin4 = "2000";
-
 
 
 		// centered Strings
@@ -556,13 +580,13 @@ public final class DrawManager {
 
 		backBufferGraphics.setColor(Color.yellow);
 		drawRightSideCumulativeRegularString(screen, playTimesString,
-				screen.getHeight() / 5 + 2*fontRegularMetrics.getHeight()+2* fontBigMetrics.getHeight() );
+				screen.getHeight() / 5 + 2*fontRegularMetrics.getHeight()+2* fontBigMetrics.getHeight()+10 );
 
 
 		//Achievement status Strings
 		backBufferGraphics.setColor(Color.MAGENTA);
 		drawCenteredBigString(screen, achievementsStatusString,
-				screen.getHeight() / 2 + fontRegularMetrics.getHeight()*2);
+				screen.getHeight() / 2 + fontBigMetrics.getHeight() );
 
 		// left
 		backBufferGraphics.setColor(Color.WHITE);
@@ -588,34 +612,30 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
-
 		backBufferGraphics.setColor(Color.GRAY);
 		drawRightSideAchievementSmallString(screen, sampleAchievementsString3,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
+
 		backBufferGraphics.setColor(Color.GRAY);
 		drawRightSideAchievementSmallString(screen, sampleAchievementsString3_1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
 
-		backBufferGraphics.setColor(Color.GRAY);
-		drawRightSideAchievementSmallString(screen, sampleAchievementsString4,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
-		backBufferGraphics.setColor(Color.GRAY);
-		drawRightSideAchievementSmallString(screen, sampleAchievementsString4_1,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
 
 
-		backBufferGraphics.setColor(Color.yellow);
+
+
+		backBufferGraphics.setColor(Color.orange);
 		drawRightSideAchievementCoinBigString(screen, sampleCoin1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
-		backBufferGraphics.setColor(Color.yellow);
+		backBufferGraphics.setColor(Color.orange);
 		drawRightSideAchievementCoinBigString(screen, sampleCoin2,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
 
-		backBufferGraphics.setColor(Color.yellow);
+		backBufferGraphics.setColor(Color.orange);
 		drawRightSideAchievementCoinBigString(screen, sampleCoin3,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
 
-		backBufferGraphics.setColor(Color.yellow);
+		backBufferGraphics.setColor(Color.orange);
 		drawRightSideAchievementCoinBigString(screen, sampleCoin4,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
 
@@ -656,7 +676,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		String totalScoreString = String.format("%s", totalScore);
         drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 3
-				- fontRegularMetrics.getHeight() + 5);
+				- fontRegularMetrics.getHeight() + 10);
 	}
 
 	public void drawTotalPlayTime(final Screen screen, final int totalPlayTime) {
@@ -666,7 +686,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		String totalScoreString = String.format("%02dm%02ds",totalMinutes,totalSeconds);
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
-				- fontRegularMetrics.getHeight() - 25);
+				- fontRegularMetrics.getHeight() - 15);
 	}
 	/**
 	 * Draws a centered string on small font.
@@ -745,7 +765,7 @@ public final class DrawManager {
 	public void drawLeftSideAchievementRegularString(final Screen screen,
 													 final String string, final int height) {
 		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(string, screen.getWidth() / 4
+		backBufferGraphics.drawString(string, screen.getWidth() *22/ 100
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
 
@@ -754,8 +774,8 @@ public final class DrawManager {
 	public void drawRightSideAchievementBigString(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontBig);
-		backBufferGraphics.drawString(string, screen.getWidth() *4/10
-				, height);
+		backBufferGraphics.drawString(string, screen.getWidth() *66/100-
+						fontRegularMetrics.stringWidth(string), height);
 	}
 
 	public void drawRightSideAchievementSmallString(final Screen screen,

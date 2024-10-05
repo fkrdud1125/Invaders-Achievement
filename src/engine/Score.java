@@ -44,8 +44,6 @@ public class Score implements Comparable<Score> {
 		return this.score;
 	}
 
-
-
 	/**
 	 * Orders the scores descending by score.
 	 * 

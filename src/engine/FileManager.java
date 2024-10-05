@@ -313,7 +313,6 @@ public final class FileManager {
 		return totalPlayTime;
 	}
 
-
 	public int loadCurrentPsAchievement() throws IOException {
 		int currentPsAchievement = 0;
 		InputStream inputStream = null;
@@ -470,7 +469,6 @@ public final class FileManager {
 
 			logger.info("Saving user high scores.");
 
-			// Saves 7 or less scores.
 			int savedCount = 0;
 			for (Score score : highScores) {
 				if (savedCount >= MAX_SCORES)

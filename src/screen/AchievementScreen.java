@@ -90,7 +90,7 @@ public class AchievementScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-
+		drawManager.drawAchievements(this);
 		drawManager.drawAchievementMenu(this, this.currentPerfectStage, this.currentPerfectStage+1);
 		drawManager.drawHighScores(this, this.highScores);
 		// 10/14 AJS Draw Total Score
