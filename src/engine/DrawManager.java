@@ -589,17 +589,34 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
+		backBufferGraphics.setColor(Color.green);
+		drawLeftSideAchievementSmallString(screen, "single play only",
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()+fontSmallMetrics.getHeight());
+
+
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString2,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
+		backBufferGraphics.setColor(Color.green);
+		drawLeftSideAchievementSmallString(screen, "single play only",
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2+fontSmallMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString3,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
+		backBufferGraphics.setColor(Color.green);
+		drawLeftSideAchievementSmallString(screen, "single play only",
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString4,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
+		backBufferGraphics.setColor(Color.yellow);
+		drawLeftSideAchievementSmallString(screen, "multi play only",
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
+
+
+
 
 		// sample code
 		backBufferGraphics.setColor(Color.WHITE);
@@ -763,6 +780,12 @@ public final class DrawManager {
 													 final String string, final int height) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.drawString(string, screen.getWidth() *22/ 100
+				- fontRegularMetrics.stringWidth(string) / 2, height);
+	}
+	public void drawLeftSideAchievementSmallString(final Screen screen,
+													 final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() *26/ 100
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
 
