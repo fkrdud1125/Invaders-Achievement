@@ -484,6 +484,7 @@ public final class DrawManager {
 				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
 	}
 
+
 	/**
 	 * Draws achievement screen title and instructions.
 	 * 
@@ -630,7 +631,7 @@ public final class DrawManager {
 	 *            List of high scores.
 	 */
 	public void drawHighScores(final Screen screen,
-			final List<Score> highScores		) {
+			final List<Score> highScores) {
 		backBufferGraphics.setColor(Color.WHITE);
 		int i = 0;
 		String scoreString = "";
@@ -769,9 +770,6 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(string, screen.getWidth()*85/100 , height);
 	}
-
-
-
 
 	/**
 	 * Countdown to game start.

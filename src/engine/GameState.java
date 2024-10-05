@@ -8,6 +8,7 @@ package engine;
  */
 public class GameState {
 
+	private GameState instance;
 	/** Current game level. */
 	private int level;
 	/** Current score. */
@@ -86,6 +87,17 @@ public class GameState {
 	 */
 	public int getCoinsEarned() {
 		return coinsEarned;
+	}
+
+	public void addCoins(int coins) {
+		coinsEarned += coins;
+	}
+
+	protected GameState getInstance() {
+		if (instance == null)
+			instance = new GameState(this.level, this.score, this.livesRemaining, this.bulletsShot,
+					this.shipsDestroyed);
+		return instance;
 	}
 
 	public float getAccuracy() {

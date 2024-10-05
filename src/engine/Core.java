@@ -30,7 +30,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Max lives. */
-	private static final int MAX_LIVES = 1;
+	private static final int MAX_LIVES = 3;
 	/** Levels between extra life. */
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
@@ -157,7 +157,7 @@ public final class Core {
 							gameState.getShipsDestroyed());
 					endTime = System.currentTimeMillis();
 					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
-					achievementManager.checkPsAchievement(gameState.getLivesRemaining(), gameState.getLevel()-1);
+					achievementManager.checkPerfectAchievement(gameState.getLivesRemaining(), gameState.getLevel()-1);
 					System.out.println(gameState.getLevel());
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
@@ -169,7 +169,7 @@ public final class Core {
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
 				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
-				AchievementScreen achievementScreen = new AchievementScreen(width,height,FPS,achievementManager);
+//				AchievementScreen achievementScreen = new AchievementScreen(width,height,FPS,achievementManager);
 				currentScreen = new ScoreScreen(width, height, FPS, gameState, wallet);
 
 				returnCode = frame.setScreen(currentScreen);

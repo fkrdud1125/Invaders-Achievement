@@ -25,7 +25,7 @@ public class GameSettingScreen extends Screen {
 	/** Player name2 for record input. */
 	private String name2;
 	/** Multiplayer mode. */
-	private boolean isMultiplayer;
+	public boolean isMultiplayer;
 	/** Difficulty level. */
 	private int difficultyLevel;
 	/** Selected row. */
