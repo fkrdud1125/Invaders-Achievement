@@ -506,7 +506,7 @@ public final class FileManager {
 
 		String achievementPath = new File(jarPath).getParent();
 		achievementPath += File.separator;
-		achievementPath += "achievements.txt";
+		achievementPath += "achievements";
 
 		File achievementFile = new File(achievementPath);
 
@@ -518,21 +518,12 @@ public final class FileManager {
 					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
 
 				// 기본 내용 작성
-				writer.write("70");
-				writer.newLine();
-				writer.write("false");
-				writer.newLine();
-				writer.write("80");
-				writer.newLine();
-				writer.write("false");
-				writer.newLine();
-				writer.write("90");
-				writer.newLine();
-				writer.write("false");
-				writer.newLine();
-				writer.write("100");
-				writer.newLine();
-				writer.write("false");
+				for (int i = 0; i <= 3; i++) {
+					writer.write(String.valueOf(70+(i*10)));
+					writer.newLine();
+					writer.write("false");
+					writer.newLine();
+				}
 
 				writer.flush();
 				logger.info("Default achievements file created.");
@@ -543,28 +534,43 @@ public final class FileManager {
 	}
 
 	public List<String> loadAchievements() throws IOException {
-		// 파일 경로 설정
-		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, "UTF-8");
-
-		String achievementPath = new File(jarPath).getParent();
-		achievementPath += File.separator;
-		achievementPath += "achievements.txt";
-
-		File achievementFile = new File(achievementPath);
 
 		List<String> achievements = new ArrayList<>();
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
 
-		// 파일이 존재하는지 확인
-		if (!achievementFile.exists()) {
-			logger.warning("Achievements file not found at " + achievementPath);
-			return null; // 파일이 없으면 null 반환
-		}
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(achievementFile), Charset.forName("UTF-8")))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				achievements.add(line);
+			String achievementPath = new File(jarPath).getParent();
+			achievementPath += File.separator;
+			achievementPath += "achievements";
+
+			File achievementFile = new File(achievementPath);
+			inputStream = new FileInputStream(achievementFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			String accuracy = bufferedReader.readLine();
+			String checkAchieved = bufferedReader.readLine();
+			while (accuracy != null && checkAchieved != null) {
+				achievements.add(accuracy);
+				achievements.add(checkAchieved);
+				accuracy = bufferedReader.readLine();
+				checkAchieved = bufferedReader.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			logger.info("File not found.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for achievements.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
 			}
 		}
 
@@ -580,7 +586,7 @@ public final class FileManager {
 
 		String achievementPath = new File(jarPath).getParent();
 		achievementPath += File.separator;
-		achievementPath += "achievements.txt";
+		achievementPath += "achievements";
 
 		File achievementFile = new File(achievementPath);
 

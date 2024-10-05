@@ -40,7 +40,7 @@ public class AchievementManager {
         FileManager.getInstance().saveTotalScore(totalScore);
     }
 
-    public void updateAccuracyAchievement(float accuracy) throws IOException {
+    public void updateAccuracyAchievement(double accuracy) throws IOException {
         if (accuracy >= 100) {
             achievemets.set(7, "true"); // 100% 업적 달성
             achievemets.set(5, "true"); // 90% 업적 자동 달성
@@ -65,6 +65,7 @@ public class AchievementManager {
     }
 
     // 각각의 업적이 달성되었는지 확인하는 메서드들
+
     public boolean isAccuracy70Achieved() {
         return achievemets.get(1).equals("true");
     }

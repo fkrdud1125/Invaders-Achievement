@@ -483,6 +483,7 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, continueOrExitString,
 				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
 	}
+	
 
 	/**
 	 * Draws achievement screen title and instructions.
@@ -766,9 +767,6 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(string, screen.getWidth()*85/100 , height);
 	}
-
-
-
 
 	/**
 	 * Countdown to game start.
