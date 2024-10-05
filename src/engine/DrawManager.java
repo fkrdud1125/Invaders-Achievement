@@ -496,7 +496,7 @@ public final class DrawManager {
 
 		//cumulative section
 		String cumulativeScoreString = "Cumulative Score";
-		String playTimesString = "-Total  Playtime(sec)-";
+		String playTimesString = "-Total  Playtime-";
 
 		// centered strings
 		String achievementString = "ACHIEVEMENT";
@@ -657,12 +657,15 @@ public final class DrawManager {
 	}
 
 	public void drawTotalPlayTime(final Screen screen, final int totalPlayTime) {
+		int totalMinutes = totalPlayTime / 60;
+		int totalSeconds = totalPlayTime % 60;
+
 		backBufferGraphics.setColor(Color.WHITE);
-		String totalScoreString = String.format("                 %s", totalPlayTime);
-		drawRightSideCumulativeRegularString(screen, totalScoreString, screen.getHeight() / 2
+		String totalScoreString = String.format("%02dm%02ds",totalMinutes,totalSeconds);
+		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 25);
 	}
-
+//182 =>
 	/**
 	 * Draws a centered string on small font.
 	 *
@@ -734,6 +737,8 @@ public final class DrawManager {
 		backBufferGraphics.drawString(string, screen.getWidth() *68/ 100
 				- fontRegularMetrics.stringWidth(string)/2 , height);
 	}
+
+
 	// left side achievement
 	public void drawLeftSideAchievementRegularString(final Screen screen,
 													 final String string, final int height) {
