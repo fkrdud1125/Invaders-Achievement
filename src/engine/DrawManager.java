@@ -568,6 +568,9 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GREEN);
 		drawLeftSideScoreRegularString(screen, highScoreString,
 				screen.getHeight() / 5+ fontBigMetrics.getHeight());
+		backBufferGraphics.setColor(Color.cyan);
+		drawLeftSideScoreSmallString(screen, "single play only",
+				screen.getHeight() / 5+ fontBigMetrics.getHeight()+fontSmallMetrics.getHeight());
 
 
 		// right side cumulative section
@@ -589,7 +592,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
-		backBufferGraphics.setColor(Color.green);
+		backBufferGraphics.setColor(Color.cyan);
 		drawLeftSideAchievementSmallString(screen, "single play only",
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()+fontSmallMetrics.getHeight());
 
@@ -597,21 +600,21 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString2,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
-		backBufferGraphics.setColor(Color.green);
+		backBufferGraphics.setColor(Color.cyan);
 		drawLeftSideAchievementSmallString(screen, "single play only",
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2+fontSmallMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString3,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
-		backBufferGraphics.setColor(Color.green);
+		backBufferGraphics.setColor(Color.cyan);
 		drawLeftSideAchievementSmallString(screen, "single play only",
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString4,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
-		backBufferGraphics.setColor(Color.yellow);
+		backBufferGraphics.setColor(Color.pink);
 		drawLeftSideAchievementSmallString(screen, "multi play only",
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
 
@@ -688,7 +691,7 @@ public final class DrawManager {
 	// 10/14 AJS Draw Total Score
 	public void drawTotalScore(final Screen screen, final int totalScore) {
 		backBufferGraphics.setColor(Color.WHITE);
-		String totalScoreString = String.format("%s", totalScore);
+		String totalScoreString = String.format(" %s", totalScore);
         drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 3
 				- fontRegularMetrics.getHeight() + 10);
 	}
@@ -698,7 +701,7 @@ public final class DrawManager {
 		int totalSeconds = totalPlayTime % 60;
 
 		backBufferGraphics.setColor(Color.WHITE);
-		String totalScoreString = String.format("%02dm%02ds",totalMinutes,totalSeconds);
+		String totalScoreString = String.format("%02dm  %02ds",totalMinutes,totalSeconds);
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 15);
 	}
@@ -758,6 +761,12 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.drawString(string, screen.getWidth() / 4
 				- fontRegularMetrics.stringWidth(string) / 2, height);
+	}
+	public void drawLeftSideScoreSmallString(final Screen screen,
+											   final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() / 4
+				- fontRegularMetrics.stringWidth(string) / 3, height);
 	}
 
 	//right side Cumulative score
