@@ -665,7 +665,6 @@ public final class DrawManager {
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 25);
 	}
-//182 =>
 	/**
 	 * Draws a centered string on small font.
 	 *
