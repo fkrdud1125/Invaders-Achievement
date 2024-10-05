@@ -24,6 +24,7 @@ public class AchievementManager {
         FileManager.getInstance().createDefaultAchievementsFile();
         //업적 파일 로드
         achievemets = FileManager.getInstance().loadAchievements();
+
     }
 
     public final int getTotalScore() {
@@ -97,7 +98,8 @@ public class AchievementManager {
     private final int[] psStageCondition = {4, 5, 6, 7};
     private final int[] psCoinRewards = {2000, 3000, 4000, 5000};
 
-    private int currentPsAchievement = 0;
+    private static int currentPsAchievement;
+    private static int nextPsAchievement = currentPsAchievement + 1;
     private boolean checkPerfect = true;
 
     // Constructor to initialize with stages and coins
@@ -107,17 +109,17 @@ public class AchievementManager {
         this.initialLives = gameState.getLivesRemaining();  // 시작 시 생명 수 저장
     }
 
-    public void updateCheckPerfect(final GameState gameState) {
+    public void updateCheckPerfect(final int livesRemaining) {
         // 라이프가 줄어든 적이 한 번이라도 있으면 checkPerfect를 다시 true로 바꾸지 않음
-        if (gameState.getLivesRemaining() < this.initialLives) {
+        if (livesRemaining < this.initialLives) {
             checkPerfect = false;  // 한 번이라도 라이프가 줄어들었으면 false로 고정
         }
         // 만약 한 번도 라이프가 줄어든 적이 없으면 유지
     }
 
 
-    public void checkPsAchievement(final GameState gameState) {
-        updateCheckPerfect(gameState); // 생명 상태 확인
+    public void checkPsAchievement(final int livesRemaining) {
+        updateCheckPerfect(livesRemaining); // 생명 상태 확인
 
         if (currentPsAchievement < psStageCondition.length) {
             int requiredStage = psStageCondition[currentPsAchievement];
@@ -125,13 +127,17 @@ public class AchievementManager {
             if (psCurrentStage >= requiredStage && checkPerfect) {
                 psCoins += psCoinRewards[currentPsAchievement];
                 currentPsAchievement++;
+                nextPsAchievement++;
             }
         }
+
+    }
+    public static int getCurrentPsAchievement() {
+        return currentPsAchievement;
     }
 
-    public void updatePsStage(int newStage, final GameState gameState) {
-        this.psCurrentStage = newStage;
-        checkPsAchievement(gameState);
+    public static int getNextPsAchievement() {
+        return nextPsAchievement;
     }
 
     // 새로운 함수: 특정 구간(스테이지 배열)을 완벽하게 클리어했는지 확인

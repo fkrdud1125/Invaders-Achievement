@@ -160,6 +160,7 @@ public final class Core {
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
 				achievementManager.updateTotalScore(gameState.getScore());
+				achievementManager.checkPsAchievement(gameState.getLivesRemaining());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "

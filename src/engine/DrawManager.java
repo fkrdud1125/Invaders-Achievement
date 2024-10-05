@@ -505,14 +505,16 @@ public final class DrawManager {
 
 		// Achievements names
 		String titleAchievementsString1 = "High Accuracy";
-		String titleAchievementsString2 = "prefect clear";
+		String titleAchievementsString2 = "Perfect Clear";
 		String titleAchievementsString3 = "We're best friends";
 		String titleAchievementsString4 = "Flawless Failure";
 
 		// sample strings
 		String sampleAchievementsString1 = "70%  =>  80%  name";
 
-		String sampleAchievementsString2 = "lv.1 => lv.2   name";
+		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
+		String sampleAchievementsString2 = "lv." + AchievementManager.getCurrentPsAchievement() + " => lv." + AchievementManager.getNextPsAchievement();
+
 
 		String sampleAchievementsString3 = " Achieved by playing 2-player mode";
 		String sampleAchievementsString3_1 = "                for the first time.";
