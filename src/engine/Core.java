@@ -122,7 +122,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
-			achievementManager = new AchievementManager(totalScore);
+			achievementManager = new AchievementManager();
 			switch (returnCode) {
 			case 1:
 				// Main menu.
@@ -157,10 +157,10 @@ public final class Core {
 							gameState.getShipsDestroyed());
 					endTime = System.currentTimeMillis();
 					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
+					achievementManager.checkPsAchievement(gameState.getLivesRemaining());
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
 				achievementManager.updateTotalScore(gameState.getScore());
-				achievementManager.checkPsAchievement(gameState.getLivesRemaining());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
