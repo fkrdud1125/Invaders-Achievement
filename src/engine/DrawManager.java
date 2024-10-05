@@ -32,9 +32,9 @@ public final class DrawManager {
 		String sampleAchievementsString = "complete!";
 		String sampleAchievementsString4 = " Achieved by playing 2-player mode";
 		String sampleAchievementsString4_1 = "                for the first time.";
-		boolean multiplayerMode = GameSettingScreen.getInstance().getMultiplay();
+		boolean multiplayerMode = GameSettingScreen.getInstance().getMultiPlay();
 		boolean firstPlayed = true;
-		if (gameSettingScreen.getMultiplay() && firstPlayed) {
+		if (gameSettingScreen.getMultiPlay() && firstPlayed) {
 				backBufferGraphics.setColor(Color.GREEN);
 				drawRightSideAchievementBigString(screen, sampleAchievementsString,
 						screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
