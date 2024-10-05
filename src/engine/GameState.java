@@ -19,6 +19,7 @@ public class GameState {
 	/** Ships destroyed until now. */
 	private int shipsDestroyed;
 	/** Number of coins earned in the game */
+	private int playTime;
 
 	private int coinsEarned;
 
@@ -38,12 +39,13 @@ public class GameState {
 	 */
 	public GameState(final int level, final int score,
 			final int livesRemaining, final int bulletsShot,
-			final int shipsDestroyed) {
+			final int shipsDestroyed, final int playTime) {
 		this.level = level;
 		this.score = score;
 		this.livesRemaining = livesRemaining;
 		this.bulletsShot = bulletsShot;
 		this.shipsDestroyed = shipsDestroyed;
+		this.playTime = playTime;
 	}
 
 	/**
@@ -80,6 +82,8 @@ public class GameState {
 	public final int getShipsDestroyed() {
 		return shipsDestroyed;
 	}
+
+	public final int getPlayTime() { return playTime; }
 
 	/**
 	 * @return the coninsEarned

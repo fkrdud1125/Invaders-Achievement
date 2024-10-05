@@ -493,7 +493,7 @@ public final class DrawManager {
 	public void drawAchievementMenu(final Screen screen) {
 		String highScoreString = "High Scores";
 		String cumulativeScoreString = "Cumulative Score";
-		String playTimesString = "-Total  Playtime-";
+		String playTimesString = "-Total  Playtime(sec)-";
 
 		String achievementString = "ACHIEVEMENT";
 		String instructionsString = "PRESS SPACE TO RETURN";
@@ -599,6 +599,13 @@ public final class DrawManager {
 		String totalScoreString = String.format("                 %s", totalScore);
         drawRightSideCumulativeRegularString(screen, totalScoreString, screen.getHeight() / 3
 				- fontRegularMetrics.getHeight() + 5);
+	}
+
+	public void drawTotalPlayTime(final Screen screen, final int totalPlayTime) {
+		backBufferGraphics.setColor(Color.WHITE);
+		String totalScoreString = String.format("                 %s", totalPlayTime);
+		drawRightSideCumulativeRegularString(screen, totalScoreString, screen.getHeight() / 2
+				- fontRegularMetrics.getHeight() - 25);
 	}
 
 	/**
