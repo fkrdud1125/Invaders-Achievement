@@ -512,13 +512,14 @@ public final class DrawManager {
 				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
 	}
 
+
 	/**
 	 * Draws achievement screen title and instructions.
 	 * 
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawAchievementMenu(final Screen screen) {
+	public void drawAchievementMenu(final Screen screen, final int currentPerfectStage, final int nextPerfectStage) {
 		//high score section
 		String highScoreString = "High Scores";
 
@@ -542,7 +543,10 @@ public final class DrawManager {
 		// sample strings
 		String sampleAchievementsString1 = "70%  =>  80%  name";
 
-		String sampleAchievementsString2 = "lv.1 => lv.2   name";
+		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
+		String sampleAchievementsString2 = "lv." + currentPerfectStage + " => lv." +
+				nextPerfectStage;
+
 
 
 		String sampleAchievementsString3 = "      Achieved when the game ends ";

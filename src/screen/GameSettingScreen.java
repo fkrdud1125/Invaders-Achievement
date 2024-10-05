@@ -22,7 +22,7 @@ public class GameSettingScreen extends Screen {
 
 
 	/** Player name1 for record input. */
-	private String name1;
+	private static String name1;
 	/** Player name2 for record input. */
 	private String name2;
 	/** Multiplayer mode. */
@@ -174,6 +174,9 @@ public class GameSettingScreen extends Screen {
 	/**
 	 * Draws the elements associated with the screen.
 	 */
+
+	public static String getName1() { return name1; }
+
 	private void draw() {
 		drawManager.initDrawing(this);
 
