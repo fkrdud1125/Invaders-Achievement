@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 
+import engine.AchievementManager;
 import engine.Core;
 import engine.Score;
 
@@ -19,6 +20,7 @@ public class AchievementScreen extends Screen {
 	private List<Score> highScores;
 	private int totalScore;
 	private int totalPlayTime;
+	private AchievementManager achievementManager;
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
@@ -29,8 +31,9 @@ public class AchievementScreen extends Screen {
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
 	 */
-	public AchievementScreen(final int width, final int height, final int fps) {
+	public AchievementScreen(final int width, final int height, final int fps, final AchievementManager achievementManager) {
 		super(width, height, fps);
+		this.achievementManager = achievementManager;
 
 		this.returnCode = 1;
 

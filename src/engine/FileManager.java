@@ -499,4 +499,109 @@ public final class FileManager {
 		InputStream inputStream = new FileInputStream(walletFile);
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
+	public void createDefaultAchievementsFile() throws IOException {
+		// 파일 경로 설정
+		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+		String achievementPath = new File(jarPath).getParent();
+		achievementPath += File.separator;
+		achievementPath += "achievements.txt";
+
+		File achievementFile = new File(achievementPath);
+
+		// 파일이 없으면 새로 생성
+		if (!achievementFile.exists()) {
+			achievementFile.createNewFile();
+
+			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
+
+				// 기본 내용 작성
+				writer.write("70");
+				writer.newLine();
+				writer.write("false");
+				writer.newLine();
+				writer.write("80");
+				writer.newLine();
+				writer.write("false");
+				writer.newLine();
+				writer.write("90");
+				writer.newLine();
+				writer.write("false");
+				writer.newLine();
+				writer.write("100");
+				writer.newLine();
+				writer.write("false");
+
+				writer.flush();
+				logger.info("Default achievements file created.");
+			}
+		} else {
+			logger.info("Achievements file already exists.");
+		}
+	}
+
+	public List<String> loadAchievements() throws IOException {
+		// 파일 경로 설정
+		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+		String achievementPath = new File(jarPath).getParent();
+		achievementPath += File.separator;
+		achievementPath += "achievements.txt";
+
+		File achievementFile = new File(achievementPath);
+
+		List<String> achievements = new ArrayList<>();
+
+		// 파일이 존재하는지 확인
+		if (!achievementFile.exists()) {
+			logger.warning("Achievements file not found at " + achievementPath);
+			return null; // 파일이 없으면 null 반환
+		}
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(achievementFile), Charset.forName("UTF-8")))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				achievements.add(line);
+			}
+		}
+
+		logger.info("Achievements successfully loaded.");
+		return achievements; // 불러온 업적 데이터를 리스트로 반환
+	}
+
+
+	public void saveAchievements(List<String> achievements) throws IOException {
+		// 파일 경로 설정
+		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+		String achievementPath = new File(jarPath).getParent();
+		achievementPath += File.separator;
+		achievementPath += "achievements.txt";
+
+		File achievementFile = new File(achievementPath);
+
+		// 업적 파일이 존재하면 내용을 갱신
+		if (achievementFile.exists()) {
+			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
+
+				// 리스트의 내용을 파일에 기록
+				for (String line : achievements) {
+					writer.write(line);
+					writer.newLine();
+				}
+				writer.flush();
+				logger.info("Achievements successfully saved.");
+			}
+		} else {
+			logger.warning("Achievements file not found at " + achievementPath);
+		}
+	}
+
+
+
 }

@@ -166,6 +166,8 @@ public final class Core {
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
+				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
+				AchievementScreen achievementScreen = new AchievementScreen(width,height,FPS,achievementManager);
 				currentScreen = new ScoreScreen(width, height, FPS, gameState, wallet);
 
 				returnCode = frame.setScreen(currentScreen);
@@ -184,7 +186,7 @@ public final class Core {
 
 			case 4:
 				// Achievement
-				currentScreen = new AchievementScreen(width, height, FPS);
+				currentScreen = new AchievementScreen(width, height, FPS,achievementManager);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " achievement screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
