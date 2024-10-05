@@ -122,7 +122,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
-			achievementManager = new AchievementManager(totalScore);
+			achievementManager = new AchievementManager();
 			switch (returnCode) {
 			case 1:
 				// Main menu.
@@ -150,22 +150,27 @@ public final class Core {
 
 					gameState = ((GameScreen) currentScreen).getGameState();
 
-					gameState = new GameState(gameState.getLevel() + 1,
+					gameState = new GameState(
+							gameState.getLevel() + 1,
 							gameState.getScore(),
 							gameState.getLivesRemaining(),
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
 					endTime = System.currentTimeMillis();
 					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
+					achievementManager.checkPerfectAchievement(gameState.getLivesRemaining(), gameState.getLevel()-1);
+					System.out.println(gameState.getLevel());
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
 				achievementManager.updateTotalScore(gameState.getScore());
+				achievementManager.checkHighScore(GameSettingScreen.getName1(), gameState.getScore());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
+				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
 				currentScreen = new ScoreScreen(width, height, FPS, gameState, wallet);
 
 				returnCode = frame.setScreen(currentScreen);
@@ -184,7 +189,7 @@ public final class Core {
 
 			case 4:
 				// Achievement
-				currentScreen = new AchievementScreen(width, height, FPS);
+				currentScreen = new AchievementScreen(width, height, FPS,achievementManager);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " achievement screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);

@@ -2,6 +2,7 @@ package screen;
 
 import engine.Cooldown;
 import engine.Core;
+import engine.GameSettings;
 import engine.InputManager;
 
 import java.awt.event.KeyEvent;
@@ -13,6 +14,7 @@ import java.awt.event.KeyEvent;
  * 
  */
 public class GameSettingScreen extends Screen {
+	private static GameSettingScreen instance;
 
 	/** Milliseconds between changes in user selection. */
 	private static final int SELECTION_TIME = 200;
@@ -21,11 +23,11 @@ public class GameSettingScreen extends Screen {
 
 
 	/** Player name1 for record input. */
-	private String name1;
+	private static String name1;
 	/** Player name2 for record input. */
 	private String name2;
 	/** Multiplayer mode. */
-	private boolean isMultiplayer;
+	private static boolean isMultiplayer = false;
 	/** Difficulty level. */
 	private int difficultyLevel;
 	/** Selected row. */
@@ -163,10 +165,19 @@ public class GameSettingScreen extends Screen {
 			}
 		}
 	}
-
+	public static GameSettingScreen getInstance() {
+		if (instance == null) {
+			instance = new GameSettingScreen(0,0,0);
+		}
+		return instance;
+	}
+	public static boolean getMultiplay() {return isMultiplayer; }
 	/**
 	 * Draws the elements associated with the screen.
 	 */
+
+	public static String getName1() { return name1; }
+
 	private void draw() {
 		drawManager.initDrawing(this);
 

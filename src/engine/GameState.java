@@ -8,6 +8,7 @@ package engine;
  */
 public class GameState {
 
+	private GameState instance;
 	/** Current game level. */
 	private int level;
 	/** Current score. */
@@ -87,4 +88,13 @@ public class GameState {
 	public int getCoinsEarned() {
 		return coinsEarned;
 	}
+
+	public float getAccuracy() {
+		if (bulletsShot == 0){
+			return 0;
+		}
+		return ((float) shipsDestroyed / bulletsShot) *100;
+	}
+
 }
+
