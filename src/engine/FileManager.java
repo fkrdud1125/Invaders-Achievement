@@ -537,7 +537,7 @@ public final class FileManager {
 
 			String totalPlayTimePath = new File(jarPath).getParent();
 			totalPlayTimePath += File.separator;
-			totalPlayTimePath += "total_play_time";
+			totalPlayTimePath += "total_play_time";  // Assuming the file name is 'info'
 
 			File totalPlayTimeFile = new File(totalPlayTimePath);
 
@@ -551,6 +551,7 @@ public final class FileManager {
 
 			logger.info("Saving user total scores.");
 
+			// Write the total score in the format TOTAL_SCORE='value'
 			bufferedWriter.write("TOTAL_PLAY_TIME=" + totalPlayTime);
 
 		} finally {
