@@ -75,7 +75,7 @@ public class AchievementManager {
     }
 
     /** 퍼펙트 업적을 달성했는지 확인 */
-    public void checkPerfectAchievement(final int livesRemaining, final int gameLevel) {
+    public void checkPerfectAchievement(final int livesRemaining, final int gameLevel) throws IOException {
         checkPerfect(livesRemaining);
         // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
         if (currentPerfectLevel < perfectStage.length) {
@@ -86,8 +86,13 @@ public class AchievementManager {
                 psCoins += perfectCoinReward[currentPerfectLevel];
                 currentPerfectLevel++;
                 nextPerfectLevel = currentPerfectLevel + 1;
+                updateCurrentPerfectStage();
             }
         }
+    }
+
+    public void updateCurrentPerfectStage() throws IOException {
+        engine.FileManager.getInstance().saveCurrentPsAchievement(currentPerfectLevel);
     }
 
     public static int getCurrentPerfectLevel() {
@@ -97,4 +102,7 @@ public class AchievementManager {
     public static int getNextPerfectLevel() {
         return nextPerfectLevel;
     }
+
+
+
 }

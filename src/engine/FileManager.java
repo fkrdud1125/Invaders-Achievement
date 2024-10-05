@@ -313,8 +313,9 @@ public final class FileManager {
 		return totalPlayTime;
 	}
 
-	public int loadPerfectAchievement() throws IOException {
-		int loadcurrentPerfectStage = 0;
+
+	public int loadCurrentPsAchievement() throws IOException {
+		int currentPsAchievement = 0;
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;
 		try {
@@ -322,12 +323,12 @@ public final class FileManager {
 					.getCodeSource().getLocation().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-			String currentPerfectStagePath = new File(jarPath).getParent();
-			currentPerfectStagePath += File.separator;
-			currentPerfectStagePath += "current Perfect stage"; // Assuming the file is named 'info'
+			String currentPsAchievementPath = new File(jarPath).getParent();
+			currentPsAchievementPath += File.separator;
+			currentPsAchievementPath += "current_Perfect_stage";
 
-			File currentPerfectStageFile= new File(currentPerfectStagePath);
-			inputStream = new FileInputStream(currentPerfectStageFile);
+			File currentPsAchievementFile = new File(currentPsAchievementPath);
+			inputStream = new FileInputStream(currentPsAchievementFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
 
@@ -336,15 +337,14 @@ public final class FileManager {
 
 			logger.info("Loading user perfect stage.");
 
-			// Get the value associated with the 'TOTAL_PLAY_TIME' key
-			String playTimeStr = properties.getProperty("Current_Perfect_stage", "0"); // Default to "0" if key not found
-			loadcurrentPerfectStage = Integer.parseInt(playTimeStr);
+			String currentPsAchievementStr = properties.getProperty("Perfect_Stage", "0"); // Default to "0" if key not found
+			currentPsAchievement = Integer.parseInt(currentPsAchievementStr);
 
 		} catch (FileNotFoundException e) {
 			// Load default if there's no user scores
-			logger.info("File not found. Loading default total play time.");
+			logger.info("File not found. Loading default current perfect stage.");
 		} catch (NumberFormatException e) {
-			logger.warning("Invalid format for total play time. Defaulting to 0.");
+			logger.warning("Invalid format for current perfect stage. Defaulting to 0.");
 		} finally {
 			if (bufferedReader != null) {
 				bufferedReader.close();
@@ -354,7 +354,7 @@ public final class FileManager {
 			}
 		}
 
-		return loadcurrentPerfectStage;
+		return currentPsAchievement;
 	}
 
 	public void loadDefaultAchievementsFile() throws IOException {
@@ -564,7 +564,7 @@ public final class FileManager {
 		}
 	}
 
-	public void savePerfectAchievement(int currnetPerfectStage) throws IOException {
+	public void saveCurrentPsAchievement(int currentPsAchievement) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
 
@@ -573,24 +573,23 @@ public final class FileManager {
 					.getCodeSource().getLocation().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-			String currentPerfectStagePath = new File(jarPath).getParent();
-			currentPerfectStagePath += File.separator;
-			currentPerfectStagePath += "total_play_time";  // Assuming the file name is 'info'
+			String currentPsAchievementPath = new File(jarPath).getParent();
+			currentPsAchievementPath += File.separator;
+			currentPsAchievementPath += "current_Perfect_Stage";  // Assuming the file name is 'Perfect_Stage'
 
-			File currentPerfectStageFile = new File(currentPerfectStagePath);
+			File currentPsAchievementFile = new File(currentPsAchievementPath);
 
 			// Create the file if it doesn't exist
-			if (!currentPerfectStageFile.exists())
-				currentPerfectStageFile.createNewFile();
+			if (!currentPsAchievementFile.exists())
+				currentPsAchievementFile.createNewFile();
 
 			// Use FileOutputStream with 'false' to overwrite the existing content
-			outputStream = new FileOutputStream(currentPerfectStageFile, false);
+			outputStream = new FileOutputStream(currentPsAchievementFile, false);
 			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
 
 			logger.info("Saving user perfect stage.");
 
-			// Write the total score in the format TOTAL_SCORE='value'
-			bufferedWriter.write("Perfect_Stage =" + currnetPerfectStage);
+			bufferedWriter.write("Perfect_Stage=" + currentPsAchievement);
 
 		} finally {
 			if (bufferedWriter != null) {
@@ -601,7 +600,7 @@ public final class FileManager {
 			}
 		}
 	}
-	
+
 	public void saveWallet(final Wallet newWallet)
 			throws IOException {
 		OutputStream outputStream = null;
