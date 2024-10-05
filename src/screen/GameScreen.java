@@ -71,6 +71,8 @@ public class GameScreen extends Screen {
 	/** Checks if a bonus life is received. */
 	private boolean bonusLife;
 
+	private int playTime;
+
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 

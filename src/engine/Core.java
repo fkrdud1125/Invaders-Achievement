@@ -71,6 +71,7 @@ public final class Core {
 	/** Logger handler for printing to console. */
 	private static ConsoleHandler consoleHandler;
 
+	private static long startTime, endTime;
 
 	/**
 	 * Test implementation.
@@ -135,6 +136,7 @@ public final class Core {
 				// Game & score.
 				do {
 					// One extra live every few levels.
+					startTime = System.currentTimeMillis();
 					boolean bonusLife = gameState.getLevel()
 							% EXTRA_LIFE_FRECUENCY == 0
 							&& gameState.getLivesRemaining() < MAX_LIVES;
@@ -153,6 +155,8 @@ public final class Core {
 							gameState.getLivesRemaining(),
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
+					endTime = System.currentTimeMillis();
+					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
 				achievementManager.updateTotalScore(gameState.getScore());
