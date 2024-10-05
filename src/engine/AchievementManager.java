@@ -1,7 +1,5 @@
 package engine;
 
-import engine.GameState;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,14 +14,25 @@ public class AchievementManager {
     private List<String> achievemets;
     private double highestAccuracy = 0;
     private int achievementCount = 0;
+    private int psCoins;
 
-    public AchievementManager(final int totalScore) throws IOException {
+    private final int[] psStageCondition = {0, 1, 2, 3, 4, 5, 6};
+    private final int[] psCoinRewards = {500, 1000, 1500, 2000, 3000, 4000, 5000};
+
+    private static int currentPsAchievement = 0;
+    private static int nextPsAchievement = currentPsAchievement + 1;
+    private boolean checkPerfect = true;
+
+
+
+    public AchievementManager() throws IOException {
         this.totalScore = FileManager.getInstance().loadTotalScore();
         this.totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
+        this.achievemets = FileManager.getInstance().loadAchievements(); //업적 파일 업로드
         //업적 파일이 없을 경우 기본파일 생성
         FileManager.getInstance().createDefaultAchievementsFile();
-        //업적 파일 로드
-        achievemets = FileManager.getInstance().loadAchievements();
+
+
 
     }
 
@@ -91,23 +100,7 @@ public class AchievementManager {
     }
 
 
-
-    private int psCoins;
-
-    private final int[] psStageCondition = {0, 1, 2, 3, 4, 5, 6};
-    private final int[] psCoinRewards = {500, 1000, 1500, 2000, 3000, 4000, 5000};
-
-    private static int currentPsAchievement = 0;
-    private static int nextPsAchievement = currentPsAchievement + 1;
-    private boolean checkPerfect = true;
-
-    // Constructor to initialize with stages and coins
-    public AchievementManager(int psCoins, final GameState gameState) {
-        this.psCoins = psCoins;
-        this.initialLives = gameState.getLivesRemaining();  // 시작 시 생명 수 저장
-    }
-
-    public void updateCheckPerfect(final int livesRemaining) {
+    public void checkPerfect(final int livesRemaining) {
         // 라이프가 줄어든 적이 한 번이라도 있으면 checkPerfect를 다시 true로 바꾸지 않음
         if (livesRemaining < this.initialLives) {
             checkPerfect = false;  // 한 번이라도 라이프가 줄어들었으면 false로 고정
@@ -116,8 +109,8 @@ public class AchievementManager {
     }
 
 
-    public void checkPsAchievement(final int livesRemaining, final int gameLevel) {
-        updateCheckPerfect(livesRemaining); // 생명 상태 확인
+    public void checkPsAchievement(final int livesRemaining, final int gameLevel) throws IOException {
+        checkPerfect(livesRemaining); // 생명 상태 확인
 
         if (currentPsAchievement < psStageCondition.length) {
             int requiredStage = psStageCondition[currentPsAchievement];
@@ -126,8 +119,13 @@ public class AchievementManager {
                 psCoins += psCoinRewards[currentPsAchievement];
                 currentPsAchievement++;
                 nextPsAchievement = currentPsAchievement + 1;
+                updateCurrentPerfectStage();
             }
         }
+    }
+
+    public void updateCurrentPerfectStage() throws IOException {
+        engine.FileManager.getInstance().saveCurrentPsAchievement(currentPsAchievement);
     }
 
 

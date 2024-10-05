@@ -490,7 +490,7 @@ public final class DrawManager {
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawAchievementMenu(final Screen screen) {
+	public void drawAchievementMenu(final Screen screen, final int currentPerfectStage, final int nextPerfectStage) {
 		//high score section
 		String highScoreString = "High Scores";
 
@@ -513,7 +513,8 @@ public final class DrawManager {
 		String sampleAchievementsString1 = "70%  =>  80%  name";
 
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
-		String sampleAchievementsString2 = "lv." + AchievementManager.getCurrentPsAchievement() + " => lv." + AchievementManager.getNextPsAchievement();
+		String sampleAchievementsString2 = "lv." + currentPerfectStage + " => lv." +
+				nextPerfectStage;
 
 
 		String sampleAchievementsString3 = " Achieved by playing 2-player mode";
@@ -629,7 +630,7 @@ public final class DrawManager {
 	 *            List of high scores.
 	 */
 	public void drawHighScores(final Screen screen,
-			final List<Score> highScores) {
+			final List<Score> highScores		) {
 		backBufferGraphics.setColor(Color.WHITE);
 		int i = 0;
 		String scoreString = "";

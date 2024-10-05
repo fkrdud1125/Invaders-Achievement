@@ -122,7 +122,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
-			achievementManager = new AchievementManager(totalScore);
+			achievementManager = new AchievementManager();
 			switch (returnCode) {
 			case 1:
 				// Main menu.
