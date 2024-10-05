@@ -29,14 +29,10 @@ public class AchievementManager {
     // 명중률 업적 관련 변수
     private List<String> accuracy; // 명중률 업적 리스트
 
-    // High Score를 가져오는 변수
-    private List<Score> highScores;
-
     public AchievementManager() throws IOException {
         totalScore = FileManager.getInstance().loadTotalScore();
         totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
         accuracy = FileManager.getInstance().loadAccuracyAchievement();
-        highScores = FileManager.getInstance().loadHighScores();
     }
 
     public void updateTotalTimePlay(int timePlay) throws IOException {
@@ -111,19 +107,6 @@ public class AchievementManager {
 
     public static int getNextPerfectLevel() {
         return nextPerfectLevel;
-    }
-
-    public void checkHighScore(String currentName, int currentScore) throws IOException {
-        Score highScore = new Score(currentName, currentScore);
-        int highScoresLength = highScores.size();
-        if (highScoresLength < 3) {
-            highScores.add(highScore);
-        } else {
-            highScores.add(highScore);
-            Collections.sort(highScores);
-            highScores.removeLast();
-        }
-        FileManager.getInstance().saveHighScores(highScores);
     }
 
 }
