@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class AchievementManager {
-
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
     private int totalScore;
@@ -16,7 +15,6 @@ public class AchievementManager {
     private List<String> achievemets;
     private double highestAccuracy = 0;
     private int achievementCount = 0;
-
     public AchievementManager(final int totalScore) throws IOException {
         this.totalScore = FileManager.getInstance().loadTotalScore();
         this.totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
