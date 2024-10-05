@@ -19,6 +19,7 @@ public class GameState {
 	/** Ships destroyed until now. */
 	private int shipsDestroyed;
 	/** Number of coins earned in the game */
+
 	private int coinsEarned;
 
 	/**
@@ -79,7 +80,6 @@ public class GameState {
 	public final int getShipsDestroyed() {
 		return shipsDestroyed;
 	}
-
 
 	/**
 	 * @return the coninsEarned
