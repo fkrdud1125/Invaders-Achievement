@@ -71,6 +71,8 @@ public class GameScreen extends Screen {
 	/** Checks if a bonus life is received. */
 	private boolean bonusLife;
 
+	private int playTime;
+
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
@@ -337,6 +339,6 @@ public class GameScreen extends Screen {
 	 */
 	public final GameState getGameState() {
 		return new GameState(this.level, this.score, this.lives,
-				this.bulletsShot, this.shipsDestroyed);
+				this.bulletsShot, this.shipsDestroyed, this.playTime);
 	}
 }

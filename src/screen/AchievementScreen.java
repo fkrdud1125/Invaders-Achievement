@@ -18,6 +18,7 @@ public class AchievementScreen extends Screen {
 	/** List of past high scores. */
 	private List<Score> highScores;
 	private int totalScore;
+	private int totalPlayTime;
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
@@ -43,6 +44,13 @@ public class AchievementScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load total scores!");
 		}
+
+		try {
+			this.totalPlayTime = Core.getFileManager().loadTotalPlayTime();
+		} catch (NumberFormatException | IOException e) {
+			logger.warning("Couldn't load total play time!");
+		}
+
 	}
 
 	/**
@@ -78,6 +86,7 @@ public class AchievementScreen extends Screen {
 		drawManager.drawHighScores(this, this.highScores);
 		// 10/14 AJS Draw Total Score
 		drawManager.drawTotalScore(this, this.totalScore);
+		drawManager.drawTotalPlayTime(this, this.totalPlayTime);
 		drawManager.completeDrawing(this);
 	}
 }
