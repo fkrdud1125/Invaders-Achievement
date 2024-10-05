@@ -11,7 +11,7 @@ public class AchievementManager {
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
     private int totalScore;
-    private int initialLives; // 시작 시의 라이프를 저장
+    private int initialLives = 1; // 시작 시의 라이프를 저장
     private int totalTimePlay;
     private List<String> achievemets;
     private double highestAccuracy = 0;
@@ -92,19 +92,17 @@ public class AchievementManager {
 
 
 
-    private int psCurrentStage;
     private int psCoins;
 
-    private final int[] psStageCondition = {4, 5, 6, 7};
-    private final int[] psCoinRewards = {2000, 3000, 4000, 5000};
+    private final int[] psStageCondition = {0, 1, 2, 3, 4, 5, 6};
+    private final int[] psCoinRewards = {500, 1000, 1500, 2000, 3000, 4000, 5000};
 
-    private static int currentPsAchievement;
+    private static int currentPsAchievement = 0;
     private static int nextPsAchievement = currentPsAchievement + 1;
     private boolean checkPerfect = true;
 
     // Constructor to initialize with stages and coins
-    public AchievementManager(int psCurrentStage, int psCoins, final GameState gameState) {
-        this.psCurrentStage = psCurrentStage;
+    public AchievementManager(int psCoins, final GameState gameState) {
         this.psCoins = psCoins;
         this.initialLives = gameState.getLivesRemaining();  // 시작 시 생명 수 저장
     }
@@ -118,20 +116,21 @@ public class AchievementManager {
     }
 
 
-    public void checkPsAchievement(final int livesRemaining) {
+    public void checkPsAchievement(final int livesRemaining, final int gameLevel) {
         updateCheckPerfect(livesRemaining); // 생명 상태 확인
 
         if (currentPsAchievement < psStageCondition.length) {
             int requiredStage = psStageCondition[currentPsAchievement];
 
-            if (psCurrentStage >= requiredStage && checkPerfect) {
+            if (gameLevel > requiredStage && checkPerfect) {
                 psCoins += psCoinRewards[currentPsAchievement];
                 currentPsAchievement++;
-                nextPsAchievement++;
+                nextPsAchievement = currentPsAchievement + 1;
             }
         }
-
     }
+
+
     public static int getCurrentPsAchievement() {
         return currentPsAchievement;
     }
@@ -140,19 +139,6 @@ public class AchievementManager {
         return nextPsAchievement;
     }
 
-    // 새로운 함수: 특정 구간(스테이지 배열)을 완벽하게 클리어했는지 확인
-    public boolean isPerfectRun(GameState gameState) {
-        // psStageCondition 내의 현재 단계가 해당하는 구간인지를 확인
-        if (currentPsAchievement < psStageCondition.length) {
-            int requiredStage = psStageCondition[currentPsAchievement];
-
-            // 스테이지가 조건에 맞고, 라이프가 한 번도 줄지 않았으면 true 반환
-            if (psCurrentStage >= requiredStage && checkPerfect) {
-                return true;
-            }
-        }
-        return false; // 조건을 만족하지 않으면 false
-    }
 
 
 }
