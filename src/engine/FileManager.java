@@ -312,6 +312,131 @@ public final class FileManager {
 
 		return totalPlayTime;
 	}
+
+	public int loadPerfectAchievement() throws IOException {
+		int loadcurrentPerfectStage = 0;
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String currentPerfectStagePath = new File(jarPath).getParent();
+			currentPerfectStagePath += File.separator;
+			currentPerfectStagePath += "current Perfect stage"; // Assuming the file is named 'info'
+
+			File currentPerfectStageFile= new File(currentPerfectStagePath);
+			inputStream = new FileInputStream(currentPerfectStageFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			Properties properties = new Properties();
+			properties.load(bufferedReader); // Load properties from the file
+
+			logger.info("Loading user perfect stage.");
+
+			// Get the value associated with the 'TOTAL_PLAY_TIME' key
+			String playTimeStr = properties.getProperty("Current_Perfect_stage", "0"); // Default to "0" if key not found
+			loadcurrentPerfectStage = Integer.parseInt(playTimeStr);
+
+		} catch (FileNotFoundException e) {
+			// Load default if there's no user scores
+			logger.info("File not found. Loading default total play time.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for total play time. Defaulting to 0.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		return loadcurrentPerfectStage;
+	}
+
+	public void loadDefaultAchievementsFile() throws IOException {
+		// 파일 경로 설정
+		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+		String achievementPath = new File(jarPath).getParent();
+		achievementPath += File.separator;
+		achievementPath += "achievements";
+
+		File achievementFile = new File(achievementPath);
+
+		// 파일이 없으면 새로 생성
+		if (!achievementFile.exists()) {
+			achievementFile.createNewFile();
+
+			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
+
+				// 기본 내용 작성
+				for (int i = 0; i <= 3; i++) {
+					writer.write(String.valueOf(70+(i*10)));
+					writer.newLine();
+					writer.write("false");
+					writer.newLine();
+				}
+
+				writer.flush();
+				logger.info("Default achievements file created.");
+			}
+		} else {
+			logger.info("Achievements file already exists.");
+		}
+	}
+
+	public List<String> loadAccuracyAchievement() throws IOException {
+
+		List<String> achievements = new ArrayList<>();
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String achievementPath = new File(jarPath).getParent();
+			achievementPath += File.separator;
+			achievementPath += "achievements";
+
+			File achievementFile = new File(achievementPath);
+			inputStream = new FileInputStream(achievementFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			String accuracy = bufferedReader.readLine();
+			String checkAchieved = bufferedReader.readLine();
+			while (accuracy != null && checkAchieved != null) {
+				achievements.add(accuracy);
+				achievements.add(checkAchieved);
+				accuracy = bufferedReader.readLine();
+				checkAchieved = bufferedReader.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			loadDefaultAchievementsFile();
+			logger.info("File not found.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for achievements.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		logger.info("Achievements successfully loaded.");
+		return achievements; // 불러온 업적 데이터를 리스트로 반환
+	}
+
 	/**
 	 * Saves user high scores to disk.
 	 * 
@@ -412,7 +537,7 @@ public final class FileManager {
 
 			String totalPlayTimePath = new File(jarPath).getParent();
 			totalPlayTimePath += File.separator;
-			totalPlayTimePath += "total_play_time";  // Assuming the file name is 'info'
+			totalPlayTimePath += "total_play_time";
 
 			File totalPlayTimeFile = new File(totalPlayTimePath);
 
@@ -426,7 +551,6 @@ public final class FileManager {
 
 			logger.info("Saving user total scores.");
 
-			// Write the total score in the format TOTAL_SCORE='value'
 			bufferedWriter.write("TOTAL_PLAY_TIME=" + totalPlayTime);
 
 		} finally {
@@ -439,6 +563,44 @@ public final class FileManager {
 		}
 	}
 
+	public void savePerfectAchievement(int currnetPerfectStage) throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String currentPerfectStagePath = new File(jarPath).getParent();
+			currentPerfectStagePath += File.separator;
+			currentPerfectStagePath += "total_play_time";  // Assuming the file name is 'info'
+
+			File currentPerfectStageFile = new File(currentPerfectStagePath);
+
+			// Create the file if it doesn't exist
+			if (!currentPerfectStageFile.exists())
+				currentPerfectStageFile.createNewFile();
+
+			// Use FileOutputStream with 'false' to overwrite the existing content
+			outputStream = new FileOutputStream(currentPerfectStageFile, false);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving user perfect stage.");
+
+			// Write the total score in the format TOTAL_SCORE='value'
+			bufferedWriter.write("Perfect_Stage =" + currnetPerfectStage);
+
+		} finally {
+			if (bufferedWriter != null) {
+				bufferedWriter.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+	}
+	
 	public void saveWallet(final Wallet newWallet)
 			throws IOException {
 		OutputStream outputStream = null;
@@ -499,87 +661,8 @@ public final class FileManager {
 		InputStream inputStream = new FileInputStream(walletFile);
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
-	public void createDefaultAchievementsFile() throws IOException {
-		// 파일 경로 설정
-		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-		String achievementPath = new File(jarPath).getParent();
-		achievementPath += File.separator;
-		achievementPath += "achievements";
-
-		File achievementFile = new File(achievementPath);
-
-		// 파일이 없으면 새로 생성
-		if (!achievementFile.exists()) {
-			achievementFile.createNewFile();
-
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
-
-				// 기본 내용 작성
-				for (int i = 0; i <= 3; i++) {
-					writer.write(String.valueOf(70+(i*10)));
-					writer.newLine();
-					writer.write("false");
-					writer.newLine();
-				}
-
-				writer.flush();
-				logger.info("Default achievements file created.");
-			}
-		} else {
-			logger.info("Achievements file already exists.");
-		}
-	}
-
-	public List<String> loadAchievements() throws IOException {
-
-		List<String> achievements = new ArrayList<>();
-		InputStream inputStream = null;
-		BufferedReader bufferedReader = null;
-
-		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-
-			String achievementPath = new File(jarPath).getParent();
-			achievementPath += File.separator;
-			achievementPath += "achievements";
-
-			File achievementFile = new File(achievementPath);
-			inputStream = new FileInputStream(achievementFile);
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					inputStream, Charset.forName("UTF-8")));
-
-			String accuracy = bufferedReader.readLine();
-			String checkAchieved = bufferedReader.readLine();
-			while (accuracy != null && checkAchieved != null) {
-				achievements.add(accuracy);
-				achievements.add(checkAchieved);
-				accuracy = bufferedReader.readLine();
-				checkAchieved = bufferedReader.readLine();
-			}
-		} catch (FileNotFoundException e) {
-			logger.info("File not found.");
-		} catch (NumberFormatException e) {
-			logger.warning("Invalid format for achievements.");
-		} finally {
-			if (bufferedReader != null) {
-				bufferedReader.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
-		}
-
-		logger.info("Achievements successfully loaded.");
-		return achievements; // 불러온 업적 데이터를 리스트로 반환
-	}
-
-
-	public void saveAchievements(List<String> achievements) throws IOException {
+	public void saveAccuracyAchievement(List<String> achievements) throws IOException {
 		// 파일 경로 설정
 		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		jarPath = URLDecoder.decode(jarPath, "UTF-8");

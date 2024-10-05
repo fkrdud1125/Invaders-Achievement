@@ -8,27 +8,28 @@ public class AchievementManager {
 
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
-    public GameState gameState;
+    // 누적 점수
     private int totalScore;
-    private int checkPerfect = 3; // 시작 시의 라이프를 저장
-    private int totalTimePlay; // 누적 플레이 시간
+    // 누적 플레이 시간
+    private int totalTimePlay;
+
+
+    // 퍼펙트 업적 관련 변수
+    private int checkPerfectAchievement = 1;
+    private int psCoins = 0;
+    private static int currentPerfectLevel = 0;
+    private static int nextPerfectLevel = currentPerfectLevel + 1;
+    private static boolean checkPerfect = true;
+    private final int[] perfectStage = {0, 1, 2, 3, 4, 5, 6, 7}; // 퍼펙트 스테이지
+    private final int[] perfectCoinReward = {2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
+
+    // 명중률 업적 관련 변수
     private List<String> accuracy; // 명중률 업적 리스트
-    private int achievementCount = 0; // 업적 카운팅
-
-    private final int[] psStageCondition = {0, 1, 2, 3, 4, 5, 6, 7}; // 퍼펙트 스테이지
-    private final int[] psCoinRewards = {2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
-
-    private static int currentPsAchievement = 0;
-    private static int nextPsAchievement = currentPsAchievement + 1;
-    private boolean checkPerfect = true;
 
     public AchievementManager() throws IOException {
-        this.totalScore = FileManager.getInstance().loadTotalScore();
-        this.totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
-        //업적 파일이 없을 경우 기본파일 생성
-        FileManager.getInstance().createDefaultAchievementsFile();
-        //업적 파일 로드
-        accuracy = FileManager.getInstance().loadAchievements();
+        totalScore = FileManager.getInstance().loadTotalScore();
+        totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
+        accuracy = FileManager.getInstance().loadAccuracyAchievement();
 
     }
 
@@ -42,96 +43,56 @@ public class AchievementManager {
         FileManager.getInstance().saveTotalScore(totalScore);
     }
 
+    /** 명중률 업적을 업데이트 하는 함수. */
     public void updateAccuracyAchievement(double accuracy) throws IOException {
+        // 명중률 업적 달성 시, 그 아래 있는 모든 업적을 같이 달성하는 조건.
         if (accuracy >= 100) {
-            this.accuracy.set(7, "true"); // 100% 업적 달성
-            this.accuracy.set(5, "true"); // 90% 업적 자동 달성
-            this.accuracy.set(3, "true"); // 80% 업적 자동 달성
-            this.accuracy.set(1, "true"); // 70% 업적 자동 달성
-            achievementCount = 8; // 카운트는 100%까지 달성
+            for (int i = 1; i <= 7; i += 2) {
+                this.accuracy.set(i, "true");
+            }
         } else if (accuracy >= 90) {
-            this.accuracy.set(5, "true"); // 90% 업적 달성
-            this.accuracy.set(3, "true"); // 80% 업적 자동 달성
-            this.accuracy.set(1, "true"); // 70% 업적 자동 달성
-            achievementCount = 6; // 카운트는 90%까지 달성
+            for (int i = 1; i <= 5; i += 2) {
+                this.accuracy.set(i, "true");
+            }
         } else if (accuracy >= 80) {
-            this.accuracy.set(3, "true"); // 80% 업적 달성
-            this.accuracy.set(1, "true"); // 70% 업적 자동 달성
-            achievementCount = 4; // 카운트는 80%까지 달성
+            for (int i = 1; i <= 3; i += 2) {
+                this.accuracy.set(i, "true");
+            }
         } else if (accuracy >= 70) {
-            this.accuracy.set(1, "true"); // 70% 업적 달성
-            achievementCount = 2; // 카운트는 70%까지 달성
+            this.accuracy.set(1, "true");
         }
-
-        FileManager.getInstance().saveAchievements(this.accuracy); // 변경된 업적 상태 저장
+        // 변경된 업적 저장.
+        FileManager.getInstance().saveAccuracyAchievement(this.accuracy);
     }
 
-    // 각각의 업적이 달성되었는지 확인하는 메서드들
-
-    public boolean isAccuracy70Achieved() {
-        return accuracy.get(1).equals("true");
-    }
-
-    public boolean isAccuracy80Achieved() {
-        return accuracy.get(3).equals("true");
-    }
-
-    public boolean isAccuracy90Achieved() {
-        return accuracy.get(5).equals("true");
-    }
-
-    public boolean isAccuracy100Achieved() {
-        return accuracy.get(7).equals("true");
-    }
-
-    public int getAchievementCount() {
-        return achievementCount;
-    }
-
-    public void updateCheckPerfect(final int livesRemaining) {
-        // 라이프가 줄어든 적이 한 번이라도 있으면 checkPerfect를 다시 true로 바꾸지 않음
-        if (livesRemaining < this.initialLives) {
-            checkPerfect = false;  // 한 번이라도 라이프가 줄어들었으면 false로 고정
+    /** 퍼펙트 조건을 위반했는지 확인 */
+    public void checkPerfect(final int checkPerfectAchievement) {
+        if (checkPerfectAchievement < this.checkPerfectAchievement) {
+            checkPerfect = false;
         }
-        // 만약 한 번도 라이프가 줄어든 적이 없으면 유지
     }
 
-    public void checkPsAchievement(final int livesRemaining) {
-        if (livesRemaining < this.initialLives) {
-            checkPerfect = false;  // 한 번이라도 라이프가 줄어들었으면 false로 고정
-        }
-        if (currentPsAchievement < psStageCondition.length) {
-            int requiredStage = psStageCondition[currentPsAchievement];
-            if (currentPsAchievement >= requiredStage) {
-                gameState.getInstance().addCoins(psCoinRewards[currentPsAchievement]);
-                currentPsAchievement++;
-                nextPsAchievement++;
+    /** 퍼펙트 업적을 달성했는지 확인 */
+    public void checkPerfectAchievement(final int livesRemaining, final int gameLevel) {
+        checkPerfect(livesRemaining);
+        // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
+        if (currentPerfectLevel < perfectStage.length) {
+            // 마지막에 달성한 퍼펙트 스테이지 변수 저장.
+            int requiredStage = perfectStage[currentPerfectLevel];
+            // 현재 게임 스테이지가 마지막에 달성된 퍼펙트 스테이지보다 높고, 퍼펙트 조건을 위반했는지 확인.
+            if (gameLevel > requiredStage && checkPerfect) {
+                psCoins += perfectCoinReward[currentPerfectLevel];
+                currentPerfectLevel++;
+                nextPerfectLevel = currentPerfectLevel + 1;
             }
         }
-
     }
 
-    public static int getCurrentPsAchievement() {
-        return currentPsAchievement;
+    public static int getCurrentPerfectLevel() {
+        return currentPerfectLevel;
     }
 
-    public static int getNextPsAchievement() {
-        return nextPsAchievement;
+    public static int getNextPerfectLevel() {
+        return nextPerfectLevel;
     }
-
-    // 새로운 함수: 특정 구간(스테이지 배열)을 완벽하게 클리어했는지 확인
-    public boolean isPerfectRun(GameState gameState) {
-        // psStageCondition 내의 현재 단계가 해당하는 구간인지를 확인
-        if (currentPsAchievement < psStageCondition.length) {
-            int requiredStage = psStageCondition[currentPsAchievement];
-
-            // 스테이지가 조건에 맞고, 라이프가 한 번도 줄지 않았으면 true 반환
-            if (currentPsAchievement >= requiredStage && checkPerfect) {
-                return true;
-            }
-        }
-        return false; // 조건을 만족하지 않으면 false
-    }
-
-
 }

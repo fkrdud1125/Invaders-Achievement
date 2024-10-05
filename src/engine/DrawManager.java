@@ -514,7 +514,7 @@ public final class DrawManager {
 		String sampleAchievementsString1 = "70%  =>  80%  name";
 
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
-		String sampleAchievementsString2 = "lv." + AchievementManager.getCurrentPsAchievement() + " => lv." + AchievementManager.getNextPsAchievement();
+		String sampleAchievementsString2 = "lv." + AchievementManager.getCurrentPerfectLevel() + " => lv." + AchievementManager.getNextPerfectLevel();
 
 
 		String sampleAchievementsString3 = " Achieved by playing 2-player mode";
