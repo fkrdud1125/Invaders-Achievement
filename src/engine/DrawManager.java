@@ -491,22 +491,42 @@ public final class DrawManager {
 	 *            Screen to draw on.
 	 */
 	public void drawAchievementMenu(final Screen screen) {
+		//high score section
 		String highScoreString = "High Scores";
+
+		//cumulative section
 		String cumulativeScoreString = "Cumulative Score";
 		String playTimesString = "-Total  Playtime-";
 
+		// centered strings
 		String achievementString = "ACHIEVEMENT";
 		String instructionsString = "PRESS SPACE TO RETURN";
-
 		String achievementsStatusString = "Achievements Status";
+
+		// Achievements names
 		String titleAchievementsString1 = "High Accuracy";
 		String titleAchievementsString2 = "prefect clear";
 		String titleAchievementsString3 = "We're best friends";
 		String titleAchievementsString4 = "Flawless Failure";
 
+		// sample strings
+		String sampleAchievementsString1 = "70%  =>  80%  name";
 
-		String sampleAchievementsString1 = "80%  =>  80%";
-		String sampleAchievementsString2 = " 1  2 ";
+		String sampleAchievementsString2 = "lv.1 => lv.2   name";
+
+		String sampleAchievementsString3 = " Achieved by playing 2-player mode";
+		String sampleAchievementsString3_1 = "                for the first time.";
+		String sampleAchievementsString4 = "      Achieved when the game ends ";
+		String sampleAchievementsString4_1 = "                  with 0% accuracy.";
+
+
+
+
+		String sampleCoin1 = "1000";
+		String sampleCoin2 = "1500";
+		String sampleCoin3 = "500";
+		String sampleCoin4 = "2000";
+
 
 
 		// centered Strings
@@ -540,7 +560,7 @@ public final class DrawManager {
 		drawCenteredBigString(screen, achievementsStatusString,
 				screen.getHeight() / 2 + fontRegularMetrics.getHeight()*2);
 
-		// left
+		// left achievement names
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
@@ -556,10 +576,45 @@ public final class DrawManager {
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString4,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
 
-		// sample code
+
+		// sample code 24/10/05 SKH . have to develop
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideAchievementBigString(screen, sampleAchievementsString1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
+
+		backBufferGraphics.setColor(Color.WHITE);
+		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
+
+		backBufferGraphics.setColor(Color.GRAY);
+		drawRightSideAchievementSmallString(screen, sampleAchievementsString3,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
+		backBufferGraphics.setColor(Color.GRAY);
+		drawRightSideAchievementSmallString(screen, sampleAchievementsString3_1,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
+
+		backBufferGraphics.setColor(Color.GRAY);
+		drawRightSideAchievementSmallString(screen, sampleAchievementsString4,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
+		backBufferGraphics.setColor(Color.GRAY);
+		drawRightSideAchievementSmallString(screen, sampleAchievementsString4_1,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
+
+
+		backBufferGraphics.setColor(Color.yellow);
+		drawRightSideAchievementCoinBigString(screen, sampleCoin1,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
+		backBufferGraphics.setColor(Color.yellow);
+		drawRightSideAchievementCoinBigString(screen, sampleCoin2,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
+
+		backBufferGraphics.setColor(Color.yellow);
+		drawRightSideAchievementCoinBigString(screen, sampleCoin3,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
+
+		backBufferGraphics.setColor(Color.yellow);
+		drawRightSideAchievementCoinBigString(screen, sampleCoin4,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
 
 
 	}
@@ -596,8 +651,8 @@ public final class DrawManager {
 	// 10/14 AJS Draw Total Score
 	public void drawTotalScore(final Screen screen, final int totalScore) {
 		backBufferGraphics.setColor(Color.WHITE);
-		String totalScoreString = String.format("                 %s", totalScore);
-        drawRightSideCumulativeRegularString(screen, totalScoreString, screen.getHeight() / 3
+		String totalScoreString = String.format("%s", totalScore);
+        drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 3
 				- fontRegularMetrics.getHeight() + 5);
 	}
 
@@ -651,23 +706,6 @@ public final class DrawManager {
 				- fontBigMetrics.stringWidth(string) / 2, height);
 	}
 
-	// right side achievement(sample)
-
-	public void drawRightSideAchievementBigString(final Screen screen,
-													 final String string, final int height) {
-		backBufferGraphics.setFont(fontBig);
-		backBufferGraphics.drawString(string, screen.getWidth() / 2
-				- fontRegularMetrics.stringWidth(string) / 2, height);
-	}
-
-	// left side achievement
-	public void drawLeftSideAchievementRegularString(final Screen screen,
-													 final String string, final int height) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(string, screen.getWidth() / 4
-				- fontRegularMetrics.stringWidth(string) / 2, height);
-	}
-
 	// left side score
 	public void drawLeftSideScoreRegularString(final Screen screen,
 											   final String string, final int height) {
@@ -676,13 +714,52 @@ public final class DrawManager {
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
 
-	//right side score
+	//right side Cumulative score
 	public void drawRightSideCumulativeRegularString(final Screen screen,
 													 final String string, final int height) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.drawString(string, screen.getWidth() *2/ 5
 				+ fontRegularMetrics.stringWidth(string)*3 / 5 , height);
 	}
+	public void drawRightSideCumulativeBigString(final Screen screen,
+												 final String string, final int height) {
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(string, screen.getWidth() *68/ 100
+				- fontRegularMetrics.stringWidth(string)/2 , height);
+	}
+	// left side achievement
+	public void drawLeftSideAchievementRegularString(final Screen screen,
+													 final String string, final int height) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.drawString(string, screen.getWidth() / 4
+				- fontRegularMetrics.stringWidth(string) / 2, height);
+	}
+
+	// right side achievement(sample)
+
+	public void drawRightSideAchievementBigString(final Screen screen,
+												  final String string, final int height) {
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(string, screen.getWidth() *4/10
+				, height);
+	}
+
+	public void drawRightSideAchievementSmallString(final Screen screen,
+												  final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2-
+				fontRegularMetrics.stringWidth(string) / 8, height);
+	}
+
+	public void drawRightSideAchievementCoinBigString(final Screen screen,
+													final String string, final int height) {
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(string, screen.getWidth()*85/100 , height);
+	}
+
+
+
+
 	/**
 	 * Countdown to game start.
 	 * 
