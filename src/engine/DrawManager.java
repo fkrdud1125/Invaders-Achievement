@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import entity.Wallet;
 import screen.Screen;
 import entity.Entity;
 import entity.Ship;
@@ -308,10 +309,10 @@ public final class DrawManager {
 	 * @param option
 	 *            Option selected.
 	 */
-	public void drawMenu(final Screen screen, final int option) {
+	public void drawMenu(final Screen screen, final int option, final int coin) {
 		String playString = "Play";
 		String shopString = "SHOP";
-		String coinString = "YOUR COIN: 000"; /*fileManager.getcoin();*/
+		String coinString = "YOUR COIN: " + coin;
 		String achievementString = "ACHIEVEMENT";
 		String settingString = "SETTING";
 		String exitString = "EXIT";
@@ -495,60 +496,73 @@ public final class DrawManager {
 		String playTimesString = "-Total Playtime-";
 
 		String achievementString = "ACHIEVEMENT";
-
-		String achievementsStatusString = "Achievements Status";
-		String eachAchievementsString1 = "Highest Accuracy";
-		String eachAchievementsString2 = "prefect stage";
-		String eachAchievementsString3 = "Best Friend";
-		String eachAchievementsString4 = "Trash";
-
 		String instructionsString = "PRESS SPACE TO RETURN";
 
+		String achievementsStatusString = "Achievements Status";
+		String titleAchievementsString1 = "High Accuracy";
+		String titleAchievementsString2 = "prefect clear";
+		String titleAchievementsString3 = "We're best friends";
+		String titleAchievementsString4 = "Flawless Failure";
+
+
+		String sampleAchievementsString1 = "80%  =>  80%";
+		String sampleAchievementsString2 = " 1  2 ";
+
+
+		// centered Strings
 		// centered Strings
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, achievementString, screen.getHeight() / 8);
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() / 5);
+				screen.getHeight() / 8 + fontBigMetrics.getHeight() );
 
 
 
-		// HighScore Strings
+		// left side HighScore Strings
 		backBufferGraphics.setColor(Color.GREEN);
-		drawRightSideScoreRegularString(screen, highScoreString,
+		drawLeftSideScoreRegularString(screen, highScoreString,
 				screen.getHeight() / 5+ fontBigMetrics.getHeight());
 
-		// cumulative section
+
+		// right side cumulative section
 		backBufferGraphics.setColor(Color.yellow);
-		drawLeftSideRegularString(screen, cumulativeScoreString,
+		drawRightSideCumulativeRegularString(screen, cumulativeScoreString,
 				screen.getHeight() / 5 + fontBigMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.yellow);
-		drawLeftSideRegularString(screen, playTimesString,
-				screen.getHeight() / 5 + 3* fontBigMetrics.getHeight() );
+		drawRightSideCumulativeRegularString(screen, playTimesString,
+				screen.getHeight() / 5 + 2*fontRegularMetrics.getHeight()+2* fontBigMetrics.getHeight() );
 
 
-		//Achievement Strings
+		//Achievement status Strings
 		backBufferGraphics.setColor(Color.MAGENTA);
 		drawCenteredBigString(screen, achievementsStatusString,
-				screen.getHeight() / 2 + 3*fontRegularMetrics.getHeight());
+				screen.getHeight() / 2 + fontRegularMetrics.getHeight()*2);
+
+		// left
+		backBufferGraphics.setColor(Color.WHITE);
+		drawLeftSideAchievementRegularString(screen, titleAchievementsString1,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
+		backBufferGraphics.setColor(Color.WHITE);
+		drawLeftSideAchievementRegularString(screen, titleAchievementsString2,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideRegularString(screen, eachAchievementsString1,
-				screen.getHeight() /2 + fontBigMetrics.getHeight()*3);
+		drawLeftSideAchievementRegularString(screen, titleAchievementsString3,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideRegularString(screen, eachAchievementsString2,
-				screen.getHeight() /2 + fontBigMetrics.getHeight()*4);
+		drawLeftSideAchievementRegularString(screen, titleAchievementsString4,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
 
+		// sample code
 		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideRegularString(screen, eachAchievementsString3,
-				screen.getHeight() /2 + fontBigMetrics.getHeight()*5);
+		drawRightSideAchievementBigString(screen, sampleAchievementsString1,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
 
-		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideRegularString(screen, eachAchievementsString4,
-				screen.getHeight() /2 + fontBigMetrics.getHeight()*6);
+
 	}
 
 	/**
@@ -570,7 +584,7 @@ public final class DrawManager {
 		for (Score score : highScores) {
 			scoreString = String.format("%s        %04d", score.getName(),
 					score.getScore());
-			drawRightSideScoreRegularString(screen, scoreString, screen.getHeight()
+			drawLeftSideScoreRegularString(screen, scoreString, screen.getHeight()
 					/ 4 + fontRegularMetrics.getHeight() * (i + 1) * 2);
 			i++;
 			countDrawingScore++;
@@ -578,6 +592,14 @@ public final class DrawManager {
 				break;
 			}
 		}
+	}
+
+	// 10/14 AJS Draw Total Score
+	public void drawTotalScore(final Screen screen, final int totalScore) {
+		backBufferGraphics.setColor(Color.WHITE);
+		String totalScoreString = String.format("                 %s", totalScore);
+        drawRightSideCumulativeRegularString(screen, totalScoreString, screen.getHeight() / 3
+				- fontRegularMetrics.getHeight() + 5);
 	}
 
 	/**
@@ -630,24 +652,37 @@ public final class DrawManager {
 				- fontBigMetrics.stringWidth(string) / 2, height);
 	}
 
-	public void drawRightSideRegularString(final Screen screen,
-										   final String string, final int height) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(string, screen.getWidth() / 3
+	// right side achievement(sample)
+
+	public void drawRightSideAchievementBigString(final Screen screen,
+													 final String string, final int height) {
+		backBufferGraphics.setFont(fontBig);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
 
-	public void drawRightSideScoreRegularString(final Screen screen,
-												final String string, final int height) {
+	// left side achievement
+	public void drawLeftSideAchievementRegularString(final Screen screen,
+													 final String string, final int height) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.drawString(string, screen.getWidth() / 4
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
-	public void drawLeftSideRegularString(final Screen screen,
-										  final String string, final int height) {
+
+	// left side score
+	public void drawLeftSideScoreRegularString(final Screen screen,
+											   final String string, final int height) {
 		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(string, screen.getWidth() / 3
-				+ fontRegularMetrics.stringWidth(string) / 2, height);
+		backBufferGraphics.drawString(string, screen.getWidth() / 4
+				- fontRegularMetrics.stringWidth(string) / 2, height);
+	}
+
+	//right side score
+	public void drawRightSideCumulativeRegularString(final Screen screen,
+													 final String string, final int height) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.drawString(string, screen.getWidth() *2/ 5
+				+ fontRegularMetrics.stringWidth(string)*3 / 5 , height);
 	}
 	/**
 	 * Countdown to game start.
@@ -788,5 +823,103 @@ public final class DrawManager {
 		if (selectedRow == 2) backBufferGraphics.setColor(Color.GREEN);
 		else backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, startString, screen.getHeight() / 100 * 98);
+	}
+
+	/**
+	 *  draw shop
+	 * @param screen
+	 * 				Screen to draw on.
+	 * @param option
+	 * 				selected shop item
+	 * @param wallet
+	 * 				player's wallet
+	 * @param money_alertcooldown
+	 * 				cooldown for insufficient coin alert
+	 * @param max_alertcooldown
+	 * 				cooldown for max level alert
+	 */
+	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
+
+		String shopString = "Shop";
+		String instructionsString = "COIN: " + wallet.getCoin();
+		String exitinfo = "press esc to exit";
+		String coststring = "cost";
+		String[] costs = new String[] {"0", "2000", "4000", "8000", "MAX LEVEL"};
+
+		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen,exitinfo,(screen.getHeight()/20)*5);
+		drawCenteredRegularString(screen, instructionsString,
+				(screen.getHeight() / 20)*6);
+		drawCenteredRegularString(screen,coststring,screen.getHeight() /20 *8 );
+
+		if(option==1)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getBullet_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==2)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getShot_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==3)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getLives_lv()],screen.getHeight() /20 *9 );
+		}
+		else if(option==4)
+		{
+			drawCenteredRegularString(screen,costs[wallet.getCoin_lv()],screen.getHeight() /20 *9 );
+		}
+
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, shopString, screen.getHeight() / 20*3);
+
+
+		String item1String = "bullet_speed";
+		String item2String = "shot_interval";
+		String item3String = "additional_life";
+		String item4String = "coin_gain";
+
+		if (option == 1)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, item1String + "  LV. "+ wallet.getBullet_lv(),
+				screen.getHeight() / 3 * 2);
+
+		if (option == 2)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, item2String+ "  LV. "+ wallet.getShot_lv(), screen.getHeight()
+				/ 3 * 2 + fontRegularMetrics.getHeight() * 2);
+
+		if (option == 3)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, item3String+ " LV. "+ wallet.getLives_lv() , screen.getHeight() / 3
+				* 2 + fontRegularMetrics.getHeight() * 4);
+
+		if (option == 4)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, item4String+ " LV. "+ wallet.getCoin_lv() , screen.getHeight() / 3
+				* 2 + fontRegularMetrics.getHeight() * 6);
+
+		if (!money_alertcooldown.checkFinished())
+		{
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight()/2);
+		}
+		if(!max_alertcooldown.checkFinished())
+		{
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2);
+
+		}
 	}
 }
