@@ -224,6 +224,36 @@ public final class FileManager {
 		return highScores;
 	}
 
+	// 10/14 AJS Load Total Score
+	public int loadTotalScore() throws IOException {
+		int totalScore = 0;
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String totalScorePath = new File(jarPath).getParent();
+			totalScorePath += File.separator;
+			totalScorePath += "info";
+
+			File totalScoreFile = new File(totalScorePath);
+			inputStream = new FileInputStream(totalScoreFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			logger.info("Loading user total score.");
+
+		totalScore = Integer.parseInt(bufferedReader.readLine());
+		} catch (FileNotFoundException e) {
+			// loads default if there's no user scores.
+			logger.info("Loading default total score.");
+		}
+
+		return totalScore;
+	}
+
 	/**
 	 * Saves user high scores to disk.
 	 * 
@@ -268,6 +298,39 @@ public final class FileManager {
 				bufferedWriter.newLine();
 				savedCount++;
 			}
+
+		} finally {
+			if (bufferedWriter != null)
+				bufferedWriter.close();
+		}
+	}
+
+	public void saveTotalScore(int totalScore) throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String totalScorePath = new File(jarPath).getParent();
+			totalScorePath += File.separator;
+			totalScorePath += "info";
+
+			File totalScoreFile = new File(totalScorePath);
+
+			if (!totalScoreFile.exists())
+				totalScoreFile.createNewFile();
+
+			outputStream = new FileOutputStream(totalScoreFile);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+					outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving user total scores.");
+
+			bufferedWriter.write(Integer.toString(totalScore));
+
 
 		} finally {
 			if (bufferedWriter != null)

@@ -1,5 +1,6 @@
 package engine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
 
 
 import screen.*;
-
+import engine.Score;
 
 /**
  * Implements core game logic.
@@ -28,7 +29,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Max lives. */
-	private static final int MAX_LIVES = 3;
+	private static final int MAX_LIVES = 1;
 	/** Levels between extra life. */
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
@@ -76,7 +77,7 @@ public final class Core {
 	 * @param args
 	 *            Program args, ignored.
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws IOException {
 		try {
 			LOGGER.setUseParentHandlers(false);
 
@@ -111,10 +112,13 @@ public final class Core {
 		
 		GameState gameState;
 
+		int totalScore = FileManager.getInstance().loadTotalScore();
+		AchievementManager achievementManager;
+
 		int returnCode = 1;
 		do {
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
-
+			achievementManager = new AchievementManager(totalScore);
 			switch (returnCode) {
 			case 1:
 				// Main menu.
@@ -146,10 +150,9 @@ public final class Core {
 							gameState.getLivesRemaining(),
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
-
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
-
+				achievementManager.updateTotalScore(gameState.getScore());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
@@ -201,7 +204,6 @@ public final class Core {
 			}
 
 		} while (returnCode != 0);
-
 		fileHandler.flush();
 		fileHandler.close();
 		System.exit(0);

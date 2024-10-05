@@ -526,7 +526,7 @@ public final class DrawManager {
 
 		backBufferGraphics.setColor(Color.yellow);
 		drawLeftSideRegularString(screen, playTimesString,
-				screen.getHeight() / 5 + 3* fontBigMetrics.getHeight() );
+				screen.getHeight() / 5 + 3 * fontBigMetrics.getHeight() );
 
 
 		//Achievement Strings
@@ -578,6 +578,14 @@ public final class DrawManager {
 				break;
 			}
 		}
+	}
+
+	// 10/14 AJS Draw Total Score
+	public void drawTotalScore(final Screen screen, final int totalScore) {
+		backBufferGraphics.setColor(Color.WHITE);
+		String totalScoreString = String.format("                 %s", totalScore);
+		drawLeftSideRegularString(screen, totalScoreString, screen.getHeight() / 3
+				- fontRegularMetrics.getHeight() + 5);
 	}
 
 	/**
