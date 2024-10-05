@@ -155,7 +155,7 @@ public final class Core {
 							gameState.getLivesRemaining(),
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
-					endTime = System.currentTimeMillis();
+					endTime = System.currentTimeMilligs();
 					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
