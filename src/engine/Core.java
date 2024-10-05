@@ -121,7 +121,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			gameState = new GameState(1, 0, MAX_LIVES, 0, 0, 0);
+			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
 			achievementManager = new AchievementManager(totalScore);
 			switch (returnCode) {
 			case 1:
@@ -154,13 +154,12 @@ public final class Core {
 							gameState.getScore(),
 							gameState.getLivesRemaining(),
 							gameState.getBulletsShot(),
-							gameState.getShipsDestroyed(),
-					        gameState.getPlayTime());
+							gameState.getShipsDestroyed());
+					endTime = System.currentTimeMilligs();
+					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
-				endTime = System.currentTimeMillis();
 				achievementManager.updateTotalScore(gameState.getScore());
-				achievementManager.updateTotalTimePlay(gameState.getPlayTime() + ((int) (endTime - startTime) / 1000));
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
