@@ -35,7 +35,7 @@ public final class FileManager {
 	/** Application logger. */
 	private static Logger logger;
 	/** Max number of high scores. */
-	private static final int MAX_SCORES = 7;
+	private static final int MAX_SCORES = 3;
 
 	/**
 	 * private constructor.
@@ -235,7 +235,7 @@ public final class FileManager {
 
 			String totalScorePath = new File(jarPath).getParent();
 			totalScorePath += File.separator;
-			totalScorePath += "total_score";
+			totalScorePath += "totalScore";
 
 			File totalScoreFile = new File(totalScorePath);
 			inputStream = new FileInputStream(totalScoreFile);
@@ -280,7 +280,7 @@ public final class FileManager {
 
 			String totalPlayTimePath = new File(jarPath).getParent();
 			totalPlayTimePath += File.separator;
-			totalPlayTimePath += "total_play_time"; // Assuming the file is named 'info'
+			totalPlayTimePath += "totalPlayTime"; // Assuming the file is named 'info'
 
 			File totalScoreFile = new File(totalPlayTimePath);
 			inputStream = new FileInputStream(totalScoreFile);
@@ -313,7 +313,7 @@ public final class FileManager {
 		return totalPlayTime;
 	}
 
-	public int loadCurrentPsAchievement() throws IOException {
+	public int loadPerfectAchievement() throws IOException {
 		int currentPsAchievement = 0;
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;
@@ -324,7 +324,7 @@ public final class FileManager {
 
 			String currentPsAchievementPath = new File(jarPath).getParent();
 			currentPsAchievementPath += File.separator;
-			currentPsAchievementPath += "current_Perfect_stage";
+			currentPsAchievementPath += "perfectAchievement";
 
 			File currentPsAchievementFile = new File(currentPsAchievementPath);
 			inputStream = new FileInputStream(currentPsAchievementFile);
@@ -390,9 +390,9 @@ public final class FileManager {
 		}
 	}
 
-	public List<String> loadAccuracyAchievement() throws IOException {
+	public int loadAccuracyAchievement() throws IOException {
 
-		List<String> achievements = new ArrayList<>();
+		int accuracy = 0;
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;
 
@@ -403,21 +403,15 @@ public final class FileManager {
 
 			String achievementPath = new File(jarPath).getParent();
 			achievementPath += File.separator;
-			achievementPath += "achievements";
+			achievementPath += "accuracyAchievement";
 
 			File achievementFile = new File(achievementPath);
 			inputStream = new FileInputStream(achievementFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
 
-			String accuracy = bufferedReader.readLine();
-			String checkAchieved = bufferedReader.readLine();
-			while (accuracy != null && checkAchieved != null) {
-				achievements.add(accuracy);
-				achievements.add(checkAchieved);
-				accuracy = bufferedReader.readLine();
-				checkAchieved = bufferedReader.readLine();
-			}
+			accuracy = Integer.parseInt(bufferedReader.readLine());
+
 		} catch (FileNotFoundException e) {
 			loadDefaultAchievementsFile();
 			logger.info("File not found.");
@@ -433,7 +427,7 @@ public final class FileManager {
 		}
 
 		logger.info("Achievements successfully loaded.");
-		return achievements; // 불러온 업적 데이터를 리스트로 반환
+		return accuracy; // 불러온 업적 데이터를 리스트로 반환
 	}
 
 	/**
@@ -469,15 +463,11 @@ public final class FileManager {
 
 			logger.info("Saving user high scores.");
 
-			int savedCount = 0;
 			for (Score score : highScores) {
-				if (savedCount >= MAX_SCORES)
-					break;
 				bufferedWriter.write(score.getName());
 				bufferedWriter.newLine();
 				bufferedWriter.write(Integer.toString(score.getScore()));
 				bufferedWriter.newLine();
-				savedCount++;
 			}
 
 		} finally {
@@ -497,7 +487,7 @@ public final class FileManager {
 
 			String totalScorePath = new File(jarPath).getParent();
 			totalScorePath += File.separator;
-			totalScorePath += "total_score";  // Assuming the file name is 'info'
+			totalScorePath += "totalScore";  // Assuming the file name is 'info'
 
 			File totalScoreFile = new File(totalScorePath);
 
@@ -535,7 +525,7 @@ public final class FileManager {
 
 			String totalPlayTimePath = new File(jarPath).getParent();
 			totalPlayTimePath += File.separator;
-			totalPlayTimePath += "total_play_time";  // Assuming the file name is 'info'
+			totalPlayTimePath += "totalPlayTime";  // Assuming the file name is 'info'
 
 			File totalPlayTimeFile = new File(totalPlayTimePath);
 
@@ -562,7 +552,7 @@ public final class FileManager {
 		}
 	}
 
-	public void saveCurrentPsAchievement(int currentPsAchievement) throws IOException {
+	public void savePerfectAchievement(int currentPsAchievement) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
 
@@ -573,7 +563,7 @@ public final class FileManager {
 
 			String currentPsAchievementPath = new File(jarPath).getParent();
 			currentPsAchievementPath += File.separator;
-			currentPsAchievementPath += "current_Perfect_Stage";  // Assuming the file name is 'Perfect_Stage'
+			currentPsAchievementPath += "perfectAchievement";  // Assuming the file name is 'Perfect_Stage'
 
 			File currentPsAchievementFile = new File(currentPsAchievementPath);
 
@@ -660,14 +650,14 @@ public final class FileManager {
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
 
-	public void saveAccuracyAchievement(List<String> achievements) throws IOException {
+	public void saveAccuracyAchievement(int accuracy) throws IOException {
 		// 파일 경로 설정
 		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
 		String achievementPath = new File(jarPath).getParent();
 		achievementPath += File.separator;
-		achievementPath += "achievements";
+		achievementPath += "accuracyAchievement";
 
 		File achievementFile = new File(achievementPath);
 
@@ -675,14 +665,10 @@ public final class FileManager {
 		if (achievementFile.exists()) {
 			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
-
 				// 리스트의 내용을 파일에 기록
-				for (String line : achievements) {
-					writer.write(line);
-					writer.newLine();
-				}
+				writer.write(String.valueOf(accuracy));
 				writer.flush();
-				logger.info("Achievements successfully saved.");
+				logger.info("Accuracy achievement successfully saved.");
 			}
 		} else {
 			logger.warning("Achievements file not found at " + achievementPath);

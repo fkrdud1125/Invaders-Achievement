@@ -625,11 +625,6 @@ public final class DrawManager {
 
 
 
-		// sample code
-		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideAchievementBigString(screen, sampleAchievementsString1,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
-
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
@@ -710,6 +705,20 @@ public final class DrawManager {
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 15);
 	}
+
+	public void drawAccuracyAchievement(final Screen screen, final int accuracy) {
+		if (accuracy >= 100) {
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementBigString(screen, "You are crazy",
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		} else {
+			backBufferGraphics.setColor(Color.WHITE);
+			String accuracyAchievement = String.format("%02d%%", accuracy) + " => " + String.format("%02d%%", accuracy+10);
+			drawRightSideAchievementBigString(screen, accuracyAchievement,
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		}
+	}
+
 	/**
 	 * Draws a centered string on small font.
 	 *
