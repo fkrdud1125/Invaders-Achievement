@@ -171,7 +171,7 @@ public class GameSettingScreen extends Screen {
 		}
 		return instance;
 	}
-	public static boolean getMultiplay() {return isMultiplayer; }
+	public static boolean getMultiplay() { return isMultiplayer; }
 	/**
 	 * Draws the elements associated with the screen.
 	 */

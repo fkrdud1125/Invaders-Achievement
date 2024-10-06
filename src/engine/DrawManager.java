@@ -27,31 +27,6 @@ import entity.Ship;
 public final class DrawManager {
 	private GameSettingScreen gameSettingScreen;
 
-	public void drawAchievements(Screen screen) {
-		// GameSettingScreen의 isMultiplayer 상태를 확인
-		String sampleAchievementsString = "complete!";
-		String sampleAchievementsString4 = " Achieved by playing 2-player mode";
-		String sampleAchievementsString4_1 = "                for the first time.";
-		boolean firstPlayed = true;
-		if (gameSettingScreen.getMultiplay() && firstPlayed) {
-				backBufferGraphics.setColor(Color.GREEN);
-				drawRightSideAchievementBigString(screen, sampleAchievementsString,
-						screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
-						firstPlayed = false;
-		} else {
-			backBufferGraphics.setColor(Color.GRAY);
-			drawRightSideAchievementSmallString(screen, sampleAchievementsString4,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
-			backBufferGraphics.setColor(Color.GRAY);
-			drawRightSideAchievementSmallString(screen, sampleAchievementsString4_1,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
-		}
-
-
-
-
-	}
-
 	/** Singleton instance of the class. */
 	private static DrawManager instance;
 	/** Current frame. */
@@ -541,11 +516,6 @@ public final class DrawManager {
 		String perfectAchievement = "lv." + currentPerfectStage + " => lv." +
 				nextPerfectStage;
 
-
-
-		String explainAccuracy_1 = "      Achieved when the game ends";
-		String explainAccuracy_2 = "                  with 0% accuracy.";
-
 		String sampleCoin1 = "1000";
 		String sampleCoin2 = "1500";
 		String sampleCoin3 = "500";
@@ -602,16 +572,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideAchievementBigString(screen, perfectAchievement,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
-		backBufferGraphics.setColor(Color.GRAY);
-		drawRightSideAchievementSmallString(screen, explainAccuracy_1,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
-
-		backBufferGraphics.setColor(Color.GRAY);
-		drawRightSideAchievementSmallString(screen, explainAccuracy_2g,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
-
-
-
 
 
 		backBufferGraphics.setColor(Color.orange);
@@ -689,6 +649,42 @@ public final class DrawManager {
 			String accuracyAchievement = String.format("%02d%%", accuracy) + " => " + String.format("%02d%%", accuracy+10);
 			drawRightSideAchievementBigString(screen, accuracyAchievement,
 					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		}
+	}
+
+	public void drawFlawlessFailureAchievement(final Screen screen, final boolean checkFlawlessFailure) {
+		if (checkFlawlessFailure) {
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementBigString(screen, "Complete!",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
+		} else {
+			String explainAccuracy_1 = "      Achieved when the game ends";
+			String explainAccuracy_2 = "                  with 0% accuracy.";
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightSideAchievementSmallString(screen, explainAccuracy_1,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightSideAchievementSmallString(screen, explainAccuracy_2,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
+		}
+	}
+
+	public void drawBestFriendsAchievement(final Screen screen, final boolean checkBestFriends) {
+		String sampleAchievementsString = "complete!";
+		String sampleAchievementsString4 = " Achieved by playing 2-player mode";
+		String sampleAchievementsString4_1 = "                for the first time.";
+		if (checkBestFriends) {
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementBigString(screen, sampleAchievementsString,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
+		} else {
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightSideAchievementSmallString(screen, sampleAchievementsString4,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightSideAchievementSmallString(screen, sampleAchievementsString4_1,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
 		}
 	}
 

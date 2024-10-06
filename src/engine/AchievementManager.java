@@ -12,7 +12,6 @@ public class AchievementManager {
     private int totalScore;
     // 누적 플레이 시간
     private int totalTimePlay;
-
     // 퍼펙트 업적 관련 변수
     private static int currentPerfectLevel;
     private static int nextPerfectLevel;
@@ -23,12 +22,20 @@ public class AchievementManager {
     private int accuracy; // 명중률 업적 리스트
     private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
 
+    // Flawless Failure 업적 관련 변수
+    private boolean checkFlawlessFailure;
+
+    // Best Friends 업적 관련 변수
+    private boolean checkBestFriends;
+
     public AchievementManager() throws IOException {
         totalScore = FileManager.getInstance().loadTotalScore();
         totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
         accuracy = FileManager.getInstance().loadAccuracyAchievement();
         currentPerfectLevel = FileManager.getInstance().loadPerfectAchievement();
         nextPerfectLevel = currentPerfectLevel + 1;
+        checkFlawlessFailure = FileManager.getInstance().loadFlawlessFailureAchievement();
+        checkBestFriends = FileManager.getInstance().loadBestFriendsAchievement();
     }
 
     public void updateTotalTimePlay(int timePlay) throws IOException {
@@ -75,6 +82,17 @@ public class AchievementManager {
         }
     }
 
-    public void updateFlawlessFailureAchievement() throws IOException {}
+    public void updateFlawlessFailureAchievement(double accuracy) throws IOException {
+        if (!checkFlawlessFailure && accuracy <= 0) {
+            checkFlawlessFailure = true;
+            FileManager.getInstance().saveFlawlessFailureAchievement(checkFlawlessFailure);
+        }
+    }
 
+    public void updateBestFriendsAchievement(boolean checkTwoPlayMode) throws IOException {
+        if (!checkBestFriends && checkTwoPlayMode) {
+            checkBestFriends = true;
+            FileManager.getInstance().saveBestFriendsAchievement(checkBestFriends);
+        }
+    }
 }
