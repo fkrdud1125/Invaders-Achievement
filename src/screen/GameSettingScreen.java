@@ -19,7 +19,8 @@ public class GameSettingScreen extends Screen {
 
 	/** Milliseconds between changes in user selection. */
 	private static final int SELECTION_TIME = 200;
-	/** Maximum number of characters for player name. */
+	/** Maximum number of characters for player name.
+	 * draw를 용이하게 하기 위해 NAME_LIMIT을 4로 제한 */
 	private static final int NAME_LIMIT = 4;
 
 
@@ -192,6 +193,7 @@ public class GameSettingScreen extends Screen {
 	 * Draws the elements associated with the screen.
 	 */
 
+	// 1번째 플레이어 이름을 가져오기 위해 getName1 함수 생성.
 	public static String getName1() { return name1; }
 
 	private void draw() {
