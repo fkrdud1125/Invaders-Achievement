@@ -21,6 +21,7 @@ public class AchievementScreen extends Screen {
 	private int totalScore;
 	private int totalPlayTime;
 	private int currentPerfectStage;
+	private int accuracyAchievement;
 	private AchievementManager achievementManager;
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -55,7 +56,12 @@ public class AchievementScreen extends Screen {
 			logger.warning("Couldn't load total play time!");
 		}
 		try {
-			this.currentPerfectStage = Core.getFileManager().loadCurrentPsAchievement();
+			this.currentPerfectStage = Core.getFileManager().loadPerfectAchievement();
+		} catch (NumberFormatException | IOException e) {
+			logger.warning("Couldn't load Current Perfect Stage");
+		}
+		try {
+			this.accuracyAchievement = Core.getFileManager().loadAccuracyAchievement();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load Current Perfect Stage");
 		}
@@ -96,6 +102,7 @@ public class AchievementScreen extends Screen {
 		// 10/14 AJS Draw Total Score
 		drawManager.drawTotalScore(this, this.totalScore);
 		drawManager.drawTotalPlayTime(this, this.totalPlayTime);
+		drawManager.drawAccuracyAchievement(this, this.accuracyAchievement);
 		drawManager.completeDrawing(this);
 	}
 }

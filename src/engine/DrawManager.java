@@ -538,10 +538,6 @@ public final class DrawManager {
 		String titleAchievementsString3 = "Flawless Failure";
 		String titleAchievementsString4 = "We're best friends";
 
-
-		// sample strings
-		String sampleAchievementsString1 = "70%  =>  80%  name";
-
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
 		String sampleAchievementsString2 = "lv." + currentPerfectStage + " => lv." +
 				nextPerfectStage;
@@ -603,11 +599,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString4,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
-
-		// sample code
-		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideAchievementBigString(screen, sampleAchievementsString1,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
@@ -688,6 +679,20 @@ public final class DrawManager {
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 15);
 	}
+
+	public void drawAccuracyAchievement(final Screen screen, final int accuracy) {
+		if (accuracy >= 100) {
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementBigString(screen, "You are crazy",
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		} else {
+			backBufferGraphics.setColor(Color.WHITE);
+			String accuracyAchievement = String.format("%02d%%", accuracy) + " => " + String.format("%02d%%", accuracy+10);
+			drawRightSideAchievementBigString(screen, accuracyAchievement,
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		}
+	}
+
 	/**
 	 * Draws a centered string on small font.
 	 *
