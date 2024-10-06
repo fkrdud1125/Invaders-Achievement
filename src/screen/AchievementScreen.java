@@ -7,6 +7,8 @@ import java.util.List;
 import engine.AchievementManager;
 import engine.Core;
 import engine.Score;
+import engine.Sound;
+import engine.SoundManager;
 
 /**
  * Implements the high scores screen, it shows player records.
@@ -18,6 +20,9 @@ public class AchievementScreen extends Screen {
 
 	/** List of past high scores. */
 	private List<Score> highScores;
+	/** Singleton instance of SoundManager */
+	private final SoundManager soundManager = SoundManager.getInstance();
+
 	private int totalScore;
 	private int totalPlayTime;
 	private int currentPerfectStage;
@@ -98,8 +103,10 @@ public class AchievementScreen extends Screen {
 
 		draw();
 		if (inputManager.isKeyDown(KeyEvent.VK_SPACE)
-				&& this.inputDelay.checkFinished())
+				&& this.inputDelay.checkFinished()) {
 			this.isRunning = false;
+			soundManager.playSound(Sound.MENU_BACK);
+		}
 	}
 
 	/**
