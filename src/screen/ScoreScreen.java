@@ -19,7 +19,7 @@ import entity.Wallet;
 public class ScoreScreen extends Screen {
 
 	/** Maximum number of high scores. */
-	private static final int MAX_HIGH_SCORE_NUM = 7;
+	private static final int MAX_HIGH_SCORE_NUM = 3;
 
 
 	/** Current score. */
@@ -52,7 +52,7 @@ public class ScoreScreen extends Screen {
 	 * @param gameState
 	 *            Current game state.
 	 */
-	public ScoreScreen(final int width, final int height, final int fps,
+	public ScoreScreen(final String name1, final int width, final int height, final int fps,
 			final GameState gameState, final Wallet wallet) {
 		super(width, height, fps);
 
@@ -121,11 +121,32 @@ public class ScoreScreen extends Screen {
 	 * Saves the score as a high score.
 	 */
 	private void saveScore() {
-		//highScores.add(new Score(new String(this.name1), score));
+		if (highScores.size() > MAX_HIGH_SCORE_NUM) {
+			int index = 0;
+			for (Score loadScore : highScores) {
+				if (name1.equals(loadScore.getName())) {
+					if (score > loadScore.getScore()) {
+						highScores.remove(index);
+						highScores.add(new Score(name1, score));
+						break;
+					}
+				}
+				index += 1;
+			}
+		} else {
+			int index = 0;
+			for (Score loadScore : highScores) {
+				if (name1.equals(loadScore.getName())) {
+					if (score > loadScore.getScore()) {
+						highScores.remove(index);
+						break;
+					}
+				}
+				index += 1;
+			}
+			highScores.add(new Score(name1, score));
+		}
 		Collections.sort(highScores);
-		if (highScores.size() > MAX_HIGH_SCORE_NUM)
-			highScores.remove(highScores.size() - 1);
-
 		try {
 			Core.getFileManager().saveHighScores(highScores);
 		} catch (IOException e) {

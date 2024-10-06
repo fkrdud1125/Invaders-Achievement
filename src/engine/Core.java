@@ -163,7 +163,6 @@ public final class Core {
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
 				achievementManager.updateTotalScore(gameState.getScore());
-				achievementManager.checkHighScore(GameSettingScreen.getName1(), gameState.getScore());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
@@ -171,7 +170,7 @@ public final class Core {
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
 				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
-				currentScreen = new ScoreScreen(width, height, FPS, gameState, wallet);
+				currentScreen = new ScoreScreen(GameSettingScreen.getName1(), width, height, FPS, gameState, wallet);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
