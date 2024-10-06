@@ -99,6 +99,8 @@ public class AchievementManager {
 
     public void updateCurrentPerfectStage() throws IOException {
         FileManager.getInstance().saveCurrentPsAchievement(currentPerfectLevel);
+        FileManager.getInstance().saveCurrentPsAchievement(nextPerfectLevel);
+
     }
 
     public static int getCurrentPerfectLevel() {
