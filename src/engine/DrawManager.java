@@ -381,12 +381,12 @@ public final class DrawManager {
 	 */
 	public void drawResults(final Screen screen, final int score,
 			final int livesRemaining, final int shipsDestroyed,
-			final float accuracy, final boolean isNewRecord, final int coinsEarned) {
+			final double accuracy, final boolean isNewRecord, final int coinsEarned) {
 		String scoreString = String.format("score %04d", score);
 		String livesRemainingString = "lives remaining " + livesRemaining;
 		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
 		String accuracyString = String
-				.format("accuracy %.2f%%", accuracy * 100);
+				.format("accuracy %.2f%%", accuracy);
 		String coinsEarnedString = "EARNED COIN " + coinsEarned;
 
 		int height = isNewRecord ? 4 : 2;
@@ -673,7 +673,7 @@ public final class DrawManager {
 				- fontRegularMetrics.getHeight() - 15);
 	}
 
-	public void drawAccuracyAchievement(final Screen screen, final int accuracy) {
+	public void drawAccuracyAchievement(final Screen screen, final double accuracy) {
 
 		if (accuracy >= 100) {
 			backBufferGraphics.setColor(Color.GREEN);
@@ -688,7 +688,7 @@ public final class DrawManager {
 			drawRightSideAchievementSmallString_2(screen,"target",
 					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 -2);
 			backBufferGraphics.setColor(Color.WHITE);
-			String accuracyAchievement = String.format("%02d%%", accuracy) + " => " + String.format("%02d%%", accuracy+10);
+			String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + String.format("%02d%%", (int)(accuracy+10)/10*10);
 			drawRightSideAchievementBigString(screen, accuracyAchievement,
 					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5 );
 		}

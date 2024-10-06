@@ -390,9 +390,9 @@ public final class FileManager {
 		}
 	}
 
-	public int loadAccuracyAchievement() throws IOException {
+	public double loadAccuracyAchievement() throws IOException {
 
-		int accuracy = 0;
+		double accuracy = 0;
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;
 
@@ -410,7 +410,7 @@ public final class FileManager {
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
 
-			accuracy = Integer.parseInt(bufferedReader.readLine());
+			accuracy = Double.parseDouble(bufferedReader.readLine());
 
 		} catch (FileNotFoundException e) {
 			loadDefaultAchievementsFile();
@@ -736,7 +736,7 @@ public final class FileManager {
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
 
-	public void saveAccuracyAchievement(int accuracy) throws IOException {
+	public void saveAccuracyAchievement(double accuracy) throws IOException {
 		// 파일 경로 설정
 		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		jarPath = URLDecoder.decode(jarPath, "UTF-8");

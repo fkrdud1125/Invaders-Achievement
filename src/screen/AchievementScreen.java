@@ -21,7 +21,7 @@ public class AchievementScreen extends Screen {
 	private int totalScore;
 	private int totalPlayTime;
 	private int currentPerfectStage;
-	private int accuracyAchievement;
+	private double accuracyAchievement;
 	private boolean checkFlawlessFailure;
 	private boolean checkBestFriends;
 	private AchievementManager achievementManager;
@@ -60,22 +60,22 @@ public class AchievementScreen extends Screen {
 		try {
 			this.currentPerfectStage = Core.getFileManager().loadPerfectAchievement();
 		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load Current Perfect Stage");
+			logger.warning("Couldn't load current perfect stage");
 		}
 		try {
 			this.accuracyAchievement = Core.getFileManager().loadAccuracyAchievement();
 		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load Current Perfect Stage");
+			logger.warning("Couldn't load Current accuracy achievement");
 		}
 		try {
 			this.checkFlawlessFailure = Core.getFileManager().loadFlawlessFailureAchievement();
 		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load Current Perfect Stage");
+			logger.warning("Couldn't load flawless failure achievement");
 		}
 		try {
 			this.checkBestFriends = Core.getFileManager().loadBestFriendsAchievement();
 		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load Current Perfect Stage");
+			logger.warning("Couldn't load best friends achievement");
 		}
 	}
 

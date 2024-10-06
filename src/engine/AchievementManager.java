@@ -1,7 +1,8 @@
 package engine;
 
+import entity.Wallet;
+
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class AchievementManager {
@@ -16,17 +17,23 @@ public class AchievementManager {
     private static int currentPerfectLevel;
     private static int nextPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] PERFECT_COIN_REWARD = {2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
+    private final int[] PERFECT_COIN_REWARD = {100, 200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
     // 명중률 업적 관련 변수
-    private int accuracy; // 명중률 업적 리스트
+    private double accuracy; // 명중률 업적 리스트
     private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
 
     // Flawless Failure 업적 관련 변수
     private boolean checkFlawlessFailure;
-
+    private final int FLAWLESS_FAILURE_COIN = 1000;
     // Best Friends 업적 관련 변수
+
     private boolean checkBestFriends;
+    private final int BEST_FRIENDS_COIN = 1000;
+
+    // Coin 갱신
+    private Wallet wallet;
+    private int coinReward;
 
     public AchievementManager() throws IOException {
         totalScore = FileManager.getInstance().loadTotalScore();
@@ -36,6 +43,7 @@ public class AchievementManager {
         nextPerfectLevel = currentPerfectLevel + 1;
         checkFlawlessFailure = FileManager.getInstance().loadFlawlessFailureAchievement();
         checkBestFriends = FileManager.getInstance().loadBestFriendsAchievement();
+        wallet = new Wallet();
     }
 
     public void updateTotalTimePlay(int timePlay) throws IOException {
@@ -52,18 +60,32 @@ public class AchievementManager {
      * 명중률 업적을 업데이트 하는 함수.
      */
     public void updateAccuracyAchievement(double accuracy) throws IOException {
+        if (this.accuracy > accuracy) {
+            return;
+        }
         // 명중률 업적 달성 시, 그 아래 있는 모든 업적을 같이 달성하는 조건.
         if (accuracy >= 100) {
+            for (int i = 0; i < 4; i++) {
+                coinReward += ACCURACY_COIN_REWARD[i];
+            }
             this.accuracy = 100;
         } else if (accuracy >= 90) {
+            for (int i = 0; i < 3; i++) {
+                coinReward += ACCURACY_COIN_REWARD[i];
+            }
             this.accuracy = 90;
         } else if (accuracy >= 80) {
+            for (int i = 0; i < 2; i++) {
+                coinReward += ACCURACY_COIN_REWARD[i];
+            }
             this.accuracy = 80;
         } else if (accuracy >= 70) {
+            coinReward += ACCURACY_COIN_REWARD[0];
             this.accuracy = 70;
         }
         // 변경된 업적 저장.
-        FileManager.getInstance().saveAccuracyAchievement(this.accuracy);
+        FileManager.getInstance().saveAccuracyAchievement(accuracy);
+        wallet.deposit(coinReward);
     }
 
     public void updateCurrentPerfectStage() throws IOException {
@@ -79,6 +101,7 @@ public class AchievementManager {
             currentPerfectLevel += 1;
             nextPerfectLevel = currentPerfectLevel + 1;
             updateCurrentPerfectStage();
+            wallet.deposit(PERFECT_COIN_REWARD[currentPerfectLevel-1]);
         }
     }
 
@@ -86,6 +109,7 @@ public class AchievementManager {
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
             FileManager.getInstance().saveFlawlessFailureAchievement(checkFlawlessFailure);
+            wallet.deposit(FLAWLESS_FAILURE_COIN);
         }
     }
 
@@ -93,6 +117,7 @@ public class AchievementManager {
         if (!checkBestFriends && checkTwoPlayMode) {
             checkBestFriends = true;
             FileManager.getInstance().saveBestFriendsAchievement(checkBestFriends);
+            wallet.deposit(BEST_FRIENDS_COIN);
         }
     }
 }

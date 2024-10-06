@@ -33,6 +33,7 @@ public class ScoreScreen extends Screen {
 	/** List of past high scores. */
 	private List<Score> highScores;
 	/** Checks if current score is a new high score. */
+	private double accuracy;
 	private boolean isNewRecord;
 	/** Number of coins earned in the game */
 	private int coinsEarned;
@@ -63,6 +64,7 @@ public class ScoreScreen extends Screen {
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
+		this.accuracy = gameState.getAccuracy();
 		this.coinsEarned = gameState.getScore()/10;
 		wallet.deposit(coinsEarned);
 
@@ -159,8 +161,7 @@ public class ScoreScreen extends Screen {
 		drawManager.drawGameOver(this, this.inputDelay.checkFinished(),
 				this.isNewRecord);
 		drawManager.drawResults(this, this.score, this.livesRemaining,
-				this.shipsDestroyed, (float) this.shipsDestroyed
-						/ this.bulletsShot, this.isNewRecord, this.coinsEarned);
+				this.shipsDestroyed, this.accuracy, this.isNewRecord, this.coinsEarned);
 
 		drawManager.completeDrawing(this);
 	}
