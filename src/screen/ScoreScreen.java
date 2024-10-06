@@ -66,15 +66,8 @@ public class ScoreScreen extends Screen {
 		this.coinsEarned = gameState.getScore()/10;
 		wallet.deposit(coinsEarned);
 
-		this.isNewRecord = false;
-
 		try {
 			this.highScores = Core.getFileManager().loadHighScores();
-			if (highScores.size() < MAX_HIGH_SCORE_NUM
-					|| highScores.get(highScores.size() - 1).getScore()
-					< this.score)
-				this.isNewRecord = true;
-
 		} catch (IOException e) {
 			logger.warning("Couldn't load high scores!");
 		}
@@ -103,14 +96,12 @@ public class ScoreScreen extends Screen {
 				// Return to main menu.
 				this.returnCode = 1;
 				this.isRunning = false;
-				if (this.isNewRecord)
-					saveScore();
+				saveScore();
 			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 				// Play again.
 				this.returnCode = 2;
 				this.isRunning = false;
-				if (this.isNewRecord)
-					saveScore();
+				saveScore();
 			}
 
 		}
@@ -134,17 +125,22 @@ public class ScoreScreen extends Screen {
 				index += 1;
 			}
 		} else {
+			boolean checkDuplicate = false;
 			int index = 0;
 			for (Score loadScore : highScores) {
 				if (name1.equals(loadScore.getName())) {
+					checkDuplicate = true;
 					if (score > loadScore.getScore()) {
 						highScores.remove(index);
+						highScores.add(new Score(name1, score));
 						break;
 					}
 				}
 				index += 1;
 			}
-			highScores.add(new Score(name1, score));
+			if (!checkDuplicate) {
+				highScores.add(new Score(name1, score));
+			}
 		}
 		Collections.sort(highScores);
 		try {
