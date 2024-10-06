@@ -14,15 +14,14 @@ public class AchievementManager {
     private int totalTimePlay;
 
     // 퍼펙트 업적 관련 변수
-    private int psCoins = 0;
     private static int currentPerfectLevel;
     private static int nextPerfectLevel;
-
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] perfectCoinReward = {2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
+    private final int[] PERFECT_COIN_REWARD = {2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
     // 명중률 업적 관련 변수
     private int accuracy; // 명중률 업적 리스트
+    private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
 
     public AchievementManager() throws IOException {
         totalScore = FileManager.getInstance().loadTotalScore();
@@ -70,7 +69,6 @@ public class AchievementManager {
     public void updatePerfectAchievement(final int MAX_LIVES, int checkLives, int gameLevel) throws IOException {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
-            psCoins += perfectCoinReward[currentPerfectLevel];
             currentPerfectLevel += 1;
             nextPerfectLevel = currentPerfectLevel + 1;
             updateCurrentPerfectStage();

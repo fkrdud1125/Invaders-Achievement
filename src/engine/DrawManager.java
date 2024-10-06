@@ -527,25 +527,24 @@ public final class DrawManager {
 		String playTimesString = "-Total  Playtime-";
 
 		// centered strings
-		String achievementString = "ACHIEVEMENT";
-		String instructionsString = "PRESS SPACE TO RETURN";
+		String achievementString = "Achievement";
+		String instructionsString = "Press space to return";
 		String achievementsStatusString = "Achievements Status";
 
-		// Achievements names
-		//public void drawAchievementStatus()
-		String titleAchievementsString1 = "High Accuracy";
-		String titleAchievementsString2 = "perfect clear";
-		String titleAchievementsString3 = "Flawless Failure";
-		String titleAchievementsString4 = "We're best friends";
-
+		// achievements names
+		String[] achievements = {"High Accuracy", "{Perfect Clear", "Flawless Failure", "We're Best Friends"};
+		final int HIGHACCURACY = 0;
+		final int PERFEACTCLEAR = 1;
+		final int FLAWLESSFAILURE = 2;
+		final int BESTFRIENDS = 3;
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
-		String sampleAchievementsString2 = "lv." + currentPerfectStage + " => lv." +
+		String perfectAchievement = "lv." + currentPerfectStage + " => lv." +
 				nextPerfectStage;
 
 
 
-		String sampleAchievementsString3 = "      Achieved when the game ends ";
-		String sampleAchievementsString3_1 = "                  with 0% accuracy.";
+		String explainAccuracy_1 = "      Achieved when the game ends";
+		String explainAccuracy_2 = "                  with 0% accuracy.";
 
 		String sampleCoin1 = "1000";
 		String sampleCoin2 = "1500";
@@ -586,29 +585,29 @@ public final class DrawManager {
 
 		// left
 		backBufferGraphics.setColor(Color.WHITE);
-		drawLeftSideAchievementRegularString(screen, titleAchievementsString1,
+		drawLeftSideAchievementRegularString(screen, achievements[HIGHACCURACY],
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
 		backBufferGraphics.setColor(Color.WHITE);
-		drawLeftSideAchievementRegularString(screen, titleAchievementsString2,
+		drawLeftSideAchievementRegularString(screen, achievements[PERFEACTCLEAR],
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		drawLeftSideAchievementRegularString(screen, titleAchievementsString3,
+		drawLeftSideAchievementRegularString(screen, achievements[FLAWLESSFAILURE],
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		drawLeftSideAchievementRegularString(screen, titleAchievementsString4,
+		drawLeftSideAchievementRegularString(screen, achievements[BESTFRIENDS],
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
+		drawRightSideAchievementBigString(screen, perfectAchievement,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
 		backBufferGraphics.setColor(Color.GRAY);
-		drawRightSideAchievementSmallString(screen, sampleAchievementsString3,
+		drawRightSideAchievementSmallString(screen, explainAccuracy_1,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.GRAY);
-		drawRightSideAchievementSmallString(screen, sampleAchievementsString3_1,
+		drawRightSideAchievementSmallString(screen, explainAccuracy_2g,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight()*2);
 
 
