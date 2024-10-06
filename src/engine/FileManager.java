@@ -356,40 +356,6 @@ public final class FileManager {
 		return currentPsAchievement;
 	}
 
-	public void loadDefaultAchievementsFile() throws IOException {
-		// 파일 경로 설정
-		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, "UTF-8");
-
-		String achievementPath = new File(jarPath).getParent();
-		achievementPath += File.separator;
-		achievementPath += "achievements";
-
-		File achievementFile = new File(achievementPath);
-
-		// 파일이 없으면 새로 생성
-		if (!achievementFile.exists()) {
-			achievementFile.createNewFile();
-
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
-
-				// 기본 내용 작성
-				for (int i = 0; i <= 3; i++) {
-					writer.write(String.valueOf(70+(i*10)));
-					writer.newLine();
-					writer.write("false");
-					writer.newLine();
-				}
-
-				writer.flush();
-				logger.info("Default achievements file created.");
-			}
-		} else {
-			logger.info("Achievements file already exists.");
-		}
-	}
-
 	public double loadAccuracyAchievement() throws IOException {
 
 		double accuracy = 0;
@@ -401,19 +367,22 @@ public final class FileManager {
 					.getCodeSource().getLocation().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-			String achievementPath = new File(jarPath).getParent();
-			achievementPath += File.separator;
-			achievementPath += "accuracyAchievement";
+			String accuracyAchievementPath = new File(jarPath).getParent();
+			accuracyAchievementPath += File.separator;
+			accuracyAchievementPath += "accuracyAchievement";
 
-			File achievementFile = new File(achievementPath);
-			inputStream = new FileInputStream(achievementFile);
+			File accuracyAchievementFile = new File(accuracyAchievementPath);
+			inputStream = new FileInputStream(accuracyAchievementFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
-
-			accuracy = Double.parseDouble(bufferedReader.readLine());
+			String accuracyStr = bufferedReader.readLine();
+			if (accuracyStr == null) {
+				accuracy = 0;
+			} else {
+				accuracy = Double.parseDouble(accuracyStr);
+			}
 
 		} catch (FileNotFoundException e) {
-			loadDefaultAchievementsFile();
 			logger.info("File not found.");
 		} catch (NumberFormatException e) {
 			logger.warning("Invalid format for achievements.");
@@ -741,23 +710,25 @@ public final class FileManager {
 		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-		String achievementPath = new File(jarPath).getParent();
-		achievementPath += File.separator;
-		achievementPath += "accuracyAchievement";
+		String accuracyAchievementPath = new File(jarPath).getParent();
+		accuracyAchievementPath += File.separator;
+		accuracyAchievementPath += "accuracyAchievement";
 
-		File achievementFile = new File(achievementPath);
+		File accuracyAchievementFile = new File(accuracyAchievementPath);
+		if (!accuracyAchievementFile.exists())
+			accuracyAchievementFile.createNewFile();
 
 		// 업적 파일이 존재하면 내용을 갱신
-		if (achievementFile.exists()) {
+		if (accuracyAchievementFile.exists()) {
 			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
+					new FileOutputStream(accuracyAchievementFile), Charset.forName("UTF-8")))) {
 				// 리스트의 내용을 파일에 기록
 				writer.write(String.valueOf(accuracy));
 				writer.flush();
 				logger.info("Accuracy achievement successfully saved.");
 			}
 		} else {
-			logger.warning("Achievements file not found at " + achievementPath);
+			logger.warning("Achievements file not found at " + accuracyAchievementPath);
 		}
 	}
 
