@@ -163,6 +163,8 @@ public final class Core {
 						&& gameState.getLevel() <= NUM_LEVELS);
 				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
 				achievementManager.updateTotalScore(gameState.getScore());
+				achievementManager.updateFlawlessFailureAchievement(gameState.getAccuracy());
+				achievementManager.updateBestFriendsAchievement(GameSettingScreen.getMultiPlay());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "

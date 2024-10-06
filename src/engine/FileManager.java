@@ -430,6 +430,92 @@ public final class FileManager {
 		return accuracy; // 불러온 업적 데이터를 리스트로 반환
 	}
 
+	public boolean loadFlawlessFailureAchievement() throws IOException {
+		boolean flawlessFailure = false;
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String flawlessFailureAchievementPath = new File(jarPath).getParent();
+			flawlessFailureAchievementPath += File.separator;
+			flawlessFailureAchievementPath += "flawlessFailureAchievement";
+
+			File flawlessFailureAchievementFile = new File(flawlessFailureAchievementPath);
+			inputStream = new FileInputStream(flawlessFailureAchievementFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			Properties properties = new Properties();
+			properties.load(bufferedReader); // Load properties from the file
+
+			logger.info("Loading user perfect stage.");
+
+			String flawlessFailureStr = properties.getProperty("Condition_Flawless_Failure", "false"); // Default to "0" if key not found
+			flawlessFailure = flawlessFailureStr.equals("true");
+
+		} catch (FileNotFoundException e) {
+			// Load default if there's no user scores
+			logger.info("File not found. Loading default current perfect stage.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for current perfect stage. Defaulting to 0.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		return flawlessFailure;
+	}
+
+	public boolean loadBestFriendsAchievement() throws IOException {
+		boolean bestFriends = false;
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String bestFriendsAchievementPath = new File(jarPath).getParent();
+			bestFriendsAchievementPath += File.separator;
+			bestFriendsAchievementPath += "BestFriendsAchievement";
+
+			File bestFriendsAchievementFile = new File(bestFriendsAchievementPath);
+			inputStream = new FileInputStream(bestFriendsAchievementFile);
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					inputStream, Charset.forName("UTF-8")));
+
+			Properties properties = new Properties();
+			properties.load(bufferedReader); // Load properties from the file
+
+			logger.info("Loading user condition of best friends.");
+
+			String bestFriendsStr = properties.getProperty("Condition_Best_Friends", "false"); // Default to "0" if key not found
+			bestFriends = bestFriendsStr.equals("true");
+
+		} catch (FileNotFoundException e) {
+			// Load default if there's no user scores
+			logger.info("File not found. Loading default current perfect stage.");
+		} catch (NumberFormatException e) {
+			logger.warning("Invalid format for current perfect stage. Defaulting to 0.");
+		} finally {
+			if (bufferedReader != null) {
+				bufferedReader.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		return bestFriends;
+	}
+
 	/**
 	 * Saves user high scores to disk.
 	 * 
@@ -675,6 +761,78 @@ public final class FileManager {
 		}
 	}
 
+	public void saveFlawlessFailureAchievement(boolean checkFlawlessFailure) throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
 
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String flawlessFailureAchievementPath = new File(jarPath).getParent();
+			flawlessFailureAchievementPath += File.separator;
+			flawlessFailureAchievementPath += "flawlessFailureAchievement";  // Assuming the file name is 'Perfect_Stage'
+
+			File falwlessFailureAchievementFile = new File(flawlessFailureAchievementPath);
+
+			// Create the file if it doesn't exist
+			if (!falwlessFailureAchievementFile.exists())
+				falwlessFailureAchievementFile.createNewFile();
+
+			// Use FileOutputStream with 'false' to overwrite the existing content
+			outputStream = new FileOutputStream(falwlessFailureAchievementFile, false);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving condition flawless failure");
+
+			bufferedWriter.write("Condition_Flawless_Failure=" + checkFlawlessFailure);
+
+		} finally {
+			if (bufferedWriter != null) {
+				bufferedWriter.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+	}
+
+	public void saveBestFriendsAchievement(boolean checkFlawlessFailure) throws IOException {
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
+
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+			String bestFriendsAchievementPath = new File(jarPath).getParent();
+			bestFriendsAchievementPath += File.separator;
+			bestFriendsAchievementPath += "BestFriendsAchievement";  // Assuming the file name is 'Perfect_Stage'
+
+			File bestFriendsAchievementFile = new File(bestFriendsAchievementPath);
+
+			// Create the file if it doesn't exist
+			if (!bestFriendsAchievementFile.exists())
+				bestFriendsAchievementFile.createNewFile();
+
+			// Use FileOutputStream with 'false' to overwrite the existing content
+			outputStream = new FileOutputStream(bestFriendsAchievementFile, false);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving condition best friends");
+
+			bufferedWriter.write("Condition_Best_Friends=" + checkFlawlessFailure);
+
+		} finally {
+			if (bufferedWriter != null) {
+				bufferedWriter.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+	}
 
 }

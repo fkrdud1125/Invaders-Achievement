@@ -22,6 +22,8 @@ public class AchievementScreen extends Screen {
 	private int totalPlayTime;
 	private int currentPerfectStage;
 	private int accuracyAchievement;
+	private boolean checkFlawlessFailure;
+	private boolean checkBestFriends;
 	private AchievementManager achievementManager;
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -65,7 +67,16 @@ public class AchievementScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load Current Perfect Stage");
 		}
-
+		try {
+			this.checkFlawlessFailure = Core.getFileManager().loadFlawlessFailureAchievement();
+		} catch (NumberFormatException | IOException e) {
+			logger.warning("Couldn't load Current Perfect Stage");
+		}
+		try {
+			this.checkBestFriends = Core.getFileManager().loadBestFriendsAchievement();
+		} catch (NumberFormatException | IOException e) {
+			logger.warning("Couldn't load Current Perfect Stage");
+		}
 	}
 
 	/**
@@ -96,13 +107,13 @@ public class AchievementScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-		drawManager.drawAchievements(this);
+		drawManager.drawBestFriendsAchievement(this, this.checkBestFriends);
 		drawManager.drawAchievementMenu(this, this.currentPerfectStage, this.currentPerfectStage+1);
 		drawManager.drawHighScores(this, this.highScores);
-		// 10/14 AJS Draw Total Score
 		drawManager.drawTotalScore(this, this.totalScore);
 		drawManager.drawTotalPlayTime(this, this.totalPlayTime);
 		drawManager.drawAccuracyAchievement(this, this.accuracyAchievement);
+		drawManager.drawFlawlessFailureAchievement(this, checkFlawlessFailure);
 		drawManager.completeDrawing(this);
 	}
 }
