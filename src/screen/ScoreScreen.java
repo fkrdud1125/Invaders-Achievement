@@ -131,8 +131,8 @@ public class ScoreScreen extends Screen {
 				if (name1.equals(loadScore.getName())) {
 					checkDuplicate = true;
 					if (score > loadScore.getScore()) {
-						highScores.add(new Score(name1, score));
 						highScores.remove(index);
+						highScores.add(new Score(name1, score));
 						break;
 					}
 				}

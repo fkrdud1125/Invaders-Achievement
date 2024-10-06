@@ -19,7 +19,7 @@ public class GameSettingScreen extends Screen {
 	/** Milliseconds between changes in user selection. */
 	private static final int SELECTION_TIME = 200;
 	/** Maximum number of characters for player name. */
-	private static final int NAME_LIMIT = 6;
+	private static final int NAME_LIMIT = 4;
 
 
 	/** Player name1 for record input. */
@@ -171,7 +171,7 @@ public class GameSettingScreen extends Screen {
 		}
 		return instance;
 	}
-	public static boolean getMultiplay() { return isMultiplayer; }
+	public static boolean getMultiPlay() {return isMultiplayer; }
 	/**
 	 * Draws the elements associated with the screen.
 	 */
