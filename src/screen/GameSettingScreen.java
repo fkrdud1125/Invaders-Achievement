@@ -2,6 +2,7 @@ package screen;
 
 import engine.Cooldown;
 import engine.Core;
+import engine.GameSettings;
 import engine.InputManager;
 
 import java.awt.event.KeyEvent;
