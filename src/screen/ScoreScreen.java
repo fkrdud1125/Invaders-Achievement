@@ -129,9 +129,10 @@ public class ScoreScreen extends Screen {
 			int index = 0;
 			for (Score loadScore : highScores) {
 				if (name1.equals(loadScore.getName())) {
+					checkDuplicate = true;
 					if (score > loadScore.getScore()) {
 						highScores.remove(index);
-						checkDuplicate = true;
+						highScores.add(new Score(name1, score));
 						break;
 					}
 				}
