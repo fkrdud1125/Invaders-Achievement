@@ -8,6 +8,7 @@ package engine;
  */
 public class GameState {
 
+	private GameState instance;
 	/** Current game level. */
 	private int level;
 	/** Current score. */
@@ -94,5 +95,6 @@ public class GameState {
 		}
 		return ((float) shipsDestroyed / bulletsShot) *100;
 	}
+
 }
 

@@ -32,7 +32,6 @@ public final class DrawManager {
 		String sampleAchievementsString = "complete!";
 		String sampleAchievementsString4 = " Achieved by playing 2-player mode";
 		String sampleAchievementsString4_1 = "                for the first time.";
-		boolean multiplayerMode = GameSettingScreen.getInstance().getMultiplay();
 		boolean firstPlayed = true;
 		if (gameSettingScreen.getMultiplay() && firstPlayed) {
 				backBufferGraphics.setColor(Color.GREEN);
@@ -512,13 +511,14 @@ public final class DrawManager {
 				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
 	}
 
+
 	/**
 	 * Draws achievement screen title and instructions.
 	 * 
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawAchievementMenu(final Screen screen) {
+	public void drawAchievementMenu(final Screen screen, final int currentPerfectStage, final int nextPerfectStage) {
 		//high score section
 		String highScoreString = "High Scores";
 
@@ -538,11 +538,10 @@ public final class DrawManager {
 		String titleAchievementsString3 = "Flawless Failure";
 		String titleAchievementsString4 = "We're best friends";
 
+		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
+		String sampleAchievementsString2 = "lv." + currentPerfectStage + " => lv." +
+				nextPerfectStage;
 
-		// sample strings
-		String sampleAchievementsString1 = "70%  =>  80%  name";
-
-		String sampleAchievementsString2 = "lv.1 => lv.2   name";
 
 
 		String sampleAchievementsString3 = "      Achieved when the game ends ";
@@ -620,11 +619,6 @@ public final class DrawManager {
 
 
 
-
-		// sample code
-		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideAchievementBigString(screen, sampleAchievementsString1,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
@@ -705,6 +699,20 @@ public final class DrawManager {
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 15);
 	}
+
+	public void drawAccuracyAchievement(final Screen screen, final int accuracy) {
+		if (accuracy >= 100) {
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementBigString(screen, "You are crazy",
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		} else {
+			backBufferGraphics.setColor(Color.WHITE);
+			String accuracyAchievement = String.format("%02d%%", accuracy) + " => " + String.format("%02d%%", accuracy+10);
+			drawRightSideAchievementBigString(screen, accuracyAchievement,
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 3 + fontBigMetrics.getHeight());
+		}
+	}
+
 	/**
 	 * Draws a centered string on small font.
 	 *
@@ -819,9 +827,6 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(string, screen.getWidth()*85/100 , height);
 	}
-
-
-
 
 	/**
 	 * Countdown to game start.
