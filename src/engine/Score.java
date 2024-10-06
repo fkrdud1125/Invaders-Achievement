@@ -12,7 +12,6 @@ public class Score implements Comparable<Score> {
 	private String name;
 	/** Score points. */
 	private int score;
-	private int totalScore;
 
 	/**
 	 * Constructor.
@@ -44,8 +43,6 @@ public class Score implements Comparable<Score> {
 	public final int getScore() {
 		return this.score;
 	}
-
-
 
 	/**
 	 * Orders the scores descending by score.

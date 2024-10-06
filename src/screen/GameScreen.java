@@ -57,6 +57,8 @@ public class GameScreen extends Screen {
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
 	/** Current score. */
+	private String name1;
+
 	private int score;
 	/** Player lives left. */
 	private int lives;
