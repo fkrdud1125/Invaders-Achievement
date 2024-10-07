@@ -159,14 +159,11 @@ public final class Core {
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
 					endTime = System.currentTimeMillis();
-					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
-					achievementManager.updatePerfectAchievement(MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
+					achievementManager.updatePlaying((int) (endTime - startTime) / 1000 ,MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
-				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
-				achievementManager.updateTotalScore(gameState.getScore());
-				achievementManager.updateFlawlessFailureAchievement(gameState.getAccuracy());
-				achievementManager.updateBestFriendsAchievement(GameSettingScreen.getMultiPlay());
+				achievementManager.updatePlayed(gameState.getAccuracy(),gameState.getScore(),GameSettingScreen.getMultiPlay());
+
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "

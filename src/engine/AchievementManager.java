@@ -120,4 +120,15 @@ public class AchievementManager {
             wallet.deposit(BEST_FRIENDS_COIN);
         }
     }
+    public void updatePlaying(int playtime,int max_lives,int LivesRemaining, int level ) throws IOException{
+        updateTotalTimePlay(playtime);
+        updatePerfectAchievement(max_lives,LivesRemaining,level);
+    }
+
+    public void updatePlayed(double accuracy, int score, boolean MultiPlay) throws IOException{
+        updateAccuracyAchievement(accuracy);
+        updateTotalScore(score);
+        updateFlawlessFailureAchievement(accuracy);
+        updateBestFriendsAchievement(MultiPlay);
+    }
 }
