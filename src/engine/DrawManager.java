@@ -836,7 +836,8 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *64/100-
 				fontRegularMetrics.stringWidth(string), height);
-	}public void drawRightSideAchievementSmallString_2(final Screen screen,
+	}
+	public void drawRightSideAchievementSmallString_2(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *78/100-

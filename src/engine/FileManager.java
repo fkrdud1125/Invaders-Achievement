@@ -395,7 +395,7 @@ public final class FileManager {
 			}
 		}
 
-		logger.info("Achievements successfully loaded.");
+		logger.info("Accuracy Achievement successfully loaded.");
 		return accuracy; // 불러온 업적 데이터를 리스트로 반환
 	}
 
@@ -706,29 +706,35 @@ public final class FileManager {
 	}
 
 	public void saveAccuracyAchievement(double accuracy) throws IOException {
+
+		OutputStream outputStream = null;
+		BufferedWriter bufferedWriter = null;
 		// 파일 경로 설정
-		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, "UTF-8");
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-		String accuracyAchievementPath = new File(jarPath).getParent();
-		accuracyAchievementPath += File.separator;
-		accuracyAchievementPath += "accuracyAchievement";
+			String accuracyAchievementPath = new File(jarPath).getParent();
+			accuracyAchievementPath += File.separator;
+			accuracyAchievementPath += "accuracyAchievement";
 
-		File accuracyAchievementFile = new File(accuracyAchievementPath);
-		if (!accuracyAchievementFile.exists())
-			accuracyAchievementFile.createNewFile();
+			File accuracyAchievementFile = new File(accuracyAchievementPath);
 
-		// 업적 파일이 존재하면 내용을 갱신
-		if (accuracyAchievementFile.exists()) {
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(accuracyAchievementFile), Charset.forName("UTF-8")))) {
-				// 리스트의 내용을 파일에 기록
-				writer.write(String.valueOf(accuracy));
-				writer.flush();
-				logger.info("Accuracy achievement successfully saved.");
-			}
-		} else {
-			logger.warning("Achievements file not found at " + accuracyAchievementPath);
+			if (!accuracyAchievementFile.exists())
+				accuracyAchievementFile.createNewFile();
+
+			outputStream = new FileOutputStream(accuracyAchievementFile);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+					outputStream, Charset.forName("UTF-8")));
+
+			logger.info("Saving Accuracy Achievement.");
+
+			bufferedWriter.write(accuracy + "");
+
+		} finally {
+			if (bufferedWriter != null)
+				bufferedWriter.close();
 		}
 	}
 
