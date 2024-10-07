@@ -515,7 +515,7 @@ public final class DrawManager {
 
 
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
-		String sampleAchievementsString2 = "  lv." + currentPerfectStage + " => lv." +
+		String sampleAchievementsString2 = "lv." + currentPerfectStage + "   =>  lv." +
 				nextPerfectStage;
 
 
@@ -852,12 +852,12 @@ public final class DrawManager {
 	public void drawRightSideAchievementSmallString_1(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
-		backBufferGraphics.drawString(string, screen.getWidth() *61/100-
+		backBufferGraphics.drawString(string, screen.getWidth() *59/100-
 				fontRegularMetrics.stringWidth(string), height);
 	}public void drawRightSideAchievementSmallString_2(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
-		backBufferGraphics.drawString(string, screen.getWidth() *75/100-
+		backBufferGraphics.drawString(string, screen.getWidth() *77/100-
 				fontRegularMetrics.stringWidth(string), height);
 	}
 
