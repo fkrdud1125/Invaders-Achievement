@@ -17,29 +17,28 @@ public class AchievementManager {
     int totalScore;
 
     // 누적 플레이 시간
-    int totalPlayTime;
-
+    private int totalPlayTime;
     // 퍼펙트 업적 관련 변수
-    int currentPerfectLevel;
-    int nextPerfectLevel;
+    private static int currentPerfectLevel;
+    private static int nextPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
     private final int[] PERFECT_COIN_REWARD = {100, 200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
-    // 명중률 업적 관련 변수// 명중률 업적 리스트
-    double highAccuracy;
+    // 명중률 업적 관련 변수
+    private double highAccuracy; // 명중률 업적 리스트
     private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
 
     // Flawless Failure 업적 관련 변수
-    boolean checkFlawlessFailure;
+    private boolean checkFlawlessFailure;
     private final int FLAWLESS_FAILURE_COIN = 1000;
-
     // Best Friends 업적 관련 변수
-    boolean checkBestFriends;
+
+    private boolean checkBestFriends;
     private final int BEST_FRIENDS_COIN = 1000;
 
     // Coin 갱신
     private Wallet wallet;
-    private int coinReward = 0;
+    private int coinReward;
 
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
@@ -122,4 +121,15 @@ public class AchievementManager {
         FileManager.getInstance().saveAchievement(achievement);
     }
 
+    public void updatePlaying(int playtime,int max_lives,int LivesRemaining, int level ) throws IOException{
+        updateTotalPlayTime(playtime);
+        updatePerfect(max_lives,LivesRemaining,level);
+    }
+
+    public void updatePlayed(double accuracy, int score, boolean MultiPlay) throws IOException{
+        updateAccuracy(accuracy);
+        updateTotalScore(score);
+        updateFlawlessFailure(accuracy);
+        updateBestFriends(MultiPlay);
+    }
 }
