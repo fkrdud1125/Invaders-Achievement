@@ -89,11 +89,11 @@ public class GameState {
 		return coinsEarned;
 	}
 
-	public float getAccuracy() {
+	public double getAccuracy() {
 		if (bulletsShot == 0){
 			return 0;
 		}
-		return ((float) shipsDestroyed / bulletsShot) *100;
+		return ((double) shipsDestroyed / bulletsShot) *100;
 	}
 
 }
