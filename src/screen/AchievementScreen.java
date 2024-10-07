@@ -11,9 +11,9 @@ import engine.Sound;
 import engine.SoundManager;
 
 /**
- * Implements the high scores screen, it shows player records.
+ * Implements the achievement screen.
  * 
- * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
+ * Team NOF
  * 
  */
 public class AchievementScreen extends Screen {

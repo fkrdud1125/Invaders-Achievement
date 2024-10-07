@@ -117,7 +117,6 @@ public final class Core {
 		GameState gameState;
 
 		AchievementManager achievementManager;
-
 		Wallet wallet = Wallet.getWallet();
 
 		int returnCode = 1;

@@ -14,8 +14,7 @@ public class AchievementManager {
     private Achievement achievement;
 
     // 누적 점수
-    int totalScore;
-
+    private int totalScore;
     // 누적 플레이 시간
     private int totalPlayTime;
     // 퍼펙트 업적 관련 변수
@@ -40,6 +39,7 @@ public class AchievementManager {
     private Wallet wallet;
     private int coinReward;
 
+    // 각 업적에 필요한 변수들을 파일을 통해 입력 받음.
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
         this.totalScore = achievement.getTotalScore();
