@@ -237,8 +237,11 @@ public final class FileManager {
 			achievementPath += File.separator;
 			achievementPath += "achievement";
 
-			File totalScoreFile = new File(achievementPath);
-			inputStream = new FileInputStream(totalScoreFile);
+			File achievementFile = new File(achievementPath);
+			if (!achievementFile.exists())
+				achievementFile.createNewFile();
+
+			inputStream = new FileInputStream(achievementFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
 
