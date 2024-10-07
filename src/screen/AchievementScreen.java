@@ -29,7 +29,7 @@ public class AchievementScreen extends Screen {
 	private double accuracyAchievement;
 	private boolean checkFlawlessFailure;
 	private boolean checkBestFriends;
-	private AchievementManager achievementManager;
+
 	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
@@ -42,7 +42,6 @@ public class AchievementScreen extends Screen {
 	 */
 	public AchievementScreen(final int width, final int height, final int fps, final AchievementManager achievementManager) {
 		super(width, height, fps);
-		this.achievementManager = achievementManager;
 
 		this.returnCode = 1;
 
@@ -52,33 +51,33 @@ public class AchievementScreen extends Screen {
 			logger.warning("Couldn't load high scores!");
 		}
 		try {
-			this.totalScore = Core.getFileManager().loadTotalScore();
+			this.totalScore = Core.getFileManager().loadAchievement().getTotalScore();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load total scores!");
 		}
 
 		try {
-			this.totalPlayTime = Core.getFileManager().loadTotalPlayTime();
+			this.totalPlayTime = Core.getFileManager().loadAchievement().getTotalPlayTime();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load total play time!");
 		}
 		try {
-			this.currentPerfectStage = Core.getFileManager().loadPerfectAchievement();
+			this.currentPerfectStage = Core.getFileManager().loadAchievement().getPerfectStage();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load current perfect stage");
 		}
 		try {
-			this.accuracyAchievement = Core.getFileManager().loadAccuracyAchievement();
+			this.accuracyAchievement = Core.getFileManager().loadAchievement().getHighAccuracy();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load Current accuracy achievement");
 		}
 		try {
-			this.checkFlawlessFailure = Core.getFileManager().loadFlawlessFailureAchievement();
+			this.checkFlawlessFailure = Core.getFileManager().loadAchievement().getFlawlessFailure();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load flawless failure achievement");
 		}
 		try {
-			this.checkBestFriends = Core.getFileManager().loadBestFriendsAchievement();
+			this.checkBestFriends = Core.getFileManager().loadAchievement().getBestFriends();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load best friends achievement");
 		}

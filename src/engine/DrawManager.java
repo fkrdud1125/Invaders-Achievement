@@ -654,7 +654,6 @@ public final class DrawManager {
 		}
 	}
 
-	// 10/14 AJS Draw Total Score
 	public void drawTotalScore(final Screen screen, final int totalScore) {
 		backBufferGraphics.setColor(Color.WHITE);
 		String totalScoreString = String.format("%s", totalScore);
