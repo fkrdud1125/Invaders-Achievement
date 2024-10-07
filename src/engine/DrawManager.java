@@ -677,8 +677,8 @@ public final class DrawManager {
 
 		if (accuracy >= 100) {
 			backBufferGraphics.setColor(Color.GREEN);
-			drawRightSideAchievementBigString(screen, "You are crazy",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 );
+			drawRightSideAchievementBigString(screen, "You are crazy!",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
 		} else {
 
 			backBufferGraphics.setColor(Color.green);
@@ -687,10 +687,18 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.red);
 			drawRightSideAchievementSmallString_2(screen,"target",
 					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 -2);
-			backBufferGraphics.setColor(Color.WHITE);
-			String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + String.format("%02d%%", (int)(accuracy+10)/10*10);
-			drawRightSideAchievementBigString(screen, accuracyAchievement,
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5 );
+			if (accuracy < 70){
+				backBufferGraphics.setColor(Color.WHITE);
+				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + "70%";
+				drawRightSideAchievementBigString(screen, accuracyAchievement,
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5 );
+			}
+			else{
+				backBufferGraphics.setColor(Color.WHITE);
+				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + String.format("%02d%%", (int)(accuracy+10)/10*10);
+				drawRightSideAchievementBigString(screen, accuracyAchievement,
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5 );
+			}
 		}
 	}
 
