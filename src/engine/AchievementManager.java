@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 public class AchievementManager {
 
+    /** 업적과 관련된 부분을 관리를 쉽게하기 위해 AchievementManager Class 생성 */
+
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
     // 누적 점수
@@ -35,6 +37,7 @@ public class AchievementManager {
     private Wallet wallet;
     private int coinReward;
 
+    // 각 업적에 필요한 변수들을 파일을 통해 입력 받음.
     public AchievementManager() throws IOException {
         totalScore = FileManager.getInstance().loadTotalScore();
         totalTimePlay = FileManager.getInstance().loadTotalPlayTime();
@@ -46,19 +49,19 @@ public class AchievementManager {
         wallet = new Wallet();
     }
 
+    // 누적 플레이 시간을 업데이트하는 함수
     public void updateTotalTimePlay(int timePlay) throws IOException {
         this.totalTimePlay += timePlay;
         FileManager.getInstance().saveTotalPlayTime(totalTimePlay);
     }
 
+    // 누적 점수를 업데이트하는 함수
     public void updateTotalScore(int score) throws IOException {
         totalScore += score;
         FileManager.getInstance().saveTotalScore(totalScore);
     }
 
-    /**
-     * 명중률 업적을 업데이트 하는 함수.
-     */
+    // 명중률 업적을 업데이트하는 함수.
     public void updateAccuracyAchievement(double accuracy) throws IOException {
         if (this.accuracy > accuracy) {
             return;
@@ -88,13 +91,12 @@ public class AchievementManager {
         wallet.deposit(coinReward);
     }
 
+    // 퍼펙트 스테이지를 업데이트하는 함수.
     public void updateCurrentPerfectStage() throws IOException {
         FileManager.getInstance().savePerfectAchievement(currentPerfectLevel);
     }
 
-    /**
-     * 퍼펙트 업적을 달성했는지 확인
-     */
+    // 퍼펙트 스테이지 조건을 검사하고, 현재 완료한 업적 레벨을 변경하는 함수.
     public void updatePerfectAchievement(final int MAX_LIVES, int checkLives, int gameLevel) throws IOException {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
@@ -105,7 +107,9 @@ public class AchievementManager {
         }
     }
 
+    // 한 대도 못 때리고(명중률 = 0) 게임이 끝날 시 업데이트되는 함수. (Flawless Failure 업적)
     public void updateFlawlessFailureAchievement(double accuracy) throws IOException {
+        // 명중률이 0일시 (한 대도 명중 못 할) 업적을 갱신하도록 설정. 이미 갱신 시 업적 업데이트 X
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
             FileManager.getInstance().saveFlawlessFailureAchievement(checkFlawlessFailure);
@@ -113,7 +117,9 @@ public class AchievementManager {
         }
     }
 
+    // 최초로 2인용 설정을 하고 게임 시 업데이트되는 함수.
     public void updateBestFriendsAchievement(boolean checkTwoPlayMode) throws IOException {
+        // 현재 설정이 2인용 모드인지 확인하고, 이미 업적을 달성했는지 확인.
         if (!checkBestFriends && checkTwoPlayMode) {
             checkBestFriends = true;
             FileManager.getInstance().saveBestFriendsAchievement(checkBestFriends);

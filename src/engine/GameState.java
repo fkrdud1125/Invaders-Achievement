@@ -89,11 +89,13 @@ public class GameState {
 		return coinsEarned;
 	}
 
-	public float getAccuracy() {
+	// 멍중률을 가져오는 함수 추가.
+	public double getAccuracy() {
+		// division 0인 경우를 방지
 		if (bulletsShot == 0){
 			return 0;
 		}
-		return ((float) shipsDestroyed / bulletsShot) *100;
+		return ((double) shipsDestroyed / bulletsShot) *100;
 	}
 
 }

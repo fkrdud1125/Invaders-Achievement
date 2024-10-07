@@ -223,7 +223,7 @@ public final class FileManager {
 		return highScores;
 	}
 
-	// 10/14 AJS Load Total Score
+	// 저장된 누적 점수를 로드하는 함수.
 	public int loadTotalScore() throws IOException {
 		int totalScore = 0;
 		InputStream inputStream = null;
@@ -269,6 +269,7 @@ public final class FileManager {
 		return totalScore;
 	}
 
+	// 저장된 누적 플레이 시간을 로드하는 함수.
 	public int loadTotalPlayTime() throws IOException {
 		int totalPlayTime = 0;
 		InputStream inputStream = null;
@@ -313,6 +314,7 @@ public final class FileManager {
 		return totalPlayTime;
 	}
 
+	// 저장된 퍼펙트 스테이지를 로드하는 함수.
 	public int loadPerfectAchievement() throws IOException {
 		int currentPsAchievement = 0;
 		InputStream inputStream = null;
@@ -356,40 +358,7 @@ public final class FileManager {
 		return currentPsAchievement;
 	}
 
-	public void loadDefaultAchievementsFile() throws IOException {
-		// 파일 경로 설정
-		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		jarPath = URLDecoder.decode(jarPath, "UTF-8");
-
-		String achievementPath = new File(jarPath).getParent();
-		achievementPath += File.separator;
-		achievementPath += "achievements";
-
-		File achievementFile = new File(achievementPath);
-
-		// 파일이 없으면 새로 생성
-		if (!achievementFile.exists()) {
-			achievementFile.createNewFile();
-
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(achievementFile), Charset.forName("UTF-8")))) {
-
-				// 기본 내용 작성
-				for (int i = 0; i <= 3; i++) {
-					writer.write(String.valueOf(70+(i*10)));
-					writer.newLine();
-					writer.write("false");
-					writer.newLine();
-				}
-
-				writer.flush();
-				logger.info("Default achievements file created.");
-			}
-		} else {
-			logger.info("Achievements file already exists.");
-		}
-	}
-
+	// 저장된 멍졍률을 로드하는 함수.
 	public double loadAccuracyAchievement() throws IOException {
 
 		double accuracy = 0;
@@ -401,19 +370,26 @@ public final class FileManager {
 					.getCodeSource().getLocation().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 
-			String achievementPath = new File(jarPath).getParent();
-			achievementPath += File.separator;
-			achievementPath += "accuracyAchievement";
+			String accuracyAchievementPath = new File(jarPath).getParent();
+			accuracyAchievementPath += File.separator;
+			accuracyAchievementPath += "accuracyAchievement";
 
-			File achievementFile = new File(achievementPath);
-			inputStream = new FileInputStream(achievementFile);
+			File accuracyAchievementFile = new File(accuracyAchievementPath);
+
+			if (!accuracyAchievementFile.exists())
+				accuracyAchievementFile.createNewFile();
+
+			inputStream = new FileInputStream(accuracyAchievementFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
 					inputStream, Charset.forName("UTF-8")));
-
-			accuracy = Double.parseDouble(bufferedReader.readLine());
+			String accuracyStr = bufferedReader.readLine();
+			if (accuracyStr == null) {
+				accuracy = 0;
+			} else {
+				accuracy = Double.parseDouble(accuracyStr);
+			}
 
 		} catch (FileNotFoundException e) {
-			loadDefaultAchievementsFile();
 			logger.info("File not found.");
 		} catch (NumberFormatException e) {
 			logger.warning("Invalid format for achievements.");
@@ -430,6 +406,7 @@ public final class FileManager {
 		return accuracy; // 불러온 업적 데이터를 리스트로 반환
 	}
 
+	// 저장된 flawless failure 업적 상태를 로드하는 함수.
 	public boolean loadFlawlessFailureAchievement() throws IOException {
 		boolean flawlessFailure = false;
 		InputStream inputStream = null;
@@ -473,6 +450,7 @@ public final class FileManager {
 		return flawlessFailure;
 	}
 
+	// 저장된 best friends 업적 상태를 로드하는 함수.
 	public boolean loadBestFriendsAchievement() throws IOException {
 		boolean bestFriends = false;
 		InputStream inputStream = null;
@@ -562,6 +540,7 @@ public final class FileManager {
 		}
 	}
 
+	// 현재 누적 점수를 저장하는 함수.
 	public void saveTotalScore(int totalScore) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
@@ -600,6 +579,7 @@ public final class FileManager {
 		}
 	}
 
+	// 현재 누적 플레이 시간을 저장하는 함수.
 	public void saveTotalPlayTime(int totalPlayTime) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
@@ -638,6 +618,7 @@ public final class FileManager {
 		}
 	}
 
+	// 현재 퍼펙트 스테이지를 저장하는 함수.
 	public void savePerfectAchievement(int currentPsAchievement) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
@@ -736,6 +717,7 @@ public final class FileManager {
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
 
+	// 현재 명중률 상태를 저장하는 함수.
 	public void saveAccuracyAchievement(double accuracy) throws IOException {
 		// 파일 경로 설정
 		String jarPath = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -761,6 +743,7 @@ public final class FileManager {
 		}
 	}
 
+	// 현재 flawless failure 업적 상태를 저장하는 함수.
 	public void saveFlawlessFailureAchievement(boolean checkFlawlessFailure) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
@@ -797,7 +780,7 @@ public final class FileManager {
 			}
 		}
 	}
-
+	// 현재 best friends 업적 상태를 저장하는 함수.
 	public void saveBestFriendsAchievement(boolean checkFlawlessFailure) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
