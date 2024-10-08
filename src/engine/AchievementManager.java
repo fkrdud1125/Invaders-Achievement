@@ -13,27 +13,18 @@ public class AchievementManager {
 
     private Achievement achievement;
 
-    // 누적 점수
-    private int totalScore;
-    // 누적 플레이 시간
-    private int totalPlayTime;
     // 퍼펙트 업적 관련 변수
     private static int currentPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
     // 명중률 업적 관련 변수
     private double highAccuracy; // 명중률 업적 리스트
-    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
 
     // Flawless Failure 업적 관련 변수
     private boolean checkFlawlessFailure;
-    private final int FLAWLESS_FAILURE_COIN = 1000;
-    // Best Friends 업적 관련 변수
 
+    // Best Friends 업적 관련 변수
     private boolean checkBestFriends;
-    private final int BEST_FRIENDS_COIN = 1000;
-    private Wallet wallet;
 
     // Coin 갱신
     private int coinReward = 0;
@@ -66,22 +57,23 @@ public class AchievementManager {
         if (highAccuracy > accuracy) {
             return;
         }
+        int[] accuracyReward = achievement.getAccuracyReward();
         highAccuracy = accuracy;
         // 명중률 업적 달성 시, 그 아래 있는 모든 업적을 같이 달성하는 조건.
         if (highAccuracy >= 100) {
             for (int i = 0; i < 4; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += accuracyReward[i];
             }
         } else if (highAccuracy >= 90) {
             for (int i = 0; i < 3; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += accuracyReward[i];
             }
         } else if (highAccuracy >= 80) {
             for (int i = 0; i < 2; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += accuracyReward[i];
             }
         } else if (highAccuracy >= 70) {
-            coinReward += ACCURACY_COIN_REWARD[0];
+            coinReward += accuracyReward[0];
         }
         // 변경된 업적 저장.
         achievement.setHighAccuracy(highAccuracy);
@@ -93,7 +85,7 @@ public class AchievementManager {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
             currentPerfectLevel += 1;
-            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel-1];
+            coinReward += achievement.getPerfectReward()[currentPerfectLevel-1];
             achievement.setCurrentPerfectStage(currentPerfectLevel);
         }
     }
@@ -101,7 +93,7 @@ public class AchievementManager {
     public void updateFlawlessFailure(double accuracy) throws IOException {
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
-            coinReward += FLAWLESS_FAILURE_COIN;
+            coinReward += achievement.getFlawlessFailureReward();
             achievement.setFlawlessFailure(true);
         }
     }
@@ -109,7 +101,7 @@ public class AchievementManager {
     public void updateBestFriends(boolean checkTwoPlayMode) throws IOException {
         if (!checkBestFriends && checkTwoPlayMode) {
             checkBestFriends = true;
-            coinReward += BEST_FRIENDS_COIN;
+            coinReward += achievement.getBestFriendsReward();
             achievement.setBestFriends(true);
         }
     }

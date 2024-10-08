@@ -677,6 +677,7 @@ public final class DrawManager {
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 2
 				- fontRegularMetrics.getHeight() - 15);
 	}
+
 	public void drawAccuracyAchievement(final Screen screen, final double accuracy) {
 
 		if (accuracy >= 100) {
