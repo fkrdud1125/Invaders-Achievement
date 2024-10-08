@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 
 public class AchievementManager {
 
+    /** 업적과 관련된 부분을 관리를 쉽게하기 위해 AchievementManager Class 생성 */
+
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
 
