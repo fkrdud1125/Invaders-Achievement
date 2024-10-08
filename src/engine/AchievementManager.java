@@ -52,13 +52,12 @@ public class AchievementManager {
     }
 
     public void updateTotalPlayTime(int playTime) throws IOException {
-        totalPlayTime += playTime;
-        achievement.setTotalPlayTime(totalPlayTime);
+
+        achievement.setTotalPlayTime(playTime);
     }
 
     public void updateTotalScore(int score) throws IOException {
-        totalScore += score;
-        achievement.setTotalScore(totalScore);
+        achievement.setTotalScore(score);
     }
 
     /**
