@@ -711,7 +711,7 @@ public final class DrawManager {
 	}
 
 
-		public void drawFlawlessFailureAchievement(final Screen screen, final boolean checkFlawlessFailure) {
+	public void drawFlawlessFailureAchievement(final Screen screen, final boolean checkFlawlessFailure) {
 		String sampleCoin3 = "500";
 		if (checkFlawlessFailure) {
 			backBufferGraphics.setColor(Color.GREEN);

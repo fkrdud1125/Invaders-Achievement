@@ -19,13 +19,12 @@ public class AchievementManager {
     private int totalPlayTime;
     // 퍼펙트 업적 관련 변수
     private static int currentPerfectLevel;
-    private static int nextPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] PERFECT_COIN_REWARD = {100, 200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
+    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
     // 명중률 업적 관련 변수
     private double highAccuracy; // 명중률 업적 리스트
-    private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
+    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
 
     // Flawless Failure 업적 관련 변수
     private boolean checkFlawlessFailure;
@@ -34,21 +33,22 @@ public class AchievementManager {
 
     private boolean checkBestFriends;
     private final int BEST_FRIENDS_COIN = 1000;
+    private Wallet wallet;
 
     // Coin 갱신
-    private Wallet wallet;
-    private int coinReward;
+    private int coinReward = 0;
 
     // 각 업적에 필요한 변수들을 파일을 통해 입력 받음.
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
-        this.totalScore = achievement.getTotalScore();
-        this.totalPlayTime = achievement.getTotalPlayTime();
         this.currentPerfectLevel = achievement.getPerfectStage();
         this.highAccuracy = achievement.getHighAccuracy();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
         this.checkBestFriends = achievement.getBestFriends();
-        wallet = Wallet.getWallet();
+    }
+
+    public int getAchievementReward() {
+        return coinReward;
     }
 
     public void updateTotalPlayTime(int playTime) throws IOException {
@@ -87,7 +87,6 @@ public class AchievementManager {
         }
         // 변경된 업적 저장.
         achievement.setHighAccuracy(highAccuracy);
-        wallet.deposit(coinReward);
     }
     /**
      * 퍼펙트 업적을 달성했는지 확인
@@ -96,8 +95,7 @@ public class AchievementManager {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
             currentPerfectLevel += 1;
-            nextPerfectLevel = currentPerfectLevel + 1;
-            wallet.deposit(PERFECT_COIN_REWARD[currentPerfectLevel-1]);
+            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel-1];
             achievement.setCurrentPerfectStage(currentPerfectLevel);
         }
     }
@@ -105,7 +103,7 @@ public class AchievementManager {
     public void updateFlawlessFailure(double accuracy) throws IOException {
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
-            wallet.deposit(FLAWLESS_FAILURE_COIN);
+            coinReward += FLAWLESS_FAILURE_COIN;
             achievement.setFlawlessFailure(true);
         }
     }
@@ -113,23 +111,24 @@ public class AchievementManager {
     public void updateBestFriends(boolean checkTwoPlayMode) throws IOException {
         if (!checkBestFriends && checkTwoPlayMode) {
             checkBestFriends = true;
-            wallet.deposit(BEST_FRIENDS_COIN);
+            coinReward += BEST_FRIENDS_COIN;
             achievement.setBestFriends(true);
         }
     }
+
     public void updateAllAchievements() throws IOException {
         FileManager.getInstance().saveAchievement(achievement);
     }
 
-    public void updatePlaying(int playtime,int max_lives,int LivesRemaining, int level ) throws IOException{
+    public void updatePlaying(int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
         updateTotalPlayTime(playtime);
         updatePerfect(max_lives,LivesRemaining,level);
     }
 
-    public void updatePlayed(double accuracy, int score, boolean MultiPlay) throws IOException{
+    public void updatePlayed(double accuracy, int score, boolean multiPlay) throws IOException{
         updateAccuracy(accuracy);
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
-        updateBestFriends(MultiPlay);
+        updateBestFriends(multiPlay);
     }
 }
