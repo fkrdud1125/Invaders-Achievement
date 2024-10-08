@@ -619,7 +619,7 @@ public final class DrawManager {
 				- fontRegularMetrics.getHeight() - 15);
 	}
 	public void drawAccuracyAchievement(final Screen screen, final double accuracy) {
-		final String[] ACCURACY_COIN_REWARD = {"500", "1000", "1500", "2000"};
+		final String[] ACCURACY_COIN_REWARD = {"500", "1500", "2000", "2500"};
 
 		if (accuracy >= 100) {
 			backBufferGraphics.setColor(Color.gray);
@@ -653,7 +653,7 @@ public final class DrawManager {
 			}
 			else{
 				backBufferGraphics.setColor(Color.orange);
-				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[(int)((accuracy+10)/10)-8],
+				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[(int)((accuracy+10)/10)-7],
 						screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
 
 				backBufferGraphics.setColor(Color.WHITE);
