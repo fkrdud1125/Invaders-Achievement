@@ -157,10 +157,10 @@ public final class Core {
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
 					endTime = System.currentTimeMillis();
-					achievementManager.updatePlaying((int) (endTime - startTime) / 1000 ,MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
+					achievementManager.updatePlaying((int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
-				achievementManager.updatePlayed(gameState.getAccuracy(),gameState.getScore(),GameSettingScreen.getMultiPlay());
+				achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore(), GameSettingScreen.getMultiPlay());
                 achievementManager.updateAllAchievements();
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
@@ -168,7 +168,7 @@ public final class Core {
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(GameSettingScreen.getName1(), width, height, FPS, gameState, wallet);
+				currentScreen = new ScoreScreen(GameSettingScreen.getName1(), width, height, FPS, gameState, wallet, achievementManager);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
