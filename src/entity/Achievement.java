@@ -9,11 +9,6 @@ public class Achievement {
     private boolean flawlessFailure;
     private boolean bestFriends;
 
-    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
-    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000};
-    private final int FLAWLESS_FAILURE_COIN = 1000;
-    private final int BEST_FRIENDS_COIN = 1000;
-
     public Achievement(int totalPlayTime, int totalScore, double getHighAccuracy, int currentPerfectStage,
                        boolean flawlessFailure, boolean bestFriends) {
         this.totalPlayTime = totalPlayTime;
@@ -55,22 +50,6 @@ public class Achievement {
 
     public void setBestFriends(boolean bestFriends) {
         this.bestFriends = bestFriends;
-    }
-
-    public int[] getAccuracyReward() {
-        return ACCURACY_COIN_REWARD;
-    }
-
-    public int[] getPerfectReward() {
-        return PERFECT_COIN_REWARD;
-    }
-
-    public int getFlawlessFailureReward() {
-        return FLAWLESS_FAILURE_COIN;
-    }
-
-    public int getBestFriendsReward() {
-        return BEST_FRIENDS_COIN;
     }
 
 }
