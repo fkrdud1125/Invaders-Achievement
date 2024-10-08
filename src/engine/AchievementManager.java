@@ -42,8 +42,6 @@ public class AchievementManager {
     // 각 업적에 필요한 변수들을 파일을 통해 입력 받음.
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
-        this.totalScore = achievement.getTotalScore();
-        this.totalPlayTime = achievement.getTotalPlayTime();
         this.currentPerfectLevel = achievement.getPerfectStage();
         this.highAccuracy = achievement.getHighAccuracy();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
@@ -52,13 +50,12 @@ public class AchievementManager {
     }
 
     public void updateTotalPlayTime(int playTime) throws IOException {
-        totalPlayTime += playTime;
-        achievement.setTotalPlayTime(totalPlayTime);
+
+        achievement.setTotalPlayTime(playTime);
     }
 
     public void updateTotalScore(int score) throws IOException {
-        totalScore += score;
-        achievement.setTotalScore(totalScore);
+        achievement.setTotalScore(score);
     }
 
     /**
