@@ -19,13 +19,12 @@ public class AchievementManager {
     private int totalPlayTime;
     // 퍼펙트 업적 관련 변수
     private static int currentPerfectLevel;
-    private static int nextPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] PERFECT_COIN_REWARD = {100, 200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
+    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
     // 명중률 업적 관련 변수
     private double highAccuracy; // 명중률 업적 리스트
-    private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
+    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
 
     // Flawless Failure 업적 관련 변수
     private boolean checkFlawlessFailure;
@@ -96,7 +95,6 @@ public class AchievementManager {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
             currentPerfectLevel += 1;
-            nextPerfectLevel = currentPerfectLevel + 1;
             wallet.deposit(PERFECT_COIN_REWARD[currentPerfectLevel-1]);
             achievement.setCurrentPerfectStage(currentPerfectLevel);
         }

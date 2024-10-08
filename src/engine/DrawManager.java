@@ -408,55 +408,6 @@ public final class DrawManager {
 	}
 
 	/**
-	 * Draws interactive characters for name input.
-	 * 
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param name
-	 *            Current name selected.
-	 * @param nameCharSelected
-	 *            Current character selected for modification.
-	 */
-	public void drawNameInput(final Screen screen, final char[] name,
-			final int nameCharSelected) {
-		String newRecordString = "New Record!";
-		String introduceNameString = "Introduce name:";
-
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredRegularString(screen, newRecordString, screen.getHeight()
-				/ 4 + fontRegularMetrics.getHeight() * 10);
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, introduceNameString,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 12);
-
-		// 3 letters name.
-		int positionX = screen.getWidth()
-				/ 2
-				- (fontRegularMetrics.getWidths()[name[0]]
-						+ fontRegularMetrics.getWidths()[name[1]]
-						+ fontRegularMetrics.getWidths()[name[2]]
-								+ fontRegularMetrics.getWidths()[' ']) / 2;
-
-		for (int i = 0; i < 3; i++) {
-			if (i == nameCharSelected)
-				backBufferGraphics.setColor(Color.GREEN);
-			else
-				backBufferGraphics.setColor(Color.WHITE);
-
-			positionX += fontRegularMetrics.getWidths()[name[i]] / 2;
-			positionX = i == 0 ? positionX
-					: positionX
-							+ (fontRegularMetrics.getWidths()[name[i - 1]]
-									+ fontRegularMetrics.getWidths()[' ']) / 2;
-
-			backBufferGraphics.drawString(Character.toString(name[i]),
-					positionX,
-					screen.getHeight() / 4 + fontRegularMetrics.getHeight()
-							* 14);
-		}
-	}
-
-	/**
 	 * Draws basic content of game over screen.
 	 * 
 	 * @param screen
@@ -516,6 +467,11 @@ public final class DrawManager {
 
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
 		if(currentPerfectStage <=6){
+			String[] PERFECT_COIN_REWARD = { "200", "400", "800", "2000", "3000", "4000", "5000"}; // 퍼펙트 스테이지 리워드
+			backBufferGraphics.setColor(Color.orange);
+			drawRightSideAchievementCoinBigString(screen, PERFECT_COIN_REWARD[currentPerfectStage],
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+
 			backBufferGraphics.setColor(Color.green);
 			drawRightSideAchievementSmallString_1(screen,"current",
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
@@ -531,6 +487,10 @@ public final class DrawManager {
 
 		}
 		else{
+			backBufferGraphics.setColor(Color.gray);
+			drawRightSideAchievementCoinBigString(screen, "5000",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString(screen, "You clear all levels perfectly",
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*3-5);
@@ -541,15 +501,6 @@ public final class DrawManager {
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
 
 		}
-
-
-
-		String sampleAchievementsString3 = "      Achieved when the game ends ";
-		String sampleAchievementsString3_1 = "                  with 0% accuracy.";
-
-		String sampleCoin1 = "1000";
-		String sampleCoin2 = "1500";
-
 
 		// centered Strings
 		backBufferGraphics.setColor(Color.GREEN);
@@ -601,6 +552,7 @@ public final class DrawManager {
 		drawLeftSideAchievementSmallString(screen, "single play only",
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2+fontSmallMetrics.getHeight());
 
+
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, titleAchievementsString3,
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
@@ -614,17 +566,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.pink);
 		drawLeftSideAchievementSmallString(screen, "multi play only",
 				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
-
-
-
-
-
-		backBufferGraphics.setColor(Color.orange);
-		drawRightSideAchievementCoinBigString(screen, sampleCoin1,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
-		backBufferGraphics.setColor(Color.orange);
-		drawRightSideAchievementCoinBigString(screen, sampleCoin2,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
 
 
 
@@ -678,8 +619,13 @@ public final class DrawManager {
 				- fontRegularMetrics.getHeight() - 15);
 	}
 	public void drawAccuracyAchievement(final Screen screen, final double accuracy) {
+		final String[] ACCURACY_COIN_REWARD = {"500", "1000", "1500", "2000"};
 
 		if (accuracy >= 100) {
+			backBufferGraphics.setColor(Color.gray);
+			drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[3],
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
+
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString(screen, "You record perfect accuracy",
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()+8);
@@ -696,12 +642,20 @@ public final class DrawManager {
 			drawRightSideAchievementSmallString_2(screen,"target",
 					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 -2);
 			if (accuracy < 70){
+				backBufferGraphics.setColor(Color.orange);
+				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[0],
+						screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
+
 				backBufferGraphics.setColor(Color.WHITE);
 				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + "70%";
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5 );
 			}
 			else{
+				backBufferGraphics.setColor(Color.orange);
+				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[(int)((accuracy+10)/10)-8],
+						screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
+
 				backBufferGraphics.setColor(Color.WHITE);
 				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + String.format("%02d%%", (int)(accuracy+10)/10*10);
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
@@ -712,7 +666,7 @@ public final class DrawManager {
 
 
 		public void drawFlawlessFailureAchievement(final Screen screen, final boolean checkFlawlessFailure) {
-		String sampleCoin3 = "500";
+		String sampleCoin3 = "1000";
 		if (checkFlawlessFailure) {
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "Complete!",
@@ -740,7 +694,7 @@ public final class DrawManager {
 	}
 
 	public void drawBestFriendsAchievement(final Screen screen, final boolean checkBestFriends) {
-		String sampleCoin4 = "2000";
+		String sampleCoin4 = "1000";
 		String sampleAchievementsString = "complete!";
 		String sampleAchievementsString4 = " Achieved by playing 2-player mode";
 		String sampleAchievementsString4_1 = "                for the first time.";
@@ -863,7 +817,7 @@ public final class DrawManager {
 	public void drawRightSideAchievementSmallEventString(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
-		backBufferGraphics.drawString(string, screen.getWidth() *67/100-
+		backBufferGraphics.drawString(string, screen.getWidth() *68/100-
 				fontRegularMetrics.stringWidth(string)/2, height);
 	}
 
@@ -913,6 +867,7 @@ public final class DrawManager {
 	 * @param bonusLife
 	 *            Checks if a bonus life is received.
 	 */
+
 	public void drawCountDown(final Screen screen, final int level,
 			final int number, final boolean bonusLife) {
 		int rectWidth = screen.getWidth();
