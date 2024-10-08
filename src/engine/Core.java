@@ -115,6 +115,7 @@ public final class Core {
 		gameSettings.add(SETTINGS_LEVEL_7);
 		
 		GameState gameState;
+
 		AchievementManager achievementManager;
 		Wallet wallet = Wallet.getWallet();
 
@@ -156,17 +157,11 @@ public final class Core {
 							gameState.getBulletsShot(),
 							gameState.getShipsDestroyed());
 					endTime = System.currentTimeMillis();
-					// 게임 한 판이 끝날시 누적 플레이 시간 갱신.
-					achievementManager.updateTotalTimePlay((int) (endTime - startTime) / 1000);
-					// 게임 한 판이 끝날시 업적 갱신 여부 확인. 퍼펙트는 MAX_LIVES와 일치하는지를 기준
-					achievementManager.updatePerfectAchievement(MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
+					achievementManager.updatePlaying((int) (endTime - startTime) / 1000 ,MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel()-1);
 				} while (gameState.getLivesRemaining() > 0
 						&& gameState.getLevel() <= NUM_LEVELS);
-				// 게임 종료 시 명중률, 누적 점수, flawless failure, best friends 업적을 달성했는지 확인.
-				achievementManager.updateAccuracyAchievement(gameState.getAccuracy());
-				achievementManager.updateTotalScore(gameState.getScore());
-				achievementManager.updateFlawlessFailureAchievement(gameState.getAccuracy());
-				achievementManager.updateBestFriendsAchievement(GameSettingScreen.getMultiPlay());
+				achievementManager.updatePlayed(gameState.getAccuracy(),gameState.getScore(),GameSettingScreen.getMultiPlay());
+                achievementManager.updateAllAchievements();
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "

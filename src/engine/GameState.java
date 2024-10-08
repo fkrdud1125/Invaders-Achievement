@@ -89,9 +89,7 @@ public class GameState {
 		return coinsEarned;
 	}
 
-	// 멍중률을 가져오는 함수 추가.
 	public double getAccuracy() {
-		// division 0인 경우를 방지
 		if (bulletsShot == 0){
 			return 0;
 		}
