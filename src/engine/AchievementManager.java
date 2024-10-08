@@ -52,7 +52,6 @@ public class AchievementManager {
     }
 
     public void updateTotalPlayTime(int playTime) throws IOException {
-
         achievement.setTotalPlayTime(playTime);
     }
 
