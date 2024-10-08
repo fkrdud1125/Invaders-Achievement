@@ -112,6 +112,7 @@ public class ScoreScreen extends Screen {
 
 	/**
 	 * Saves the score as a high score.
+	 * 중복 방지를 위한 로직 추가.
 	 */
 	private void saveScore() {
 		if (highScores.size() > MAX_HIGH_SCORE_NUM) {

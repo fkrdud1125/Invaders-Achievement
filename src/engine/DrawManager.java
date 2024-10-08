@@ -515,8 +515,32 @@ public final class DrawManager {
 
 
 		// AchievementManager에서 값을 얻은 후 AchievementMenu를 그릴 때 넘겨줌
-		String sampleAchievementsString2 = "lv." + currentPerfectStage + "   =>  lv." +
-				nextPerfectStage;
+		if(currentPerfectStage <=6){
+			backBufferGraphics.setColor(Color.green);
+			drawRightSideAchievementSmallString_1(screen,"current",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
+			backBufferGraphics.setColor(Color.red);
+			drawRightSideAchievementSmallString_2(screen,"target",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
+
+			String sampleAchievementsString2 = "lv." + currentPerfectStage + "   =>  lv." +
+					nextPerfectStage;
+			backBufferGraphics.setColor(Color.WHITE);
+			drawRightSideAchievementBigString(screen, sampleAchievementsString2,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+
+		}
+		else{
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementSmallEventString(screen, "You clear all levels perfectly",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*3-5);
+
+			String sampleAchievementsString2 = " 100% Clear !! ";
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementBigString(screen, sampleAchievementsString2,
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+
+		}
 
 
 
@@ -594,16 +618,6 @@ public final class DrawManager {
 
 
 
-		backBufferGraphics.setColor(Color.green);
-		drawRightSideAchievementSmallString_1(screen,"current",
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
-		backBufferGraphics.setColor(Color.red);
-		drawRightSideAchievementSmallString_2(screen,"target",
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
-
-		backBufferGraphics.setColor(Color.WHITE);
-		drawRightSideAchievementBigString(screen, sampleAchievementsString2,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
 
 		backBufferGraphics.setColor(Color.orange);
 		drawRightSideAchievementCoinBigString(screen, sampleCoin1,
@@ -666,6 +680,10 @@ public final class DrawManager {
 	public void drawAccuracyAchievement(final Screen screen, final double accuracy) {
 
 		if (accuracy >= 100) {
+			backBufferGraphics.setColor(Color.GREEN);
+			drawRightSideAchievementSmallEventString(screen, "You record perfect accuracy",
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()+8);
+
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "You are crazy!",
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
@@ -842,6 +860,12 @@ public final class DrawManager {
 	}
 
 	// right side achievement(sample)
+	public void drawRightSideAchievementSmallEventString(final Screen screen,
+												  final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() *67/100-
+				fontRegularMetrics.stringWidth(string)/2, height);
+	}
 
 	public void drawRightSideAchievementBigString(final Screen screen,
 												  final String string, final int height) {
