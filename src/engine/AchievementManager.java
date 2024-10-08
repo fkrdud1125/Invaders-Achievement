@@ -46,7 +46,7 @@ public class AchievementManager {
         this.highAccuracy = achievement.getHighAccuracy();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
         this.checkBestFriends = achievement.getBestFriends();
-        wallet = new Wallet();
+        wallet = Wallet.getWallet();
     }
 
     public void updateTotalPlayTime(int playTime) throws IOException {
