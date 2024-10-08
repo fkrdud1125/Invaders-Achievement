@@ -503,7 +503,7 @@ public final class DrawManager {
 
 		// centered strings
 		String achievementString = "Achievement";
-		String instructionsString = "Press space to return";
+		String instructionsString = "Press ESC to return";
 		String achievementsStatusString = "Achievements Status";
 
 		// Achievements names

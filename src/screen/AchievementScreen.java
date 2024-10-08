@@ -101,7 +101,7 @@ public class AchievementScreen extends Screen {
 		super.update();
 
 		draw();
-		if (inputManager.isKeyDown(KeyEvent.VK_SPACE)
+		if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)
 				&& this.inputDelay.checkFinished()) {
 			this.isRunning = false;
 			soundManager.playSound(Sound.MENU_BACK);
