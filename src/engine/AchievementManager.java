@@ -15,30 +15,26 @@ public class AchievementManager {
 
     private Achievement achievement;
 
-    // 누적 점수
-    private int totalScore;
-    // 누적 플레이 시간
-    private int totalPlayTime;
     // 퍼펙트 업적 관련 변수
     private static int currentPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
     // 명중률 업적 관련 변수
     private double highAccuracy; // 명중률 업적 리스트
-    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
 
     // Flawless Failure 업적 관련 변수
     private boolean checkFlawlessFailure;
-    private final int FLAWLESS_FAILURE_COIN = 1000;
-    // Best Friends 업적 관련 변수
 
+    // Best Friends 업적 관련 변수
     private boolean checkBestFriends;
-    private final int BEST_FRIENDS_COIN = 1000;
-    private Wallet wallet;
 
     // Coin 갱신
     private int coinReward = 0;
+
+    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
+    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000};
+    private final int FLAWLESS_FAILURE_COIN = 1000;
+    private final int BEST_FRIENDS_COIN = 1000;
 
     // 각 업적에 필요한 변수들을 파일을 통해 입력 받음.
     public AchievementManager() throws IOException {
@@ -53,18 +49,18 @@ public class AchievementManager {
         return coinReward;
     }
 
-    public void updateTotalPlayTime(int playTime) throws IOException {
+    public void updateTotalPlayTime(int playTime) {
         achievement.setTotalPlayTime(playTime);
     }
 
-    public void updateTotalScore(int score) throws IOException {
+    public void updateTotalScore(int score) {
         achievement.setTotalScore(score);
     }
 
     /**
      * 명중률 업적을 업데이트 하는 함수.
      */
-    public void updateAccuracy(double accuracy) throws IOException {
+    public void updateAccuracy(double accuracy) {
         if (highAccuracy > accuracy) {
             return;
         }
@@ -91,7 +87,7 @@ public class AchievementManager {
     /**
      * 퍼펙트 업적을 달성했는지 확인
      */
-    public void updatePerfect(final int MAX_LIVES, int checkLives, int gameLevel) throws IOException {
+    public void updatePerfect(final int MAX_LIVES, int checkLives, int gameLevel) {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
             currentPerfectLevel += 1;
@@ -100,7 +96,7 @@ public class AchievementManager {
         }
     }
 
-    public void updateFlawlessFailure(double accuracy) throws IOException {
+    public void updateFlawlessFailure(double accuracy) {
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
             coinReward += FLAWLESS_FAILURE_COIN;
@@ -108,7 +104,7 @@ public class AchievementManager {
         }
     }
 
-    public void updateBestFriends(boolean checkTwoPlayMode) throws IOException {
+    public void updateBestFriends(boolean checkTwoPlayMode) {
         if (!checkBestFriends && checkTwoPlayMode) {
             checkBestFriends = true;
             coinReward += BEST_FRIENDS_COIN;
