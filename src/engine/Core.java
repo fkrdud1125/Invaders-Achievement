@@ -9,6 +9,12 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import screen.GameScreen;
+import screen.AchievementScreen;
+import screen.ScoreScreen;
+import screen.Screen;
+import screen.TitleScreen;
+import screen.*;
 
 import entity.Wallet;
 import screen.*;
@@ -30,7 +36,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Max lives. */
-	private static final int MAX_LIVES = 3;
+	private static int MAX_LIVES;
 	/** Levels between extra life. */
 	private static final int EXTRA_LIFE_FRECUENCY = 3;
 	/** Total number of levels. */
@@ -121,6 +127,7 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
+			MAX_LIVES = wallet.getLives_lv()+2;
 			gameState = new GameState(1, 0, MAX_LIVES, 0, 0);
 			achievementManager = new AchievementManager();
 			switch (returnCode) {
@@ -142,7 +149,7 @@ public final class Core {
 							&& gameState.getLivesRemaining() < MAX_LIVES;
 					currentScreen = new GameScreen(gameState,
 							gameSettings.get(gameState.getLevel() - 1),
-							bonusLife, width, height, FPS);
+							bonusLife, width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 							+ " game screen at " + FPS + " fps.");
 					frame.setScreen(currentScreen);
@@ -176,7 +183,6 @@ public final class Core {
 
 			case 3:
 				//Shop
-
 				currentScreen = new ShopScreen(width, height, FPS, wallet);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " Shop screen at " + FPS + " fps.");
@@ -195,11 +201,11 @@ public final class Core {
 
 			case 5:
 				//Setting
-
-				/* Please fill in this case state as you finish your work on Setting Screen.*/
-
-				LOGGER.warning("Setting screen has to come out. Please implement setting screen.");
-				returnCode = 1;
+				currentScreen = new SettingScreen(width, height, FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " setting screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing Setting screen.");
 				break;
 
 			case 6:
@@ -209,6 +215,16 @@ public final class Core {
 						+ " game setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing game setting screen.");
+        break;
+
+			case 7:
+				//Credit Screen
+				currentScreen = new CreditScreen(width, height, FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " credit screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing credit screen.");
+				break;
 
 			default:
 				break;

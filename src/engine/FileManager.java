@@ -537,6 +537,35 @@ public final class FileManager {
 //		return bestFriends;
 //	}
 
+	public List<String> loadCreditList() throws IOException {  // 사용자의 크레딧 파일을 로드
+
+		List<String> creditname = new ArrayList<String>();
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+
+		try {
+			inputStream = FileManager.class.getClassLoader()
+					.getResourceAsStream("creditlist");
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+			logger.info("Loading credit list.");
+
+			String name = bufferedReader.readLine();
+
+			while (name != null) {
+				creditname.add(name);
+				name = bufferedReader.readLine();
+			}
+
+		}finally {
+			if (bufferedReader != null)
+				bufferedReader.close();
+		}
+
+		return creditname;
+	}
+
+
 	/**
 	 * Saves user high scores to disk.
 	 * 
@@ -570,11 +599,16 @@ public final class FileManager {
 
 			logger.info("Saving user high scores.");
 
+			// Saves 7 or less scores.
+			int savedCount = 0;
 			for (Score score : highScores) {
+				if (savedCount >= MAX_SCORES)
+					break;
 				bufferedWriter.write(score.getName());
 				bufferedWriter.newLine();
 				bufferedWriter.write(Integer.toString(score.getScore()));
 				bufferedWriter.newLine();
+				savedCount++;
 			}
 
 		} finally {
