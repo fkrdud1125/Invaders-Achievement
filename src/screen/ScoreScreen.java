@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import engine.AchievementManager;
 import engine.Core;
 import engine.GameState;
 import engine.Score;
@@ -57,7 +58,7 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final String name1, final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet) {
+			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
 		this.name1 = name1;
@@ -80,7 +81,7 @@ public class ScoreScreen extends Screen {
 
 		// deposit the earned coins to wallet
 		this.accuracy = gameState.getAccuracy();
-		this.coinsEarned = gameState.getScore()/10;
+		this.coinsEarned = gameState.getScore()/10 + achievementManager.getAchievementReward();
 		wallet.deposit(coinsEarned);
 
 		try {
