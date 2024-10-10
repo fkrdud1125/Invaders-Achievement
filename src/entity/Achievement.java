@@ -19,7 +19,7 @@ public class Achievement {
         this.bestFriends = bestFriends;
     }
 
-    // 각 업적 상태를 가져오는 함수들.
+    // Functions to get the status of each achievement.
     public int getTotalPlayTime() { return totalPlayTime; }
     public int getTotalScore() { return totalScore; }
     public double getHighAccuracy() { return getHighAccuracy; }
@@ -27,7 +27,7 @@ public class Achievement {
     public boolean getFlawlessFailure() { return flawlessFailure; }
     public boolean getBestFriends() { return bestFriends; }
 
-    // 각 업적 상태를 저장하는 함들.
+    // Functions to store the status of each achievement.
     public void setTotalPlayTime(int totalPlayTime) {
         this.totalPlayTime += totalPlayTime;
     }
