@@ -61,21 +61,30 @@ public class AchievementManager {
      * Function to update the accuracy achievement.
      */
     public void updateAccuracy(double accuracy) {
-        if (highAccuracy > accuracy) {
+        if (highAccuracy >= accuracy) {
             return;
         }
+        int accuracyGoal = (int)(highAccuracy/10)*10+10;
         highAccuracy = accuracy;
+        if (accuracyGoal < 70) {
+            accuracyGoal = 70;
+        }
+        if (highAccuracy < accuracyGoal) {
+            achievement.setHighAccuracy(highAccuracy);
+            return;
+        }
+        int rewardIndex = accuracyGoal/10-7;
         // When an accuracy achievement is reached, all lower achievements are achieved together.
         if (highAccuracy >= 100) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = rewardIndex; i < 4; i++) {
                 coinReward += ACCURACY_COIN_REWARD[i];
             }
         } else if (highAccuracy >= 90) {
-            for (int i = 0; i < 3; i++) {
+            for (int i = rewardIndex; i < 3; i++) {
                 coinReward += ACCURACY_COIN_REWARD[i];
             }
         } else if (highAccuracy >= 80) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = rewardIndex; i < 2; i++) {
                 coinReward += ACCURACY_COIN_REWARD[i];
             }
         } else if (highAccuracy >= 70) {
