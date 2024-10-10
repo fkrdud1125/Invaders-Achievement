@@ -22,6 +22,11 @@ public class SoundManager {
     private static Logger logger;
     /** Sound manager activation flag */
     private boolean soundEnabled;
+    /** Default value of currentVolume */
+    private static int currentVolume = 10;
+    /** Maximum and minimum values of volume */
+    private final float MIN_VOL = -80.0f;
+    private final float MAX_VOL = 6.0f;
 
     /**
      * Private constructor.
@@ -37,7 +42,16 @@ public class SoundManager {
             loadSound(Sound.MENU_CLICK, "res/sound/SFX/menuClick.wav");
             loadSound(Sound.MENU_MOVE, "res/sound/SFX/menuMove.wav");
             loadSound(Sound.MENU_TYPING, "res/sound/SFX/nameTyping.wav");
+            loadSound(Sound.COUNTDOWN, "res/sound/SFX/countdown.wav");
+            loadSound(Sound.ALIEN_HIT, "res/sound/SFX/alienHit.wav");
+            loadSound(Sound.ALIEN_LASER, "res/sound/SFX/alienLaser.wav");
+            loadSound(Sound.PLAYER_HIT, "res/sound/SFX/playerHit.wav");
+            loadSound(Sound.PLAYER_LASER, "res/sound/SFX/playerLaser.wav");
+            loadSound(Sound.PLAYER_MOVE, "res/sound/SFX/playerMove.wav");
+            loadSound(Sound.COIN_INSUFFICIENT, "res/sound/SFX/coinInsufficient.wav");
+            loadSound(Sound.COIN_USE, "res/sound/SFX/coinUse.wav");
 
+            setVolume(currentVolume);
             logger.info("Finished loading all sounds.");
 
         } catch (IOException e) {
@@ -79,6 +93,49 @@ public class SoundManager {
         clip.open(audioStream);
 
         soundClips.put(sound, clip);
+    }
+
+    /**
+     * Apply volume to all audio files by converting integer volume to decibels non-linearly.
+     *
+     * @param volume Int value of volume (0-10)
+     */
+    private void setVolume(int volume) {
+        float newVolume = MIN_VOL + (float)(Math.log(volume + 1) / Math.log(11)) * (MAX_VOL - MIN_VOL);
+
+        for (Clip clip : soundClips.values()) {
+            try {
+                FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                volumeControl.setValue(newVolume);
+            } catch (IllegalArgumentException e) {
+                logger.warning("Failed to set volume: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * @return current volume
+     * */
+    public int getVolume() { return currentVolume; }
+
+    /**
+     * Increases the volume of all sounds by 1.
+     */
+    public void volumeUp() {
+        if (soundEnabled && (currentVolume < 10)) {
+            currentVolume++;
+            setVolume(currentVolume);
+        }
+    }
+
+    /**
+     * Decreases the volume of all sounds by 1.
+     */
+    public void volumeDown() {
+        if (soundEnabled && (currentVolume > 0)) {
+            currentVolume--;
+            setVolume(currentVolume);
+        }
     }
 
     /**
