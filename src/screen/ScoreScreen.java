@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import engine.AchievementManager;
-import engine.Core;
-import engine.GameState;
-import engine.Score;
+import engine.*;
 import entity.Wallet;
 
 /**
@@ -21,6 +18,8 @@ public class ScoreScreen extends Screen {
 
 	/** Maximum number of high scores. */
 	private static final int MAX_HIGH_SCORE_NUM = 3;
+	/** Singleton instance of SoundManager */
+	private final SoundManager soundManager = SoundManager.getInstance();
 
 
 	/** Current score. */
@@ -114,11 +113,13 @@ public class ScoreScreen extends Screen {
 				// Return to main menu.
 				this.returnCode = 1;
 				this.isRunning = false;
+				soundManager.playSound(Sound.MENU_BACK);
 				saveScore();
 			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 				// Play again.
 				this.returnCode = 2;
 				this.isRunning = false;
+				soundManager.playSound(Sound.MENU_CLICK);
 				saveScore();
 			}
 
