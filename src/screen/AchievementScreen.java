@@ -113,7 +113,7 @@ public class AchievementScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-		drawManager.drawAchievementMenu(this, this.totalPlayTime, this.totalScore,
+		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
 				this.accuracy, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure, this.checkBestFriends);
 		drawManager.drawHighScores(this, this.highScores);
