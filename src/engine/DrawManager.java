@@ -886,12 +886,13 @@ public final class DrawManager {
 		String achievementTitle = "Achievement";
 		String instructionsString = "Press ESC to return";
 		String achievementsStatusTitle = "Achievements Status";
+		String achievementsExplain = "Applies to single-player play only";
 
 		// Achievements names
-		String highAccuracyTitle = "High Accuracy";
+		String maxComboTitle = " Combo Mastery ";
 		String perfectClearTitle = "perfect clear";
 		String flawlessFailureTitle = "Flawless Failure";
-		String bestFriendsTitle = "We're best friends";
+		String eternityTimeTitle = "A time of eternity";
 
 		// draw "perfect clear"
 		if (currentPerfectStage <= 6) {
@@ -937,18 +938,16 @@ public final class DrawManager {
 		// draw instruction
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() / 8 + fontBigMetrics.getHeight() );
+				screen.getHeight() / 8 + fontRegularMetrics.getHeight());
 
-		// draw 'high score"
+		backBufferGraphics.setColor(Color.cyan);
+		drawCenteredRegularString(screen, achievementsExplain,
+				screen.getHeight() / 7 + fontBigMetrics.getHeight() );
+
+		// draw "high score"
 		backBufferGraphics.setColor(Color.GREEN);
 		drawLeftSideScoreRegularString(screen, highScoreTitle,
 				screen.getHeight() / 5+ fontBigMetrics.getHeight());
-
-		// draw "single play only"
-		backBufferGraphics.setColor(Color.cyan);
-		drawLeftSideScoreSmallString(screen, "single play only",
-				screen.getHeight() / 5+ fontBigMetrics.getHeight()+fontSmallMetrics.getHeight());
-
 
 		// draw total score
 		backBufferGraphics.setColor(Color.yellow);
@@ -971,45 +970,27 @@ public final class DrawManager {
 		drawCenteredBigString(screen, achievementsStatusTitle,
 				screen.getHeight() / 2 + fontBigMetrics.getHeight() );
 
+
+
 		// draw "high accuracy"
 		backBufferGraphics.setColor(Color.WHITE);
-		drawLeftSideAchievementRegularString(screen, highAccuracyTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight());
-
-		// draw "single play only"
-		backBufferGraphics.setColor(Color.cyan);
-		drawLeftSideAchievementSmallString(screen, "single play only",
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()+fontSmallMetrics.getHeight());
+		drawLeftSideAchievementRegularString(screen, maxComboTitle,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()+7);
 
 		// draw "Perfect clear"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, perfectClearTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2);
-
-		// draw "single play only"
-		backBufferGraphics.setColor(Color.cyan);
-		drawLeftSideAchievementSmallString(screen, "single play only",
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2+fontSmallMetrics.getHeight());
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2+7);
 
 		// draw "Flawless Failure"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, flawlessFailureTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3);
-
-		// draw"single play only"
-		backBufferGraphics.setColor(Color.cyan);
-		drawLeftSideAchievementSmallString(screen, "single play only",
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3+5);
 
 		// draw "best friends"
 		backBufferGraphics.setColor(Color.WHITE);
-		drawLeftSideAchievementRegularString(screen, bestFriendsTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4);
-
-		// draw "multi play only"
-		backBufferGraphics.setColor(Color.pink);
-		drawLeftSideAchievementSmallString(screen, "multi play only",
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
+		drawLeftSideAchievementRegularString(screen, eternityTimeTitle,
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4+3);
 
 		int totalHours = totalPlayTime / 3600;
 		int remainHours = totalPlayTime % 3600;
@@ -1028,7 +1009,7 @@ public final class DrawManager {
 		// draw accuracy reward
 		final String[] ACCURACY_COIN_REWARD = {"500", "1500", "2000", "2500"};
 
-		// draw accuracy achievementad
+		// draw accuracy achievement
 		if (accuracy >= 100) {
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[3],
@@ -1081,8 +1062,8 @@ public final class DrawManager {
 						screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*4-5);
 
 		} else {
-			String explainFlawlessFailure_1 = "      Achieved when the game ends";
-			String explainFlawlessFailure_2 = "                  with 0% accuracy.";
+			String explainFlawlessFailure_1 = "    Achieved when the game ends";
+			String explainFlawlessFailure_2 = "                with 0% accuracy.";
 			backBufferGraphics.setColor(Color.GRAY);
 			drawRightSideAchievementSmallString_3(screen, explainFlawlessFailure_1,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*3+fontSmallMetrics.getHeight());
@@ -1096,27 +1077,27 @@ public final class DrawManager {
 		}
 
 		// draw best friends achievement
-		String bestFriendsReward = "1000";
+		String eternityTimeReward = "1000";
 		String sampleAchievementsString = "complete!";
-		String explainBestFriends_1 = " Achieved by playing 2-player mode";
-		String explainBestFriends_2 = "                for the first time.";
+		String explainEternityTime_1 = "              Total play time ";
+		String explainEternityTime_2 = "        must exceed 10 minutes...";
 		if (checkBestFriends) {
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, sampleAchievementsString,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*5-5);
 			backBufferGraphics.setColor(Color.gray);
-			drawRightSideAchievementCoinBigString(screen, bestFriendsReward,
+			drawRightSideAchievementCoinBigString(screen, eternityTimeReward,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*5-5);
 
 		} else {
 			backBufferGraphics.setColor(Color.GRAY);
-			drawRightSideAchievementSmallString_3(screen, explainBestFriends_1,
+			drawRightSideAchievementSmallString_3(screen, explainEternityTime_1,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
 			backBufferGraphics.setColor(Color.GRAY);
-			drawRightSideAchievementSmallString_3(screen, explainBestFriends_2,
+			drawRightSideAchievementSmallString_3(screen, explainEternityTime_2,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
 			backBufferGraphics.setColor(Color.orange);
-			drawRightSideAchievementCoinBigString(screen, bestFriendsReward,
+			drawRightSideAchievementCoinBigString(screen, eternityTimeReward,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*5-5);
 
 			}
