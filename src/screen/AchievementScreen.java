@@ -26,7 +26,7 @@ public class AchievementScreen extends Screen {
 	private int totalScore;
 	private int totalPlayTime;
 	private int currentPerfectStage;
-	private double accuracy;
+	private int maxCombo;
 	private boolean checkFlawlessFailure;
 	private boolean checkBestFriends;
 
@@ -67,7 +67,7 @@ public class AchievementScreen extends Screen {
 			logger.warning("Couldn't load current perfect stage");
 		}
 		try {
-			this.accuracy = Core.getFileManager().loadAchievement().getHighAccuracy();
+			this.maxCombo = Core.getFileManager().loadAchievement().getHighmaxCombo();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load Current accuracy achievement");
 		}
@@ -114,7 +114,7 @@ public class AchievementScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
-				this.accuracy, this.currentPerfectStage, this.currentPerfectStage+1,
+				this.maxCombo, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure, this.checkBestFriends);
 		drawManager.drawHighScores(this, this.highScores);
 		drawManager.completeDrawing(this);
