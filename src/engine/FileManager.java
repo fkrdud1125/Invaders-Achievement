@@ -250,9 +250,8 @@ public final class FileManager {
 			int maxCombo = Integer.parseInt(properties.getProperty("high_max_combo", "0"));
 			int perfectStage = Integer.parseInt(properties.getProperty("perfect_stage", "0"));
 			boolean flawlessFailure = properties.getProperty("flawless_failure", "0").equals("true");
-			boolean bestFriends = properties.getProperty("best_friends", "false").equals("true");
 
-			achievement = new Achievement(totalPlay, totalScore, maxCombo, perfectStage, flawlessFailure, bestFriends);
+			achievement = new Achievement(totalPlay, totalScore, maxCombo, perfectStage, flawlessFailure);
 
 		} catch (FileNotFoundException e) {
 			// loads default if there's no user scores.
@@ -440,8 +439,6 @@ public final class FileManager {
 			bufferedWriter.write("perfect_stage=" + achievement.getPerfectStage());
 			bufferedWriter.newLine();
 			bufferedWriter.write("flawless_failure=" + achievement.getFlawlessFailure());
-			bufferedWriter.newLine();
-			bufferedWriter.write("best_friends=" + achievement.getBestFriends());
 			bufferedWriter.newLine();
 
 		} finally {

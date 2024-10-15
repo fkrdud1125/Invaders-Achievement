@@ -16,12 +16,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-import entity.ShipFactory;
-import entity.Wallet;
+import entity.*;
 import screen.GameSettingScreen;
 import screen.Screen;
-import entity.Entity;
-import entity.Ship;
 
 /**
  * Manages screen drawing.
@@ -872,9 +869,8 @@ public final class DrawManager {
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawAchievementMenu(final Screen screen, final int totalScore, final int totalPlayTime, final double accuracy,
-									final int currentPerfectStage, final int nextPerfectStage, boolean checkFlawlessFailure,
-									boolean checkBestFriends) {
+	public void drawAchievementMenu(final Screen screen, final int totalScore, final int totalPlayTime, final int maxCombo,
+									final int currentPerfectStage, final int nextPerfectStage, boolean checkFlawlessFailure) {
 		//high score section
 		String highScoreTitle = "High Scores";
 
@@ -1010,13 +1006,13 @@ public final class DrawManager {
 		final String[] ACCURACY_COIN_REWARD = {"500", "1500", "2000", "2500"};
 
 		// draw accuracy achievement
-		if (accuracy >= 100) {
+		if (maxCombo >= 25) {
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[3],
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
 
 			backBufferGraphics.setColor(Color.GREEN);
-			drawRightSideAchievementSmallEventString(screen, "You record perfect accuracy",
+			drawRightSideAchievementSmallEventString(screen, "You record high combo",
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()+8);
 
 			backBufferGraphics.setColor(Color.GREEN);
@@ -1030,22 +1026,22 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.red);
 			drawRightSideAchievementSmallString_2(screen, "target",
 					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 - 2);
-			if (accuracy < 70) {
+			if (maxCombo < 10) {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[0],
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + "70%";
+				String accuracyAchievement = String.format("%d", maxCombo) + " => " + "10";
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5);
 			} else {
 				backBufferGraphics.setColor(Color.orange);
-				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[(int) ((accuracy + 10) / 10) - 8],
+				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[maxCombo <= 9 ? 0 : maxCombo / 5 - 1],
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + String.format("%02d%%", (int) (accuracy + 10) / 10 * 10);
+				String accuracyAchievement = String.format("%d CB", maxCombo) + " => " + String.format("%d CB", maxCombo <= 9 ? 10 : (((( (maxCombo - 10) / 5) + 1) * 5 ) + 10));
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5);
 			}
@@ -1076,12 +1072,12 @@ public final class DrawManager {
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*4-5);
 		}
 
-		// draw best friends achievement
+		// draw play time achievement
 		String eternityTimeReward = "1000";
 		String sampleAchievementsString = "complete!";
 		String explainEternityTime_1 = "              Total play time ";
 		String explainEternityTime_2 = "        must exceed 10 minutes...";
-		if (checkBestFriends) {
+		if (totalPlayTime >= 600) {
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, sampleAchievementsString,
 					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*5-5);

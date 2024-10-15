@@ -76,11 +76,6 @@ public class AchievementScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load flawless failure achievement");
 		}
-		try {
-			this.checkBestFriends = Core.getFileManager().loadAchievement().getBestFriends();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load best friends achievement");
-		}
 	}
 
 	/**
@@ -115,7 +110,7 @@ public class AchievementScreen extends Screen {
 		drawManager.initDrawing(this);
 		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
 				this.maxCombo, this.currentPerfectStage, this.currentPerfectStage+1,
-				this.checkFlawlessFailure, this.checkBestFriends);
+				this.checkFlawlessFailure);
 		drawManager.drawHighScores(this, this.highScores);
 		drawManager.completeDrawing(this);
 	}
