@@ -8,128 +8,132 @@ import java.util.logging.Logger;
 
 public class AchievementManager {
 
+    /** Created AchievementManager class to easily manage achievement-related aspects */
+
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
 
     private Achievement achievement;
 
-    // 누적 점수
-    private int totalScore;
-    // 누적 플레이 시간
-    private int totalPlayTime;
-    // 퍼펙트 업적 관련 변수
+    // Variables related to Perfect Achievement
     private static int currentPerfectLevel;
-    private static int nextPerfectLevel;
     private final int MAX_PERFECT_STAGE = 7;
-    private final int[] PERFECT_COIN_REWARD = {100, 200, 400, 800, 2000, 3000, 4000, 5000}; // 퍼펙트 스테이지 리워드
 
-    // 명중률 업적 관련 변수
-    private double highAccuracy; // 명중률 업적 리스트
-    private final int[] ACCURACY_COIN_REWARD = {2000, 3000, 4000, 5000};
+    // Variables related to Accuracy Achievement
+    private double highAccuracy; // List of accuracy achievements
 
-    // Flawless Failure 업적 관련 변수
+    // Variables related to Flawless Failure Achievement
     private boolean checkFlawlessFailure;
-    private final int FLAWLESS_FAILURE_COIN = 1000;
-    // Best Friends 업적 관련 변수
 
+    // Variables related to Best Friends Achievement
     private boolean checkBestFriends;
+
+    // Coin rewards update
+    private int coinReward = 0;
+
+    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
+    private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000};
+    private final int FLAWLESS_FAILURE_COIN = 1000;
     private final int BEST_FRIENDS_COIN = 1000;
 
-    // Coin 갱신
-    private Wallet wallet;
-    private int coinReward;
-
-    // 각 업적에 필요한 변수들을 파일을 통해 입력 받음.
+    // Variables needed for each achievement are loaded through a file.
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
-        this.totalScore = achievement.getTotalScore();
-        this.totalPlayTime = achievement.getTotalPlayTime();
         this.currentPerfectLevel = achievement.getPerfectStage();
         this.highAccuracy = achievement.getHighAccuracy();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
         this.checkBestFriends = achievement.getBestFriends();
-        wallet = new Wallet();
     }
 
-    public void updateTotalPlayTime(int playTime) throws IOException {
-        totalPlayTime += playTime;
-        achievement.setTotalPlayTime(totalPlayTime);
+    public int getAchievementReward() {
+        return coinReward;
     }
 
-    public void updateTotalScore(int score) throws IOException {
-        totalScore += score;
-        achievement.setTotalScore(totalScore);
+    public void updateTotalPlayTime(int playTime) {
+        achievement.setTotalPlayTime(playTime);
+    }
+
+    public void updateTotalScore(int score) {
+        achievement.setTotalScore(score);
     }
 
     /**
-     * 명중률 업적을 업데이트 하는 함수.
+     * Function to update the accuracy achievement.
      */
-    public void updateAccuracy(double accuracy) throws IOException {
-        if (highAccuracy > accuracy) {
+    public void updateAccuracy(double accuracy) {
+        if (highAccuracy >= accuracy) {
             return;
         }
+        int accuracyGoal = (int)(highAccuracy/10)*10+10;
         highAccuracy = accuracy;
-        // 명중률 업적 달성 시, 그 아래 있는 모든 업적을 같이 달성하는 조건.
+        if (accuracyGoal < 70) {
+            accuracyGoal = 70;
+        }
+        if (highAccuracy < accuracyGoal) {
+            achievement.setHighAccuracy(highAccuracy);
+            return;
+        }
+        int rewardIndex = accuracyGoal/10-7;
+        // When an accuracy achievement is reached, all lower achievements are achieved together.
         if (highAccuracy >= 100) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = rewardIndex; i < 4; i++) {
                 coinReward += ACCURACY_COIN_REWARD[i];
             }
         } else if (highAccuracy >= 90) {
-            for (int i = 0; i < 3; i++) {
+            for (int i = rewardIndex; i < 3; i++) {
                 coinReward += ACCURACY_COIN_REWARD[i];
             }
         } else if (highAccuracy >= 80) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = rewardIndex; i < 2; i++) {
                 coinReward += ACCURACY_COIN_REWARD[i];
             }
         } else if (highAccuracy >= 70) {
             coinReward += ACCURACY_COIN_REWARD[0];
         }
-        // 변경된 업적 저장.
+        // Save the updated achievement.
         achievement.setHighAccuracy(highAccuracy);
-        wallet.deposit(coinReward);
     }
     /**
-     * 퍼펙트 업적을 달성했는지 확인
+     * Check if the perfect achievement has been reached.
      */
-    public void updatePerfect(final int MAX_LIVES, int checkLives, int gameLevel) throws IOException {
+    public void updatePerfect(final int MAX_LIVES, int checkLives, int gameLevel) {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
-            // 현재 퍼펙트 달성 스테이지가 총 스테이지를 넘지 않았는지 확인.
+            // Check if the current perfect stage has not exceeded the total stages.
             currentPerfectLevel += 1;
-            nextPerfectLevel = currentPerfectLevel + 1;
-            wallet.deposit(PERFECT_COIN_REWARD[currentPerfectLevel-1]);
+            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel-1];
             achievement.setCurrentPerfectStage(currentPerfectLevel);
         }
     }
 
-    public void updateFlawlessFailure(double accuracy) throws IOException {
+    public void updateFlawlessFailure(double accuracy) {
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
-            wallet.deposit(FLAWLESS_FAILURE_COIN);
+            coinReward += FLAWLESS_FAILURE_COIN;
             achievement.setFlawlessFailure(true);
         }
     }
 
-    public void updateBestFriends(boolean checkTwoPlayMode) throws IOException {
+    public void updateBestFriends(boolean checkTwoPlayMode) {
         if (!checkBestFriends && checkTwoPlayMode) {
             checkBestFriends = true;
-            wallet.deposit(BEST_FRIENDS_COIN);
+            coinReward += BEST_FRIENDS_COIN;
             achievement.setBestFriends(true);
         }
     }
+
     public void updateAllAchievements() throws IOException {
         FileManager.getInstance().saveAchievement(achievement);
     }
 
-    public void updatePlaying(int playtime,int max_lives,int LivesRemaining, int level ) throws IOException{
+    public void updatePlaying(int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
         updateTotalPlayTime(playtime);
         updatePerfect(max_lives,LivesRemaining,level);
     }
 
-    public void updatePlayed(double accuracy, int score, boolean MultiPlay) throws IOException{
+    public void updatePlayed(double accuracy, int score, boolean multiPlay) throws IOException{
         updateAccuracy(accuracy);
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
-        updateBestFriends(MultiPlay);
+        updateBestFriends(multiPlay);
     }
 }

@@ -25,9 +25,9 @@ import entity.Achievement;
 
 /**
  * Manages files used in the application.
- * 
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
+ *
  */
 public final class FileManager {
 
@@ -47,7 +47,7 @@ public final class FileManager {
 
 	/**
 	 * Returns shared instance of FileManager.
-	 * 
+	 *
 	 * @return Shared instance of FileManager.
 	 */
 	protected static FileManager getInstance() {
@@ -58,51 +58,49 @@ public final class FileManager {
 
 	/**
 	 * Loads sprites from disk.
-	 * 
+	 *
 	 * @param spriteMap
 	 *            Mapping of sprite type and empty boolean matrix that will
 	 *            contain the image.
 	 * @throws IOException
 	 *             In case of loading problems.
 	 */
-	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap)
-			throws IOException {
-		InputStream inputStream = null;
-		/**--1-- 첫번째 변경점
-		 * res파일을 못찾는 것 같아서 res파일을 리소스파일로 만들어줌
-		 */
-		try {
-			inputStream = DrawManager.class.getClassLoader()
-					.getResourceAsStream("graphics");
-			char c;
+	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap) throws IOException {
+        try (InputStream inputStream = DrawManager.class.getClassLoader().getResourceAsStream("graphics");
+			 BufferedReader reader = inputStream != null ? new BufferedReader(new InputStreamReader(inputStream)) : null) {
 
-			// Sprite loading.
-			for (Map.Entry<SpriteType, boolean[][]> sprite : spriteMap
-					.entrySet()) {
-				for (int i = 0; i < sprite.getValue().length; i++)
-					for (int j = 0; j < sprite.getValue()[i].length; j++) {
-						do
-							c = (char) inputStream.read();
-						while (c != '0' && c != '1');
+			if (reader == null)
+				throw new IOException("Graphics file not found.");
 
-						if (c == '1')
-							sprite.getValue()[i][j] = true;
-						else
-							sprite.getValue()[i][j] = false;
-					}
-				logger.fine("Sprite " + sprite.getKey() + " loaded.");
-			}
-			if (inputStream != null)
-				inputStream.close();
-		} finally {
-			if (inputStream != null)
-				inputStream.close();
-		}
+            String line;
+
+            // Sprite loading.
+            for (Map.Entry<SpriteType, boolean[][]> sprite : spriteMap.entrySet()) {
+
+                int idx = 0;
+                do {
+					line = reader.readLine();
+
+					if (line == null)
+						throw new IOException("Sprite data not found.");
+
+				} while (line.trim().isEmpty() || line.trim().startsWith("#"));
+
+                for (int i = 0; i < sprite.getValue().length; i++) {
+                    for (int j = 0; j < sprite.getValue()[i].length; j++) {
+                        char c = line.charAt(idx++);
+                        sprite.getValue()[i][j] = c == '1';
+                    }
+                }
+
+                logger.fine("Sprite " + sprite.getKey() + " loaded.");
+            }
+        }
 	}
 
 	/**
 	 * Loads a font of a given size.
-	 * 
+	 *
 	 * @param size
 	 *            Point size of the font.
 	 * @return New font.
@@ -118,10 +116,6 @@ public final class FileManager {
 
 		try {
 			// Font loading.
-			/**--2-- 두번째 변경점
-			 * 1. res파일을 못찾는 것 같아서 res파일을 리소스파일로 만들어줌
-			 * 2. font파일이 없어서 github에 있는 폰트 다운 및 res파일에 넣고 경로 설정 해줌
-			 */
 			inputStream = FileManager.class.getClassLoader()
 					.getResourceAsStream("space_invaders.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(
@@ -137,7 +131,7 @@ public final class FileManager {
 	/**
 	 * Returns the application default scores if there is no user high scores
 	 * file.
-	 * 
+	 *
 	 * @return Default high scores.
 	 * @throws IOException
 	 *             In case of loading problems.
@@ -173,7 +167,7 @@ public final class FileManager {
 	/**
 	 * Loads high scores from file, and returns a sorted list of pairs score -
 	 * value.
-	 * 
+	 *
 	 * @return Sorted list of scores - players.
 	 * @throws IOException
 	 *             In case of loading problems.
@@ -276,276 +270,45 @@ public final class FileManager {
 		return achievement;
 	}
 
-//	public int loadTotalScore() throws IOException {
-//		int totalScore = 0;
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String totalScorePath = new File(jarPath).getParent();
-//			totalScorePath += File.separator;
-//			totalScorePath += "totalScore";
-//
-//			File totalScoreFile = new File(totalScorePath);
-//			inputStream = new FileInputStream(totalScoreFile);
-//			bufferedReader = new BufferedReader(new InputStreamReader(
-//					inputStream, Charset.forName("UTF-8")));
-//
-//			// Load properties from the file
-//			Properties properties = new Properties();
-//			properties.load(bufferedReader);
-//
-//			logger.info("Loading user total score.");
-//
-//			// Get the value associated with the 'TOTAL_SCORE' key
-//			String totalScoreStr = properties.getProperty("TOTAL_SCORE", "0"); // Default to "0" if key not found
-//			totalScore = Integer.parseInt(totalScoreStr);
-//
-//		} catch (FileNotFoundException e) {
-//			// loads default if there's no user scores.
-//			logger.info("File not found. Loading default total score.");
-//		} catch (NumberFormatException e) {
-//			logger.warning("Invalid format for total score. Defaulting to 0.");
-//		} finally {
-//			if (bufferedReader != null) {
-//				bufferedReader.close();
-//			}
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//		}
-//
-//		return totalScore;
-//	}
-//
-//	public int loadTotalPlayTime() throws IOException {
-//		int totalPlayTime = 0;
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String totalPlayTimePath = new File(jarPath).getParent();
-//			totalPlayTimePath += File.separator;
-//			totalPlayTimePath += "totalPlayTime"; // Assuming the file is named 'info'
-//
-//			File totalScoreFile = new File(totalPlayTimePath);
-//			inputStream = new FileInputStream(totalScoreFile);
-//			bufferedReader = new BufferedReader(new InputStreamReader(
-//					inputStream, Charset.forName("UTF-8")));
-//
-//			Properties properties = new Properties();
-//			properties.load(bufferedReader); // Load properties from the file
-//
-//			logger.info("Loading user total play time.");
-//
-//			// Get the value associated with the 'TOTAL_PLAY_TIME' key
-//			String playTimeStr = properties.getProperty("TOTAL_PLAY_TIME", "0"); // Default to "0" if key not found
-//			totalPlayTime = Integer.parseInt(playTimeStr);
-//
-//		} catch (FileNotFoundException e) {
-//			// Load default if there's no user scores
-//			logger.info("File not found. Loading default total play time.");
-//		} catch (NumberFormatException e) {
-//			logger.warning("Invalid format for total play time. Defaulting to 0.");
-//		} finally {
-//			if (bufferedReader != null) {
-//				bufferedReader.close();
-//			}
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//		}
-//
-//		return totalPlayTime;
-//	}
-//
-//	public int loadPerfectAchievement() throws IOException {
-//		int currentPsAchievement = 0;
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String currentPsAchievementPath = new File(jarPath).getParent();
-//			currentPsAchievementPath += File.separator;
-//			currentPsAchievementPath += "perfectAchievement";
-//
-//			File currentPsAchievementFile = new File(currentPsAchievementPath);
-//			inputStream = new FileInputStream(currentPsAchievementFile);
-//			bufferedReader = new BufferedReader(new InputStreamReader(
-//					inputStream, Charset.forName("UTF-8")));
-//
-//			Properties properties = new Properties();
-//			properties.load(bufferedReader); // Load properties from the file
-//
-//			logger.info("Loading user perfect stage.");
-//
-//			String currentPsAchievementStr = properties.getProperty("Perfect_Stage", "0"); // Default to "0" if key not found
-//			currentPsAchievement = Integer.parseInt(currentPsAchievementStr);
-//
-//		} catch (FileNotFoundException e) {
-//			// Load default if there's no user scores
-//			logger.info("File not found. Loading default current perfect stage.");
-//		} catch (NumberFormatException e) {
-//			logger.warning("Invalid format for current perfect stage. Defaulting to 0.");
-//		} finally {
-//			if (bufferedReader != null) {
-//				bufferedReader.close();
-//			}
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//		}
-//
-//		return currentPsAchievement;
-//	}
-//
-//	public double loadAccuracyAchievement() throws IOException {
-//
-//		double accuracy = 0;
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String accuracyAchievementPath = new File(jarPath).getParent();
-//			accuracyAchievementPath += File.separator;
-//			accuracyAchievementPath += "accuracyAchievement";
-//
-//			File accuracyAchievementFile = new File(accuracyAchievementPath);
-//			inputStream = new FileInputStream(accuracyAchievementFile);
-//			bufferedReader = new BufferedReader(new InputStreamReader(
-//					inputStream, Charset.forName("UTF-8")));
-//			String accuracyStr = bufferedReader.readLine();
-//			if (accuracyStr == null) {
-//				accuracy = 0;
-//			} else {
-//				accuracy = Double.parseDouble(accuracyStr);
-//			}
-//
-//		} catch (FileNotFoundException e) {
-//			logger.info("File not found.");
-//		} catch (NumberFormatException e) {
-//			logger.warning("Invalid format for achievements.");
-//		} finally {
-//			if (bufferedReader != null) {
-//				bufferedReader.close();
-//			}
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//		}
-//
-//		logger.info("Accuracy Achievement successfully loaded.");
-//		return accuracy; // 불러온 업적 데이터를 리스트로 반환
-//	}
-//
-//	public boolean loadFlawlessFailureAchievement() throws IOException {
-//		boolean flawlessFailure = false;
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String flawlessFailureAchievementPath = new File(jarPath).getParent();
-//			flawlessFailureAchievementPath += File.separator;
-//			flawlessFailureAchievementPath += "flawlessFailureAchievement";
-//
-//			File flawlessFailureAchievementFile = new File(flawlessFailureAchievementPath);
-//			inputStream = new FileInputStream(flawlessFailureAchievementFile);
-//			bufferedReader = new BufferedReader(new InputStreamReader(
-//					inputStream, Charset.forName("UTF-8")));
-//
-//			Properties properties = new Properties();
-//			properties.load(bufferedReader); // Load properties from the file
-//
-//			logger.info("Loading user perfect stage.");
-//
-//			String flawlessFailureStr = properties.getProperty("Condition_Flawless_Failure", "false"); // Default to "0" if key not found
-//			flawlessFailure = flawlessFailureStr.equals("true");
-//
-//		} catch (FileNotFoundException e) {
-//			// Load default if there's no user scores
-//			logger.info("File not found. Loading default current perfect stage.");
-//		} catch (NumberFormatException e) {
-//			logger.warning("Invalid format for current perfect stage. Defaulting to 0.");
-//		} finally {
-//			if (bufferedReader != null) {
-//				bufferedReader.close();
-//			}
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//		}
-//
-//		return flawlessFailure;
-//	}
-//
-//	public boolean loadBestFriendsAchievement() throws IOException {
-//		boolean bestFriends = false;
-//		InputStream inputStream = null;
-//		BufferedReader bufferedReader = null;
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String bestFriendsAchievementPath = new File(jarPath).getParent();
-//			bestFriendsAchievementPath += File.separator;
-//			bestFriendsAchievementPath += "BestFriendsAchievement";
-//
-//			File bestFriendsAchievementFile = new File(bestFriendsAchievementPath);
-//			inputStream = new FileInputStream(bestFriendsAchievementFile);
-//			bufferedReader = new BufferedReader(new InputStreamReader(
-//					inputStream, Charset.forName("UTF-8")));
-//
-//			Properties properties = new Properties();
-//			properties.load(bufferedReader); // Load properties from the file
-//
-//			logger.info("Loading user condition of best friends.");
-//
-//			String bestFriendsStr = properties.getProperty("Condition_Best_Friends", "false"); // Default to "0" if key not found
-//			bestFriends = bestFriendsStr.equals("true");
-//
-//		} catch (FileNotFoundException e) {
-//			// Load default if there's no user scores
-//			logger.info("File not found. Loading default current perfect stage.");
-//		} catch (NumberFormatException e) {
-//			logger.warning("Invalid format for current perfect stage. Defaulting to 0.");
-//		} finally {
-//			if (bufferedReader != null) {
-//				bufferedReader.close();
-//			}
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//		}
-//
-//		return bestFriends;
-//	}
+
+	public List<String> loadCreditList() throws IOException {  // 사용자의 크레딧 파일을 로드
+
+		List<String> creditname = new ArrayList<String>();
+		InputStream inputStream = null;
+		BufferedReader bufferedReader = null;
+
+		try {
+			inputStream = FileManager.class.getClassLoader()
+					.getResourceAsStream("creditlist");
+			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+			logger.info("Loading credit list.");
+
+			String name = bufferedReader.readLine();
+
+			while (name != null) {
+				creditname.add(name);
+				name = bufferedReader.readLine();
+			}
+
+		}finally {
+			if (bufferedReader != null)
+				bufferedReader.close();
+		}
+
+		return creditname;
+	}
+
 
 	/**
 	 * Saves user high scores to disk.
-	 * 
+	 *
 	 * @param highScores
 	 *            High scores to save.
 	 * @throws IOException
 	 *             In case of loading problems.
 	 */
-	public void saveHighScores(final List<Score> highScores) 
+	public void saveHighScores(final List<Score> highScores)
 			throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
@@ -582,119 +345,6 @@ public final class FileManager {
 				bufferedWriter.close();
 		}
 	}
-
-//	public void saveTotalScore(int totalScore) throws IOException {
-//		OutputStream outputStream = null;
-//		BufferedWriter bufferedWriter = null;
-//
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String totalScorePath = new File(jarPath).getParent();
-//			totalScorePath += File.separator;
-//			totalScorePath += "totalScore";  // Assuming the file name is 'info'
-//
-//			File totalScoreFile = new File(totalScorePath);
-//
-//			// Create the file if it doesn't exist
-//			if (!totalScoreFile.exists())
-//				totalScoreFile.createNewFile();
-//
-//			// Use FileOutputStream with 'false' to overwrite the existing content
-//			outputStream = new FileOutputStream(totalScoreFile, false);
-//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
-//
-//			logger.info("Saving user total scores.");
-//
-//			// Write the total score in the format TOTAL_SCORE='value'
-//			bufferedWriter.write("TOTAL_SCORE=" + totalScore);
-//
-//		} finally {
-//			if (bufferedWriter != null) {
-//				bufferedWriter.close();
-//			}
-//			if (outputStream != null) {
-//				outputStream.close();
-//			}
-//		}
-//	}
-//
-//	public void saveTotalPlayTime(int totalPlayTime) throws IOException {
-//		OutputStream outputStream = null;
-//		BufferedWriter bufferedWriter = null;
-//
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String totalPlayTimePath = new File(jarPath).getParent();
-//			totalPlayTimePath += File.separator;
-//			totalPlayTimePath += "totalPlayTime";  // Assuming the file name is 'info'
-//
-//			File totalPlayTimeFile = new File(totalPlayTimePath);
-//
-//			// Create the file if it doesn't exist
-//			if (!totalPlayTimeFile.exists())
-//				totalPlayTimeFile.createNewFile();
-//
-//			// Use FileOutputStream with 'false' to overwrite the existing content
-//			outputStream = new FileOutputStream(totalPlayTimeFile, false);
-//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
-//
-//			logger.info("Saving user total scores.");
-//
-//			// Write the total score in the format TOTAL_SCORE='value'
-//			bufferedWriter.write("TOTAL_PLAY_TIME=" + totalPlayTime);
-//
-//		} finally {
-//			if (bufferedWriter != null) {
-//				bufferedWriter.close();
-//			}
-//			if (outputStream != null) {
-//				outputStream.close();
-//			}
-//		}
-//	}
-//
-//	public void savePerfectAchievement(int currentPsAchievement) throws IOException {
-//		OutputStream outputStream = null;
-//		BufferedWriter bufferedWriter = null;
-//
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String currentPsAchievementPath = new File(jarPath).getParent();
-//			currentPsAchievementPath += File.separator;
-//			currentPsAchievementPath += "perfectAchievement";  // Assuming the file name is 'Perfect_Stage'
-//
-//			File currentPsAchievementFile = new File(currentPsAchievementPath);
-//
-//			// Create the file if it doesn't exist
-//			if (!currentPsAchievementFile.exists())
-//				currentPsAchievementFile.createNewFile();
-//
-//			// Use FileOutputStream with 'false' to overwrite the existing content
-//			outputStream = new FileOutputStream(currentPsAchievementFile, false);
-//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
-//
-//			logger.info("Saving user perfect stage.");
-//
-//			bufferedWriter.write("Perfect_Stage=" + currentPsAchievement);
-//
-//		} finally {
-//			if (bufferedWriter != null) {
-//				bufferedWriter.close();
-//			}
-//			if (outputStream != null) {
-//				outputStream.close();
-//			}
-//		}
-//	}
 
 	public void saveWallet(final Wallet newWallet)
 			throws IOException {
@@ -756,113 +406,6 @@ public final class FileManager {
 		InputStream inputStream = new FileInputStream(walletFile);
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
-
-//	public void saveAccuracyAchievement(double accuracy) throws IOException {
-//
-//		OutputStream outputStream = null;
-//		BufferedWriter bufferedWriter = null;
-//		// 파일 경로 설정
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String accuracyAchievementPath = new File(jarPath).getParent();
-//			accuracyAchievementPath += File.separator;
-//			accuracyAchievementPath += "accuracyAchievement";
-//
-//			File accuracyAchievementFile = new File(accuracyAchievementPath);
-//
-//			if (!accuracyAchievementFile.exists())
-//				accuracyAchievementFile.createNewFile();
-//
-//			outputStream = new FileOutputStream(accuracyAchievementFile);
-//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-//					outputStream, Charset.forName("UTF-8")));
-//
-//			logger.info("Saving Accuracy Achievement.");
-//
-//			bufferedWriter.write(accuracy + "");
-//
-//		} finally {
-//			if (bufferedWriter != null)
-//				bufferedWriter.close();
-//		}
-//	}
-//
-//	public void saveFlawlessFailureAchievement(boolean checkFlawlessFailure) throws IOException {
-//		OutputStream outputStream = null;
-//		BufferedWriter bufferedWriter = null;
-//
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String flawlessFailureAchievementPath = new File(jarPath).getParent();
-//			flawlessFailureAchievementPath += File.separator;
-//			flawlessFailureAchievementPath += "flawlessFailureAchievement";  // Assuming the file name is 'Perfect_Stage'
-//
-//			File falwlessFailureAchievementFile = new File(flawlessFailureAchievementPath);
-//
-//			// Create the file if it doesn't exist
-//			if (!falwlessFailureAchievementFile.exists())
-//				falwlessFailureAchievementFile.createNewFile();
-//
-//			// Use FileOutputStream with 'false' to overwrite the existing content
-//			outputStream = new FileOutputStream(falwlessFailureAchievementFile, false);
-//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
-//
-//			logger.info("Saving condition flawless failure");
-//
-//			bufferedWriter.write("Condition_Flawless_Failure=" + checkFlawlessFailure);
-//
-//		} finally {
-//			if (bufferedWriter != null) {
-//				bufferedWriter.close();
-//			}
-//			if (outputStream != null) {
-//				outputStream.close();
-//			}
-//		}
-//	}
-//
-//	public void saveBestFriendsAchievement(boolean checkFlawlessFailure) throws IOException {
-//		OutputStream outputStream = null;
-//		BufferedWriter bufferedWriter = null;
-//
-//		try {
-//			String jarPath = FileManager.class.getProtectionDomain()
-//					.getCodeSource().getLocation().getPath();
-//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-//
-//			String bestFriendsAchievementPath = new File(jarPath).getParent();
-//			bestFriendsAchievementPath += File.separator;
-//			bestFriendsAchievementPath += "BestFriendsAchievement";  // Assuming the file name is 'Perfect_Stage'
-//
-//			File bestFriendsAchievementFile = new File(bestFriendsAchievementPath);
-//
-//			// Create the file if it doesn't exist
-//			if (!bestFriendsAchievementFile.exists())
-//				bestFriendsAchievementFile.createNewFile();
-//
-//			// Use FileOutputStream with 'false' to overwrite the existing content
-//			outputStream = new FileOutputStream(bestFriendsAchievementFile, false);
-//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
-//
-//			logger.info("Saving condition best friends");
-//
-//			bufferedWriter.write("Condition_Best_Friends=" + checkFlawlessFailure);
-//
-//		} finally {
-//			if (bufferedWriter != null) {
-//				bufferedWriter.close();
-//			}
-//			if (outputStream != null) {
-//				outputStream.close();
-//			}
-//		}
-//	}
 
 	public void saveAchievement(final Achievement achievement)
 			throws IOException {

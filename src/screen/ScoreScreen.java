@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import engine.Core;
-import engine.GameState;
-import engine.Score;
+import engine.*;
 import entity.Wallet;
 
 /**
@@ -20,6 +18,8 @@ public class ScoreScreen extends Screen {
 
 	/** Maximum number of high scores. */
 	private static final int MAX_HIGH_SCORE_NUM = 3;
+	/** Singleton instance of SoundManager */
+	private final SoundManager soundManager = SoundManager.getInstance();
 
 
 	/** Current score. */
@@ -40,6 +40,9 @@ public class ScoreScreen extends Screen {
 	/** Player's name */
 	private String name1, name2;
 
+	// Set ratios for each coin_lv - placed in an array in the order of lv1, lv2, lv3, lv4, and will be used accordingly,
+	// e.g., lv1; score 100 * 0.1
+	private static final double[] COIN_RATIOS = {0.1, 0.13, 0.16, 0.19};
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -54,7 +57,7 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final String name1, final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet) {
+			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
 		this.name1 = name1;
@@ -64,9 +67,23 @@ public class ScoreScreen extends Screen {
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
+
+		// Get the user's coin_lv
+		int coin_lv = wallet.getCoin_lv();
+
+		// Apply different ratios based on coin_lv
+		double coin_ratio = COIN_RATIOS[coin_lv-1];
+
+		// Adjust coin earning ratios based on the game level upgrade stage score
+		// Since coins are in integer units, round the decimal points and convert to int
+		this.coinsEarned = (int)Math.round(gameState.getScore() * coin_ratio);
+		this.coinsEarned += achievementManager.getAchievementReward();
+
+		// deposit the earned coins to wallet
 		this.accuracy = gameState.getAccuracy();
-		this.coinsEarned = gameState.getScore()/10;
 		wallet.deposit(coinsEarned);
+
+		soundManager.loopSound(Sound.BGM_GAMEOVER);
 
 		try {
 			this.highScores = Core.getFileManager().loadHighScores();
@@ -98,11 +115,15 @@ public class ScoreScreen extends Screen {
 				// Return to main menu.
 				this.returnCode = 1;
 				this.isRunning = false;
+				soundManager.stopSound(Sound.BGM_GAMEOVER);
+				soundManager.playSound(Sound.MENU_BACK);
 				saveScore();
 			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 				// Play again.
 				this.returnCode = 2;
 				this.isRunning = false;
+				soundManager.stopSound(Sound.BGM_GAMEOVER);
+				soundManager.playSound(Sound.MENU_CLICK);
 				saveScore();
 			}
 
