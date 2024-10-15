@@ -19,7 +19,7 @@ public class AchievementManager {
     private final int MAX_PERFECT_STAGE = 7;
 
     // Variables related to Accuracy Achievement
-    private int higMaxcombo; // List of accuracy achievements
+    private int highMaxCombo; // List of accuracy achievements
 
     // Variables related to Flawless Failure Achievement
     private boolean checkFlawlessFailure;
@@ -30,7 +30,7 @@ public class AchievementManager {
     // Coin rewards update
     private int coinReward = 0;
 
-    private final int[] ACCURACY_COIN_REWARD = {500, 1500, 2000, 2500};
+    private final int[] COMBO_COIN_REWARD = {500, 1500, 2000, 2500};
     private final int[] PERFECT_COIN_REWARD = {200, 400, 800, 2000, 3000, 4000, 5000};
     private final int FLAWLESS_FAILURE_COIN = 1000;
     private final int BEST_FRIENDS_COIN = 1000;
@@ -40,7 +40,7 @@ public class AchievementManager {
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
         this.currentPerfectLevel = achievement.getPerfectStage();
-        this.higMaxcombo = achievement.getHighmaxCombo();
+        this.highMaxCombo = achievement.getHighmaxCombo();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
         this.checkBestFriends = achievement.getBestFriends();
     }
@@ -60,38 +60,44 @@ public class AchievementManager {
     /**
      * Function to update the accuracy achievement.
      */
-    public void updatemaxCombo(int maxCombo) {
-        if (higMaxcombo >= maxCombo) {
+    public void updateMaxCombo(int maxCombo) {
+        if (highMaxCombo >= maxCombo) {
             return;
         }
-        int Maxcombogoal = (int)(higMaxcombo /10)*10+10;
-        higMaxcombo = maxCombo;
-        if (Maxcombogoal < 70) {
-            Maxcombogoal = 70;
+        int maxComboGoal = 10;
+        if (highMaxCombo < 10) {
+            maxComboGoal = 10;
+        } else if (highMaxCombo < 15) {
+            maxComboGoal = 15;
+        } else if (highMaxCombo < 20) {
+            maxComboGoal = 20;
+        } else if (highMaxCombo < 25) {
+            maxComboGoal = 25;
         }
-        if (higMaxcombo < Maxcombogoal) {
-            achievement.setHighMaxcombo(higMaxcombo);
+        int rewardIndex = highMaxCombo / 5 - 1;
+        highMaxCombo = maxCombo;
+        if (highMaxCombo < maxComboGoal) {
+            achievement.setHighMaxcombo(highMaxCombo);
             return;
         }
-        int rewardIndex = Maxcombogoal/10-7;
         // When an accuracy achievement is reached, all lower achievements are achieved together.
-        if (higMaxcombo >= 100) {
+        if (highMaxCombo >= 25) {
             for (int i = rewardIndex; i < 4; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += COMBO_COIN_REWARD[i];
             }
-        } else if (higMaxcombo >= 90) {
+        } else if (highMaxCombo >= 20) {
             for (int i = rewardIndex; i < 3; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += COMBO_COIN_REWARD[i];
             }
-        } else if (higMaxcombo >= 80) {
+        } else if (highMaxCombo >= 15) {
             for (int i = rewardIndex; i < 2; i++) {
-                coinReward += ACCURACY_COIN_REWARD[i];
+                coinReward += COMBO_COIN_REWARD[i];
             }
-        } else if (higMaxcombo >= 70) {
-            coinReward += ACCURACY_COIN_REWARD[0];
+        } else if (highMaxCombo >= 10) {
+            coinReward += COMBO_COIN_REWARD[0];
         }
         // Save the updated achievement.
-        achievement.setHighMaxcombo(higMaxcombo);
+        achievement.setHighMaxcombo(highMaxCombo);
     }
     /**
      * Check if the perfect achievement has been reached.
@@ -128,7 +134,7 @@ public class AchievementManager {
     public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
         updateTotalPlayTime(playtime);
         updatePerfect(max_lives,LivesRemaining,level);
-        updatemaxCombo(maxCombo);
+        updateMaxCombo(maxCombo);
     }
 
     public void updatePlayed(double accuracy, int score, boolean multiPlay) throws IOException{
