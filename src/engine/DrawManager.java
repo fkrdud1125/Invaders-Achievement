@@ -18,7 +18,6 @@ import javax.imageio.ImageIO;
 
 import entity.ShipFactory;
 import entity.Wallet;
-import screen.GameSettingScreen;
 import screen.Screen;
 import entity.Entity;
 import entity.Ship;
@@ -1034,9 +1033,16 @@ public final class DrawManager {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, ACCURACY_COIN_REWARD[0],
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2);
+				backBufferGraphics.setColor(Color.orange);
+
+				drawRightSideAchievementComboString_1(screen, "combo",
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5+5);
+				drawRightSideAchievementComboString_2(screen, "combo",
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5+5);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("%.02f%%", accuracy) + " => " + "70%";
+				String accuracyAchievement = "       10" + "  =>  " + "     70";//String.format("%.02f%%", accuracy) + " => " + "70%";
+
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5);
 			} else {
@@ -1256,6 +1262,17 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(string, screen.getWidth() *63/100-
 						fontRegularMetrics.stringWidth(string), height);
+	}
+	public void drawRightSideAchievementComboString_1(final Screen screen,
+													  final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() *52/100-
+				fontRegularMetrics.stringWidth(string), height);
+	}public void drawRightSideAchievementComboString_2(final Screen screen,
+													  final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() *72/100-
+				fontRegularMetrics.stringWidth(string), height);
 	}
 	public void drawRightSideAchievementSmallString_1(final Screen screen,
 												  final String string, final int height) {
