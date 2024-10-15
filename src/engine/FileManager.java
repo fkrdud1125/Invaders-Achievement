@@ -25,9 +25,9 @@ import entity.Achievement;
 
 /**
  * Manages files used in the application.
- * 
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
+ *
  */
 public final class FileManager {
 
@@ -47,7 +47,7 @@ public final class FileManager {
 
 	/**
 	 * Returns shared instance of FileManager.
-	 * 
+	 *
 	 * @return Shared instance of FileManager.
 	 */
 	protected static FileManager getInstance() {
@@ -58,51 +58,49 @@ public final class FileManager {
 
 	/**
 	 * Loads sprites from disk.
-	 * 
+	 *
 	 * @param spriteMap
 	 *            Mapping of sprite type and empty boolean matrix that will
 	 *            contain the image.
 	 * @throws IOException
 	 *             In case of loading problems.
 	 */
-	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap)
-			throws IOException {
-		InputStream inputStream = null;
-		/**--1-- 첫번째 변경점
-		 * res파일을 못찾는 것 같아서 res파일을 리소스파일로 만들어줌
-		 */
-		try {
-			inputStream = DrawManager.class.getClassLoader()
-					.getResourceAsStream("graphics");
-			char c;
+	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap) throws IOException {
+        try (InputStream inputStream = DrawManager.class.getClassLoader().getResourceAsStream("graphics");
+			 BufferedReader reader = inputStream != null ? new BufferedReader(new InputStreamReader(inputStream)) : null) {
 
-			// Sprite loading.
-			for (Map.Entry<SpriteType, boolean[][]> sprite : spriteMap
-					.entrySet()) {
-				for (int i = 0; i < sprite.getValue().length; i++)
-					for (int j = 0; j < sprite.getValue()[i].length; j++) {
-						do
-							c = (char) inputStream.read();
-						while (c != '0' && c != '1');
+			if (reader == null)
+				throw new IOException("Graphics file not found.");
 
-						if (c == '1')
-							sprite.getValue()[i][j] = true;
-						else
-							sprite.getValue()[i][j] = false;
-					}
-				logger.fine("Sprite " + sprite.getKey() + " loaded.");
-			}
-			if (inputStream != null)
-				inputStream.close();
-		} finally {
-			if (inputStream != null)
-				inputStream.close();
-		}
+            String line;
+
+            // Sprite loading.
+            for (Map.Entry<SpriteType, boolean[][]> sprite : spriteMap.entrySet()) {
+
+                int idx = 0;
+                do {
+					line = reader.readLine();
+
+					if (line == null)
+						throw new IOException("Sprite data not found.");
+
+				} while (line.trim().isEmpty() || line.trim().startsWith("#"));
+
+                for (int i = 0; i < sprite.getValue().length; i++) {
+                    for (int j = 0; j < sprite.getValue()[i].length; j++) {
+                        char c = line.charAt(idx++);
+                        sprite.getValue()[i][j] = c == '1';
+                    }
+                }
+
+                logger.fine("Sprite " + sprite.getKey() + " loaded.");
+            }
+        }
 	}
 
 	/**
 	 * Loads a font of a given size.
-	 * 
+	 *
 	 * @param size
 	 *            Point size of the font.
 	 * @return New font.
@@ -118,10 +116,6 @@ public final class FileManager {
 
 		try {
 			// Font loading.
-			/**--2-- 두번째 변경점
-			 * 1. res파일을 못찾는 것 같아서 res파일을 리소스파일로 만들어줌
-			 * 2. font파일이 없어서 github에 있는 폰트 다운 및 res파일에 넣고 경로 설정 해줌
-			 */
 			inputStream = FileManager.class.getClassLoader()
 					.getResourceAsStream("space_invaders.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(
@@ -137,7 +131,7 @@ public final class FileManager {
 	/**
 	 * Returns the application default scores if there is no user high scores
 	 * file.
-	 * 
+	 *
 	 * @return Default high scores.
 	 * @throws IOException
 	 *             In case of loading problems.
@@ -173,7 +167,7 @@ public final class FileManager {
 	/**
 	 * Loads high scores from file, and returns a sorted list of pairs score -
 	 * value.
-	 * 
+	 *
 	 * @return Sorted list of scores - players.
 	 * @throws IOException
 	 *             In case of loading problems.
@@ -308,13 +302,13 @@ public final class FileManager {
 
 	/**
 	 * Saves user high scores to disk.
-	 * 
+	 *
 	 * @param highScores
 	 *            High scores to save.
 	 * @throws IOException
 	 *             In case of loading problems.
 	 */
-	public void saveHighScores(final List<Score> highScores) 
+	public void saveHighScores(final List<Score> highScores)
 			throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
